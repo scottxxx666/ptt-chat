@@ -1,8 +1,22 @@
 {
   "manifest_version": 3,
-  "name": "CRXJS React Vite Example",
-  "version": "1.0.0",
+  "name": "PTT Chat",
+  "description": "Add PTT Chat to any site",
+  "version": "1.0",
   "action": {
-    "default_popup": "index.html"
-  }
+  },
+  "permissions": [
+    "activeTab",
+    "scripting"
+  ],
+  "content_scripts": [
+    {
+      "js": [
+        "src/content.jsx"
+      ],
+      "matches": [
+        "https://term.ptt.cc/*"
+      ]
+    }
+  ]
 }
