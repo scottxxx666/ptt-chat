@@ -3,6 +3,9 @@
   "name": "PTT Chat",
   "description": "Add PTT Chat to any site",
   "version": "1.0",
+  "background": {
+    "service_worker": "src/background.js"
+  },
   "action": {
   },
   "permissions": [
