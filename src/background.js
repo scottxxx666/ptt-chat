@@ -82,5 +82,7 @@ async function stopExtension() {
     files: [toggleChat],
   });
 
+  await chrome.tabs.sendMessage(chatTab, {type: 'STOP'});
+
   setStatus('OFF');
 }

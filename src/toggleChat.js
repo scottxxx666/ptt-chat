@@ -1,7 +1,4 @@
 (() => {
-  const root = document.querySelector('#crx-root');
-  if (root) {
-    root.classList.toggle('hide')
-  }
+  document.querySelector('#crx-root').classList?.toggle('hide')
 })()
 

@@ -1,33 +1,42 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import {useEffect, useState} from 'react'
 import './App.css'
+import Login from "./Login.jsx"
+import './wasm_exec'
+import Chat from "./Chat.jsx"
+
+function messageListener(request, sender, sendResponse) {
+  console.log(request)
+  // const {type, data} = request;
+}
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [isStart, setIsStart] = useState(false)
+
+  useEffect(() => {
+    chrome.runtime.onMessage.addListener(messageListener)
+    return () => {
+      chrome.runtime.onMessage.removeListener(messageListener)
+    }
+  })
+
+  async function start(data) {
+    const res = await chrome.runtime.sendMessage({type: "OPEN", data});
+    console.log({res})
+    setIsStart(true)
+  }
+
+  function close() {
+    setIsStart(false)
+  }
 
   return (
     <>
       <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={chrome.runtime.getURL(viteLogo)} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={chrome.runtime.getURL(reactLogo)} className="logo react" alt="React logo" />
-        </a>
+        <button>Hide</button>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
+      <div>
+        {isStart ? <Chat close={close}/> : <Login start={start}/>}
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
   )
 }
