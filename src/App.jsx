@@ -4,13 +4,21 @@ import Login from "./Login.jsx"
 import './wasm_exec'
 import Chat from "./Chat.jsx"
 
-function messageListener(request, sender, sendResponse) {
-  console.log(request)
-  // const {type, data} = request;
-}
-
 function App() {
+  console.log('App')
   const [isStart, setIsStart] = useState(false)
+  const [messages, setMessages] = useState([])
+
+  function messageListener(request, sender, sendResponse) {
+    console.log(request)
+    const {type, data} = request
+    if (type === 'MSG') {
+      const messages = JSON.parse(data)
+      if (messages.length === 0) return
+      console.log(messages)
+      setMessages(prev => [...prev, ...messages])
+    }
+  }
 
   useEffect(() => {
     chrome.runtime.onMessage.addListener(messageListener)
@@ -31,12 +39,10 @@ function App() {
 
   return (
     <>
-      <div>
+      <div id='ptt-chat-header'>
         <button>Hide</button>
       </div>
-      <div>
-        {isStart ? <Chat close={close}/> : <Login start={start}/>}
-      </div>
+      {isStart ? <Chat messages={messages} close={close}/> : <Login start={start}/>}
     </>
   )
 }

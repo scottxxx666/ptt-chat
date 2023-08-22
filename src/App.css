@@ -9,6 +9,45 @@
   color: white;
 }
 
+#crx-root input {
+  color: black;
+}
+
 #crx-root.hide {
   display: none !important;
+}
+
+#ptt-chat-header {
+  height: 24px;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-bottom: 4px;
+}
+
+#ptt-chat-container {
+  flex: 1;
+  padding: 0 0 12px 12px;
+  overflow-y: scroll;
+  scrollbar-color: white blue;
+}
+
+#ptt-chat {
+  margin-right: 24px;
+  height: 100%;
+  color: white;
+  font-size: 14px;
+}
+
+#ptt-chat .row {
+  display: flex;
+}
+
+#ptt-chat .account {
+  color: #2ba640;
+}
+
+#ptt-chat .message {
+  color: #dedee3;
+  /*color: #010110;*/
+  /*color: #1f1f23;*/
 }
