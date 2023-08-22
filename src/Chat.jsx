@@ -10,7 +10,7 @@ export default function Chat({messages, close}) {
   console.log('CHat')
   const msgs = messages.map(e => {
     return (
-      <div key={Math.random() * 99999}>
+      <div key={Math.random() * 99999} className={'row'}>
         <span className={'account'}>{e.user}</span>
         <span className={'message'}>: {e.message}</span>
       </div>
