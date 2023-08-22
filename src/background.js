@@ -41,7 +41,6 @@ chrome.runtime.onMessage.addListener(async function (request, sender, sendRespon
     } catch (e) {
       console.log(e);
       stopExtension();
-      chatTab = null
     }
   }
 });
@@ -79,12 +78,17 @@ async function stopExtension() {
     chrome.tabs.remove(pttTab);
   }
 
-  await chrome.scripting.executeScript({
-    target: {tabId: chatTab},
-    files: [toggleChat],
-  });
+  try {
+    await chrome.scripting.executeScript({
+      target: {tabId: chatTab},
+      files: [toggleChat],
+    });
 
-  chrome.tabs.sendMessage(chatTab, {type: 'STOP'}).catch(e=>console.log(e));
+    await chrome.tabs.sendMessage(chatTab, {type: 'STOP'})
+  } catch (e) {
+    console.log(e)
+  }
 
   setStatus('OFF');
+  chatTab = null
 }

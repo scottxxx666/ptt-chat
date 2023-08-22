@@ -17,6 +17,9 @@ function App() {
       if (messages.length === 0) return
       console.log(messages)
       setMessages(prev => [...prev, ...messages])
+    } else if (type === 'STOP') {
+      setIsStart(false)
+      setMessages([])
     }
   }
 
