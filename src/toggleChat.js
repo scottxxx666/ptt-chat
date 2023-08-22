@@ -1,4 +1,4 @@
 (() => {
-  document.querySelector('#crx-root').classList?.toggle('hide')
+  document.querySelector('#crx-root')?.classList.toggle('hide')
 })()
 

@@ -16,7 +16,7 @@
   "content_scripts": [
     {
       "js": [
-        "src/content.jsx"
+        "src/ptt.js"
       ],
       "matches": [
         "https://term.ptt.cc/*"

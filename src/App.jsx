@@ -20,7 +20,7 @@ function App() {
   })
 
   async function start(data) {
-    const res = await chrome.runtime.sendMessage({type: "OPEN", data});
+    const res = await chrome.runtime.sendMessage({type: "START", data});
     console.log({res})
     setIsStart(true)
   }

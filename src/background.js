@@ -31,8 +31,10 @@ let chatTab
 chrome.runtime.onMessage.addListener(async function (request, sender, sendResponse) {
   console.log(request)
   const {type} = request
-  if (type === 'PTT' && sender.tab.id === pttTab) {
-    await chrome.tabs.sendMessage(pttTab, {type: 'START'});
+  if (type === 'START') {
+    await chrome.tabs.sendMessage(pttTab, {type: 'START', data: request.data});
+  } else if (type === 'PTT' && sender.tab.id === pttTab) {
+    await chrome.tabs.sendMessage(chatTab, {type: 'READY'});
   } else if (type === 'MSG' && chatTab) {
     try {
       await chrome.tabs.sendMessage(chatTab, request);
