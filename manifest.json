@@ -23,6 +23,17 @@
       ]
     }
   ],
+  "web_accessible_resources": [
+    {
+      "matches": [
+        "https://term.ptt.cc/*"
+      ],
+      "resources": [
+        "src/wasm_exec.js",
+        "src/ptt.wasm"
+      ]
+    }
+  ],
   "commands": {
     "_execute_action": {
       "suggested_key": {
