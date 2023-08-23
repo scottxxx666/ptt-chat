@@ -8,9 +8,9 @@ Chat.propTypes = {
 
 export default function Chat({messages, close}) {
   console.log('CHat')
-  const msgs = messages.map(e => {
+  const msgs = messages.map((e) => {
     return (
-      <div key={Math.random() * 99999} className={'row'}>
+      <div key={e.id} className={'ptt-chat-row'}>
         <span className={'account'}>{e.user}</span>
         <span className={'message'}>: {e.message}</span>
       </div>

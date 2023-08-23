@@ -15,12 +15,18 @@ function App() {
     if (type === 'MSG') {
       const messages = JSON.parse(data)
       if (messages.length === 0) return
-      console.log(messages)
-      setMessages(prev => [...prev, ...messages])
+      setMessages(prev => [...prev, ...messages.toReversed()])
     } else if (type === 'STOP') {
-      setIsStart(false)
-      setMessages([])
+      reset()
+    } else if (type === 'ERR') {
+      alert(request.data)
+      reset()
     }
+  }
+
+  function reset() {
+    setIsStart(false)
+    setMessages([])
   }
 
   useEffect(() => {

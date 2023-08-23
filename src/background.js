@@ -42,6 +42,12 @@ chrome.runtime.onMessage.addListener(async function (request, sender, sendRespon
       console.log(e);
       stopExtension();
     }
+  } else if (type === 'ERR' && chatTab) {
+    try {
+      await chrome.tabs.sendMessage(chatTab, request);
+    } catch (e) {
+      console.log(e);
+    }
   }
 });
 

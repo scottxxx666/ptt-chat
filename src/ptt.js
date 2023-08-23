@@ -12,7 +12,7 @@
       const {type} = request
       if (type === 'START') {
         const {username, password, deleteDuplicate, board, article} = request.data
-        pollingMessages(username, password, deleteDuplicate, board, article, sendPushes)
+        pollingMessages(username, password, deleteDuplicate, board, article, sendPushes, notifyError)
       }
     }
   );
@@ -21,5 +21,9 @@
 
   function sendPushes(pushes) {
     chrome.runtime.sendMessage({type: "MSG", data: pushes});
+  }
+
+  function notifyError(errorStr) {
+    chrome.runtime.sendMessage({type: "ERR", data: errorStr});
   }
 })();
