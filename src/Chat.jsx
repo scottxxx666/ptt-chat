@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import {useEffect, useRef} from "react";
+import {useEffect, useRef, useState} from "react";
 
 Chat.propTypes = {
   messages: PropTypes.array,
@@ -16,18 +16,43 @@ export default function Chat({messages, close}) {
       </div>
     )
   })
-  const ref = useRef();
+  const chatRef = useRef();
+  const [message, setMessage] = useState();
+
+  function handleInput(e) {
+    console.log('change')
+    e.preventDefault()
+    setMessage(e.target.value)
+  }
+
+  function handleEnter(e) {
+    if (e.key === 'Enter' && !e.nativeEvent.isComposing){
+      sendMessage()
+    }
+  }
+
+  async function sendMessage() {
+    const res = await chrome.runtime.sendMessage({type: "SEND", data: message});
+    console.log(res);
+    setMessage('')
+  }
 
   useEffect(() => {
     console.log('useEffect')
-    ref.current?.lastElementChild?.scrollIntoView()
+    chatRef.current?.lastElementChild?.scrollIntoView()
   }, [msgs])
 
   return (
-    <div id='ptt-chat-container'>
-      <div id={"ptt-chat"} ref={ref}>
-        {msgs}
+    <>
+      <div id='ptt-chat-container'>
+        <div id={"ptt-chat"} ref={chatRef}>
+          {msgs}
+        </div>
       </div>
-    </div>
+      <div id='ptt-chat-footer'>
+        <input name='message' type='text' onChange={handleInput} onKeyDown={handleEnter} value={message}/>
+        <button id='submit' onClick={sendMessage}>⏎</button>
+      </div>
+    </>
   )
 }

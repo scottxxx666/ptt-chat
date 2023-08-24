@@ -4,6 +4,7 @@
 
 #crx-root input {
   color: black;
+  height: 32px;
 }
 
 #crx-root.hide {
@@ -19,8 +20,12 @@
 
 #ptt-chat-container {
   flex: 1;
-  padding: 0 0 12px 12px;
+  padding: 0 0 0 12px;
   overflow-y: scroll;
+}
+
+#ptt-chat-container.transparent {
+  visibility: hidden;
 }
 
 #ptt-chat-container::-webkit-scrollbar {
@@ -46,6 +51,7 @@
 
 #ptt-chat .ptt-chat-row {
   padding: 4px 0 4px 0;
+  word-break: break-all;
 }
 
 #ptt-chat .account {
@@ -56,4 +62,14 @@
   color: #dedee3;
   /*color: #010110;*/
   /*color: #1f1f23;*/
+}
+
+#ptt-chat-footer {
+  padding: 4px 4px 4px 4px;
+  display: flex;
+}
+
+#ptt-chat-footer #submit {
+  width: 36px;
+  margin-left: 8px;
 }

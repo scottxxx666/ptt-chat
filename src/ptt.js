@@ -13,6 +13,9 @@
       if (type === 'START') {
         const {username, password, deleteDuplicate, board, article} = request.data
         pollingMessages(username, password, deleteDuplicate, board, article, sendPushes, notifyError)
+      } else if (type === 'SEND') {
+        const res = pushMessage(request.data)
+        console.log({res})
       }
     }
   );
