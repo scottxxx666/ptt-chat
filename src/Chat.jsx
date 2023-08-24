@@ -17,12 +17,12 @@ export default function Chat({messages, close}) {
     )
   })
   const chatRef = useRef();
-  const [message, setMessage] = useState();
+  const [input, setInput] = useState('');
 
   function handleInput(e) {
     console.log('change')
     e.preventDefault()
-    setMessage(e.target.value)
+    setInput(e.target.value)
   }
 
   function handleEnter(e) {
@@ -32,9 +32,9 @@ export default function Chat({messages, close}) {
   }
 
   async function sendMessage() {
-    const res = await chrome.runtime.sendMessage({type: "SEND", data: message});
+    const res = await chrome.runtime.sendMessage({type: "SEND", data: input});
     console.log(res);
-    setMessage('')
+    setInput('')
   }
 
   useEffect(() => {
@@ -50,7 +50,7 @@ export default function Chat({messages, close}) {
         </div>
       </div>
       <div id='ptt-chat-footer'>
-        <input name='message' type='text' onChange={handleInput} onKeyDown={handleEnter} value={message}/>
+        <input name='message' type='text' onChange={handleInput} onKeyDown={handleEnter} value={input}/>
         <button id='submit' onClick={sendMessage}>⏎</button>
       </div>
     </>

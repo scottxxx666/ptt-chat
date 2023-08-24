@@ -8,6 +8,7 @@ function App() {
   console.log('App')
   const [isStart, setIsStart] = useState(false)
   const [messages, setMessages] = useState([])
+  const [isMini, setIsMini] = useState(false)
 
   function messageListener(request, sender, sendResponse) {
     console.log(request)
@@ -46,10 +47,29 @@ function App() {
     setIsStart(false)
   }
 
+  function toggleChat() {
+    setIsMini(prevState => !prevState)
+  }
+
+  useEffect(() => {
+    const root = document.querySelector('#crx-root');
+    if (isMini) {
+      root.classList.add('mini')
+    } else {
+      root.classList.remove('mini')
+    }
+  }, [isMini])
+
+  if (isMini) {
+    return (
+      <div><button onClick={toggleChat}>⇤</button></div>
+    )
+  }
+
   return (
     <>
       <div id='ptt-chat-header'>
-        <button>Hide</button>
+        <button onClick={toggleChat}>⇥</button>
       </div>
       {isStart ? <Chat messages={messages} close={close}/> : <Login start={start}/>}
     </>
