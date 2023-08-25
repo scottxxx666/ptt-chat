@@ -1,8 +1,8 @@
 #crx-root {
-  height: 90%;
+  height: 80%;
   width: 300px;
   position: fixed;
-  top: 5%;
+  top: 10%;
   right: 4px;
   z-index: 2147483647;
   border-radius: 16px;
@@ -27,7 +27,7 @@
   color: white;
 }
 
-#ptt-chat-window.transparent {
+#ptt-chat-window.transparent:not(:hover) {
   background-color: transparent;
 }
 
@@ -37,7 +37,7 @@
 }
 
 #ptt-chat-window.transparent input:not(:focus) {
-  background-color: transparent;
+  /*background-color: transparent;*/
 }
 
 #ptt-chat-header {
@@ -45,6 +45,8 @@
   padding-left: 4px;
   padding-right: 4px;
   margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
 }
 
 #ptt-chat-header button {
@@ -100,6 +102,10 @@
 #ptt-chat-footer {
   padding: 4px 4px 4px 4px;
   display: flex;
+}
+
+#ptt-chat-footer input {
+  flex: 1;
 }
 
 #ptt-chat-footer #submit {

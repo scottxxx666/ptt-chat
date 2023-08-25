@@ -49,6 +49,7 @@ function App() {
   }
 
   function close() {
+    chrome.runtime.sendMessage({type: 'STOP'});
     setIsStart(false)
   }
 
@@ -77,10 +78,15 @@ function App() {
     <TransparentContext.Provider value={transparent}>
       <div id="ptt-chat-window" className={transparent ? 'transparent' : ''}>
         <div id="ptt-chat-header">
-          <button onClick={toggleChat}>⇥</button>
-          <button onClick={() => setTransparent(prev => !prev)}>透明</button>
+          <div>
+            <button onClick={toggleChat}>⇥</button>
+            <button onClick={() => setTransparent(prev => !prev)}>
+              {transparent ? '取消透明' : '背景透明'}
+            </button>
+          </div>
+          <button onClick={close}>x</button>
         </div>
-        {isStart ? <Chat messages={messages} close={close}/> : <Login start={start}/>}
+        {isStart ? <Chat messages={messages}/> : <Login start={start}/>}
       </div>
     </TransparentContext.Provider>
   )

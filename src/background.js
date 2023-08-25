@@ -37,6 +37,8 @@ chrome.runtime.onMessage.addListener(async function (request, sender, sendRespon
     await chrome.tabs.sendMessage(chatTab, {type: 'READY'});
   } else if (type === 'SEND') {
     await chrome.tabs.sendMessage(pttTab, request);
+  } else if (type === 'STOP') {
+    stopExtension();
   } else if (type === 'MSG' && chatTab) {
     try {
       await chrome.tabs.sendMessage(chatTab, request);
