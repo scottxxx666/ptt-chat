@@ -21,15 +21,19 @@ export default function Login({start}) {
     setLoginArgs(p => ({...p, [e.target.name]: e.target.value}));
   }
 
-  function handleSubmit(e) {
-    e.preventDefault();
+  function submit() {
     const {username, password, deleteDuplicate, board, article} = loginArgs
     start({username, password, deleteDuplicate: deleteDuplicate === 'on', board, article});
   }
 
+  function handleEnter(e) {
+    if (e.key === 'Enter' && !e.nativeEvent.isComposing){
+      submit()
+    }
+  }
+
   return (
-    <form className={`flex min-h-screen flex-col items-left justify-between p-24`} style={{right: 0}}
-          onSubmit={handleSubmit}>
+    <div>
       <div>
         <label className={labelClass}>帳號：</label>
         <input className={textClass} name="username" onChange={handleChange} value={loginArgs.username}/>
@@ -48,11 +52,11 @@ export default function Login({start}) {
       </div>
       <div>
         <label className={labelClass}>文章代碼：</label>
-        <input name="article" className={textClass} onChange={handleChange} value={loginArgs.article}/>
+        <input name="article" className={textClass} onChange={handleChange} onKeyDown={handleEnter} value={loginArgs.article}/>
       </div>
       <div className={'flex flex-col items-center'}>
-        <button className={`bg-stone-500 py-2 px-3`}>送出</button>
+        <button className={`bg-stone-500 py-2 px-3`} onClick={submit}>送出</button>
       </div>
-    </form>
+    </div>
   )
 }
