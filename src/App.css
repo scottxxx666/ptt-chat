@@ -1,21 +1,54 @@
 #crx-root {
-  color: white;
+  height: 90%;
+  width: 300px;
+  position: fixed;
+  top: 5%;
+  right: 4px;
+  z-index: 2147483647;
+  border-radius: 16px;
 }
 
-#crx-root input {
-  color: black;
-  height: 32px;
+#crx-root.mini {
+  width: 36px;
+  background-color: rgba(0, 0, 0, 0);
+  height: 36px;
 }
 
 #crx-root.hide {
   display: none !important;
 }
 
+#ptt-chat-window {
+  height: 100%;
+  background-color: #18181b;
+  display: flex;
+  flex-direction: column;
+  padding: 4px 4px 12px;
+  color: white;
+}
+
+#ptt-chat-window.transparent {
+  background-color: transparent;
+}
+
+#ptt-chat-window .ptt-input {
+  color: black;
+  height: 32px;
+}
+
+#ptt-chat-window.transparent input:not(:focus) {
+  background-color: transparent;
+}
+
 #ptt-chat-header {
   height: 24px;
   padding-left: 4px;
   padding-right: 4px;
-  padding-bottom: 4px;
+  margin-bottom: 8px;
+}
+
+#ptt-chat-header button {
+  margin-right: 4px;
 }
 
 #ptt-chat-container {

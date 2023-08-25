@@ -32,23 +32,23 @@ export default function Login({start}) {
           onSubmit={handleSubmit}>
       <div>
         <label className={labelClass}>帳號：</label>
-        <input className={textClass} name="username" onChange={handleChange}/>
+        <input className={textClass} name="username" onChange={handleChange} value={loginArgs.username}/>
       </div>
       <div>
         <label className={labelClass}>密碼：</label>
-        <input type="password" name="password" className={textClass} onChange={handleChange}/>
+        <input type="password" name="password" className={textClass} onChange={handleChange} value={loginArgs.password}/>
       </div>
       <div>
-        <input type="checkbox" name="deleteDuplicate" onChange={handleChange}/>
+        <input type="checkbox" name="deleteDuplicate" onChange={handleChange} value={loginArgs.deleteDuplicate}/>
         <label className={labelClass}>是否刪除重覆連線</label>
       </div>
       <div>
         <label className={labelClass}>看板：</label>
-        <input name="board" className={textClass} onChange={handleChange}/>
+        <input name="board" className={textClass} onChange={handleChange} value={loginArgs.board}/>
       </div>
       <div>
         <label className={labelClass}>文章代碼：</label>
-        <input name="article" className={textClass} onChange={handleChange}/>
+        <input name="article" className={textClass} onChange={handleChange} value={loginArgs.article}/>
       </div>
       <div className={'flex flex-col items-center'}>
         <button className={`bg-stone-500 py-2 px-3`}>送出</button>

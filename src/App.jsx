@@ -1,14 +1,19 @@
-import {useEffect, useState} from 'react'
+import {createContext, useContext, useEffect, useState} from 'react'
 import './App.css'
 import Login from "./Login.jsx"
 import './wasm_exec'
 import Chat from "./Chat.jsx"
+
+const TransparentContext = createContext(null);
 
 function App() {
   console.log('App')
   const [isStart, setIsStart] = useState(false)
   const [messages, setMessages] = useState([])
   const [isMini, setIsMini] = useState(false)
+
+  const theme = useContext(TransparentContext)
+  const [transparent, setTransparent] = useState(false)
 
   function messageListener(request, sender, sendResponse) {
     console.log(request)
@@ -27,7 +32,7 @@ function App() {
 
   function reset() {
     setIsStart(false)
-    setMessages([])
+    // setMessages([])
   }
 
   useEffect(() => {
@@ -62,17 +67,22 @@ function App() {
 
   if (isMini) {
     return (
-      <div><button onClick={toggleChat}>⇤</button></div>
+      <div>
+        <button onClick={toggleChat}>⇤</button>
+      </div>
     )
   }
 
   return (
-    <>
-      <div id='ptt-chat-header'>
-        <button onClick={toggleChat}>⇥</button>
+    <TransparentContext.Provider value={transparent}>
+      <div id="ptt-chat-window" className={transparent ? 'transparent' : ''}>
+        <div id="ptt-chat-header">
+          <button onClick={toggleChat}>⇥</button>
+          <button onClick={() => setTransparent(prev => !prev)}>透明</button>
+        </div>
+        {isStart ? <Chat messages={messages} close={close}/> : <Login start={start}/>}
       </div>
-      {isStart ? <Chat messages={messages} close={close}/> : <Login start={start}/>}
-    </>
+    </TransparentContext.Provider>
   )
 }
 
