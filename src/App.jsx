@@ -21,7 +21,7 @@ function App() {
     if (type === 'MSG') {
       const messages = JSON.parse(data)
       if (messages.length === 0) return
-      setMessages(prev => [...prev, ...messages.toReversed()])
+      setMessages(prev => [...prev, ...messages])
     } else if (type === 'STOP') {
       reset()
     } else if (type === 'ERR') {
