@@ -10,9 +10,9 @@ export default function Chat({messages, close}) {
   console.log('CHat')
   const msgs = messages.map((e) => {
     return (
-      <div key={e.id} className={'py-1 break-all'}>
-        <span className={'text-green-400'}>{e.user}</span>
-        <span className={'text-white'}>: {e.message}</span>
+      <div key={e.id} className={'ptt-py-1 ptt-break-all'}>
+        <span className={'ptt-text-green-400'}>{e.user}</span>
+        <span className={'ptt-text-white'}>: {e.message}</span>
       </div>
     )
   })
@@ -44,15 +44,15 @@ export default function Chat({messages, close}) {
 
   return (
     <>
-      <div id='ptt-chat-container' className={'overflow-y-scroll h-full'}>
-        <div id={"ptt-chat"} ref={chatRef} className={'mr-1 text-sm h-full'}>
+      <div id='ptt-chat-container' className={'ptt-overflow-y-scroll ptt-h-full'}>
+        <div id={"ptt-chat"} ref={chatRef} className={'ptt-mr-1 ptt-text-sm ptt-h-full'}>
           {msgs}
         </div>
       </div>
-      <div id='ptt-chat-footer' className={'flex pt-2 pb-1'}>
+      <div id='ptt-chat-footer' className={'ptt-flex ptt-pt-2 ptt-pb-1'}>
         <input name='message' type='text' onChange={handleInput} onKeyDown={handleEnter} value={input}
-               className={'outline outline-slate-600 bg-transparent px-1 flex-auto'}/>
-        <button id='submit' onClick={sendMessage} className={'ml-2 w-7'}>⏎</button>
+               className={'ptt-outline ptt-outline-slate-600 ptt-bg-transparent ptt-px-1 ptt-flex-auto'}/>
+        <button id='submit' onClick={sendMessage} className={'ptt-ml-2 ptt-w-7'}>⏎</button>
       </div>
     </>
   )

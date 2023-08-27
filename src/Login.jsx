@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import {useState} from "react";
 
-const textClass = 'text-black pl-1 bg-stone-300 placeholder:text-slate-600';
+const textClass = 'ptt-text-black ptt-pl-1 ptt-bg-stone-300 placeholder:ptt-text-slate-600';
 
 Login.propTypes = {
   start: PropTypes.func,
@@ -33,30 +33,30 @@ export default function Login({start}) {
 
   return (
     <div>
-      <div className={'pb-4'}>
+      <div className={'ptt-pb-4'}>
         <label>帳號：</label>
         <input className={textClass} name="username" onChange={handleChange} value={loginArgs.username}/>
       </div>
-      <div className={'pb-4'}>
+      <div className={'ptt-pb-4'}>
         <label>密碼：</label>
         <input type="password" name="password" className={textClass} onChange={handleChange}
                value={loginArgs.password}/>
       </div>
-      <div className={'pb-4'}>
+      <div className={'ptt-pb-4'}>
         <input type="checkbox" name="deleteDuplicate" onChange={handleChange} value={loginArgs.deleteDuplicate}/>
         <label> 是否刪除重覆連線</label>
       </div>
-      <div className={'pb-4'}>
+      <div className={'ptt-pb-4'}>
         <label>看板：</label>
         <input name="board" className={textClass} onChange={handleChange} value={loginArgs.board} placeholder="c_chat"/>
       </div>
-      <div className={'pb-4'}>
+      <div className={'ptt-pb-4'}>
         <label>文章代碼：</label>
         <input name="article" className={textClass} onChange={handleChange} onKeyDown={handleEnter}
                value={loginArgs.article} placeholder="#1ab2CDEF"/>
       </div>
-      <div className={'flex flex-col items-center mt-2'}>
-        <button className={`bg-stone-500 py-1 px-3`} onClick={submit}>開始</button>
+      <div className={'ptt-flex ptt-flex-col ptt-items-center ptt-mt-2'}>
+        <button className={`ptt-bg-stone-500 ptt-py-1 ptt-px-3`} onClick={submit}>開始</button>
       </div>
     </div>
   )

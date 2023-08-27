@@ -10,8 +10,7 @@
 
 #crx-root.mini {
   width: 36px;
-  background-color: rgba(0, 0, 0, 0);
-  height: 36px;
+  height: fit-content;
 }
 
 #crx-root.hide {

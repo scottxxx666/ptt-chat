@@ -68,8 +68,8 @@ function App() {
 
   if (isMini) {
     return (
-      <div>
-        <button onClick={toggleChat}>⇤</button>
+      <div className={'ptt-h-full ptt-py-1 ptt-bg-slate-950 ptt-text-white ptt-px-2'}>
+        <button className={'text-lg'} onClick={toggleChat}>⇤</button>
       </div>
     )
   }
@@ -77,11 +77,11 @@ function App() {
   return (
     <TransparentContext.Provider value={transparent}>
       <div id="ptt-chat-window"
-           className={`h-full flex flex-col bg-slate-950 py-2 pr-2 pl-3 text-white text-base ${transparent ? '[&:not(:hover)]:bg-transparent' : ''}`}>
-        <div id="ptt-chat-header" className={'flex mb-2 justify-between'}>
+           className={`ptt-h-full ptt-flex ptt-flex-col ptt-bg-slate-950 ptt-py-2 ptt-pr-2 ptt-pl-3 ptt-text-white ptt-text-base ${transparent ? '[&:not(:hover)]:ptt-bg-transparent' : ''}`}>
+        <div id="ptt-chat-header" className={'ptt-flex ptt-mb-2 ptt-justify-between'}>
           <div>
             <button onClick={toggleChat}>⇥</button>
-            <button className={'ml-2'} onClick={() => setTransparent(prev => !prev)}>
+            <button className={'ptt-ml-2'} onClick={() => setTransparent(prev => !prev)}>
               {transparent ? '取消透明' : '背景透明'}
             </button>
           </div>
