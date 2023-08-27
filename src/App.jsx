@@ -3,6 +3,7 @@ import './App.css'
 import Login from "./Login.jsx"
 import './wasm_exec'
 import Chat from "./Chat.jsx"
+import LightDarkIcon from "./LightDarkIcon.jsx";
 
 export const DarkThemeContext = createContext(null);
 
@@ -67,34 +68,30 @@ function App() {
   }, [isMini])
 
   if (isMini) {
-    return (
-      <div
-        className={`ptt-rounded-md ptt-h-full ptt-py-1 ptt-px-2 ${dark ? 'ptt-bg-slate-950 ptt-text-white ' : 'ptt-bg-white ptt-text-black'}`}>
-        <button className={'ptt-text-lg'} onClick={toggleChat}>⇤</button>
-      </div>
-    )
+    return (<div
+      className={`ptt-rounded-md ptt-h-full ptt-py-1 ptt-px-2 ${dark ? 'ptt-bg-slate-950 ptt-text-white ' : 'ptt-bg-white ptt-text-black'}`}>
+      <button className={'ptt-text-lg'} onClick={toggleChat}>⇤</button>
+    </div>)
   }
 
-  return (
-    <DarkThemeContext.Provider value={dark}>
-      <div id="ptt-chat-window"
-           className={`ptt-rounded-md ptt-h-full ptt-flex ptt-flex-col ptt-py-2 ptt-pr-2 ptt-pl-3 ${dark ? 'ptt-bg-slate-950 ptt-text-white' : 'ptt-bg-white ptt-text-black'} ptt-text-base ${transparent ? '[&:not(:hover)]:ptt-bg-transparent' : ''}`}>
-        <div id="ptt-chat-header" className={'ptt-flex ptt-mb-2 ptt-justify-between'}>
-          <div>
-            <button onClick={toggleChat}>⇥</button>
-            <button className={'ptt-ml-2'} onClick={() => setTransparent(prev => !prev)}>
-              {transparent ? '取消透明' : '背景透明'}
-            </button>
-            <button className={'ptt-ml-2'} onClick={() => setDark(prev => !prev)}>
-              {dark ? 'light' : 'dark'}
-            </button>
-          </div>
-          <button onClick={close}>x</button>
+  return (<DarkThemeContext.Provider value={dark}>
+    <div id="ptt-chat-window"
+         className={`ptt-rounded-md ptt-h-full ptt-flex ptt-flex-col ptt-py-2 ptt-pr-2 ptt-pl-3 ${dark ? 'ptt-bg-slate-950 ptt-text-white' : 'ptt-bg-white ptt-text-black'} ptt-text-base ${transparent ? '[&:not(:hover)]:ptt-bg-transparent' : ''}`}>
+      <div id="ptt-chat-header" className={'ptt-flex ptt-mb-2 ptt-justify-between'}>
+        <div className={'ptt-flex'}>
+          <button onClick={toggleChat}>⇥</button>
+          <button className={'ptt-ml-2'} onClick={() => setTransparent(prev => !prev)}>
+            {transparent ? '取消透明' : '背景透明'}
+          </button>
+          <button className={`ptt-ml-2`} onClick={() => setDark(prev => !prev)}>
+            <LightDarkIcon/>
+          </button>
         </div>
-        {isStart ? <Chat messages={messages}/> : <Login start={start}/>}
+        <button onClick={close}>x</button>
       </div>
-    </DarkThemeContext.Provider>
-  )
+      {isStart ? <Chat messages={messages}/> : <Login start={start}/>}
+    </div>
+  </DarkThemeContext.Provider>)
 }
 
 export default App
