@@ -1,20 +1,19 @@
 import PropTypes from "prop-types";
-import {useEffect, useRef, useState} from "react";
+import {useContext, useEffect, useRef, useState} from "react";
+import {DarkThemeContext} from "./App.jsx";
 
 Chat.propTypes = {
-  messages: PropTypes.array,
-  close: PropTypes.func,
+  messages: PropTypes.array, close: PropTypes.func,
 }
 
 export default function Chat({messages, close}) {
   console.log('CHat')
+  const darkTheme = useContext(DarkThemeContext)
   const msgs = messages.map((e) => {
-    return (
-      <div key={e.id} className={'ptt-py-1 ptt-break-all'}>
-        <span className={'ptt-text-green-400'}>{e.user}</span>
-        <span className={'ptt-text-white'}>: {e.message}</span>
-      </div>
-    )
+    return (<div key={e.id} className={'ptt-py-1 ptt-break-all'}>
+      <span className={darkTheme ? 'ptt-text-green-400' : 'ptt-text-green-600'}>{e.user}</span>
+      <span className={darkTheme ? 'ptt-text-white' : 'ptt-text-black'}>: {e.message}</span>
+    </div>)
   })
   const chatRef = useRef();
   const [input, setInput] = useState('');
@@ -44,14 +43,17 @@ export default function Chat({messages, close}) {
 
   return (
     <>
-      <div id='ptt-chat-container' className={'ptt-overflow-y-scroll ptt-h-full'}>
+      <div id='ptt-chat-container' className={'ptt-overflow-y-scroll ptt-overflow-x-hidden ptt-h-full'}>
         <div id={"ptt-chat"} ref={chatRef} className={'ptt-mr-1 ptt-text-sm ptt-h-full'}>
           {msgs}
         </div>
       </div>
       <div id='ptt-chat-footer' className={'ptt-flex ptt-pt-2 ptt-pb-1'}>
         <input name='message' type='text' onChange={handleInput} onKeyDown={handleEnter} value={input}
-               className={'ptt-outline ptt-outline-slate-600 ptt-bg-transparent ptt-px-1 ptt-flex-auto'}/>
+               className={`ptt-outline ptt-bg-transparent ptt-px-1 ptt-flex-auto ptt-rounded
+                ${darkTheme ? 'ptt-outline-slate-600' : 'ptt-outline-slate-400'}`}
+               maxLength={24}
+        />
         <button id='submit' onClick={sendMessage} className={'ptt-ml-2 ptt-w-7'}>⏎</button>
       </div>
     </>
