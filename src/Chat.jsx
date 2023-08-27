@@ -10,9 +10,9 @@ export default function Chat({messages, close}) {
   console.log('CHat')
   const msgs = messages.map((e) => {
     return (
-      <div key={e.id} className={'ptt-chat-row'}>
-        <span className={'account'}>{e.user}</span>
-        <span className={'message'}>: {e.message}</span>
+      <div key={e.id} className={'py-1 break-all'}>
+        <span className={'text-green-400'}>{e.user}</span>
+        <span className={'text-white'}>: {e.message}</span>
       </div>
     )
   })
@@ -26,7 +26,7 @@ export default function Chat({messages, close}) {
   }
 
   function handleEnter(e) {
-    if (e.key === 'Enter' && !e.nativeEvent.isComposing){
+    if (e.key === 'Enter' && !e.nativeEvent.isComposing) {
       sendMessage()
     }
   }
@@ -44,14 +44,15 @@ export default function Chat({messages, close}) {
 
   return (
     <>
-      <div id='ptt-chat-container'>
-        <div id={"ptt-chat"} ref={chatRef}>
+      <div id='ptt-chat-container' className={'overflow-y-scroll h-full'}>
+        <div id={"ptt-chat"} ref={chatRef} className={'mr-1 text-sm h-full'}>
           {msgs}
         </div>
       </div>
-      <div id='ptt-chat-footer'>
-        <input name='message' type='text' onChange={handleInput} onKeyDown={handleEnter} value={input}/>
-        <button id='submit' onClick={sendMessage}>⏎</button>
+      <div id='ptt-chat-footer' className={'flex pt-2 pb-1'}>
+        <input name='message' type='text' onChange={handleInput} onKeyDown={handleEnter} value={input}
+               className={'outline outline-slate-600 bg-transparent px-1 flex-auto'}/>
+        <button id='submit' onClick={sendMessage} className={'ml-2 w-7'}>⏎</button>
       </div>
     </>
   )

@@ -76,11 +76,12 @@ function App() {
 
   return (
     <TransparentContext.Provider value={transparent}>
-      <div id="ptt-chat-window" className={transparent ? 'transparent' : ''}>
-        <div id="ptt-chat-header">
+      <div id="ptt-chat-window"
+           className={`h-full flex flex-col bg-slate-950 py-2 pr-2 pl-3 text-white text-base ${transparent ? '[&:not(:hover)]:bg-transparent' : ''}`}>
+        <div id="ptt-chat-header" className={'flex mb-2 justify-between'}>
           <div>
             <button onClick={toggleChat}>⇥</button>
-            <button onClick={() => setTransparent(prev => !prev)}>
+            <button className={'ml-2'} onClick={() => setTransparent(prev => !prev)}>
               {transparent ? '取消透明' : '背景透明'}
             </button>
           </div>

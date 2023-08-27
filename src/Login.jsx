@@ -1,8 +1,7 @@
 import PropTypes from "prop-types";
 import {useState} from "react";
 
-const labelClass = 'text-yellow-300'
-const textClass = 'text-black pl-1';
+const textClass = 'text-black pl-1 bg-stone-300 placeholder:text-slate-600';
 
 Login.propTypes = {
   start: PropTypes.func,
@@ -27,35 +26,37 @@ export default function Login({start}) {
   }
 
   function handleEnter(e) {
-    if (e.key === 'Enter' && !e.nativeEvent.isComposing){
+    if (e.key === 'Enter' && !e.nativeEvent.isComposing) {
       submit()
     }
   }
 
   return (
     <div>
-      <div>
-        <label className={labelClass}>帳號：</label>
+      <div className={'pb-4'}>
+        <label>帳號：</label>
         <input className={textClass} name="username" onChange={handleChange} value={loginArgs.username}/>
       </div>
-      <div>
-        <label className={labelClass}>密碼：</label>
-        <input type="password" name="password" className={textClass} onChange={handleChange} value={loginArgs.password}/>
+      <div className={'pb-4'}>
+        <label>密碼：</label>
+        <input type="password" name="password" className={textClass} onChange={handleChange}
+               value={loginArgs.password}/>
       </div>
-      <div>
+      <div className={'pb-4'}>
         <input type="checkbox" name="deleteDuplicate" onChange={handleChange} value={loginArgs.deleteDuplicate}/>
-        <label className={labelClass}>是否刪除重覆連線</label>
+        <label> 是否刪除重覆連線</label>
       </div>
-      <div>
-        <label className={labelClass}>看板：</label>
-        <input name="board" className={textClass} onChange={handleChange} value={loginArgs.board}/>
+      <div className={'pb-4'}>
+        <label>看板：</label>
+        <input name="board" className={textClass} onChange={handleChange} value={loginArgs.board} placeholder="c_chat"/>
       </div>
-      <div>
-        <label className={labelClass}>文章代碼：</label>
-        <input name="article" className={textClass} onChange={handleChange} onKeyDown={handleEnter} value={loginArgs.article}/>
+      <div className={'pb-4'}>
+        <label>文章代碼：</label>
+        <input name="article" className={textClass} onChange={handleChange} onKeyDown={handleEnter}
+               value={loginArgs.article} placeholder="#1ab2CDEF"/>
       </div>
-      <div className={'flex flex-col items-center'}>
-        <button className={`bg-stone-500 py-2 px-3`} onClick={submit}>送出</button>
+      <div className={'flex flex-col items-center mt-2'}>
+        <button className={`bg-stone-500 py-1 px-3`} onClick={submit}>開始</button>
       </div>
     </div>
   )
