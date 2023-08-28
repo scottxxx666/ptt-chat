@@ -4,6 +4,7 @@ import Login from "./Login.jsx"
 import './wasm_exec'
 import Chat from "./Chat.jsx"
 import LightDarkIcon from "./LightDarkIcon.jsx";
+import {MAX_MESSAGE_COUNT} from "./configs.js";
 
 export const DarkThemeContext = createContext(null);
 
@@ -22,7 +23,7 @@ function App() {
     if (type === 'MSG') {
       const messages = JSON.parse(data)
       if (messages.length === 0) return
-      setMessages(prev => [...prev, ...messages])
+      setMessages(prev => [...prev, ...messages].slice(-MAX_MESSAGE_COUNT))
     } else if (type === 'STOP') {
       reset()
     } else if (type === 'ERR') {
