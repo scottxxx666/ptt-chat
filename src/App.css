@@ -4,7 +4,7 @@
   position: fixed;
   top: 10%;
   right: 4px;
-  z-index: 2147483647;
+  z-index: 2147483637;
   border-radius: 16px;
 }
 
@@ -18,7 +18,7 @@
 }
 
 #ptt-chat-container::-webkit-scrollbar {
-  width: 8px;
+  width: 4px;
   background: transparent;
 }
 
@@ -27,6 +27,19 @@
   border: 0;
 }
 
+#ptt-chat-container.ptt-scroll-light::-webkit-scrollbar-thumb {
+  background: #ccc;
+}
+
 #ptt-chat-container::-webkit-scrollbar-track {
   background-color: transparent;
+}
+
+#ptt-page-end {
+  z-index: 2147483638;
+  position: absolute;
+  bottom: 60px;
+  left: 50%;
+  /* since container padding left 4 more pixel*/
+  transform: translate(-36%, 0);
 }

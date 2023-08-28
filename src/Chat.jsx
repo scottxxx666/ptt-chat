@@ -3,11 +3,10 @@ import {useContext, useEffect, useRef, useState} from "react";
 import {DarkThemeContext} from "./App.jsx";
 
 Chat.propTypes = {
-  messages: PropTypes.array, close: PropTypes.func,
+  messages: PropTypes.array,
 }
 
-export default function Chat({messages, close}) {
-  console.log('CHat')
+export default function Chat({messages}) {
   const darkTheme = useContext(DarkThemeContext)
   const msgs = messages.map((e) => {
     return (<div key={e.id} className={'ptt-py-1 ptt-break-all'}>
@@ -17,6 +16,7 @@ export default function Chat({messages, close}) {
   })
   const chatRef = useRef();
   const [input, setInput] = useState('');
+  const [scrolling, setScrolling] = useState(false);
 
   function handleInput(e) {
     console.log('change')
@@ -38,15 +38,41 @@ export default function Chat({messages, close}) {
 
   useEffect(() => {
     console.log('useEffect')
-    chatRef.current?.lastElementChild?.scrollIntoView()
+    if (!scrolling) {
+      chatRef.current?.lastElementChild?.scrollIntoView()
+    }
   }, [msgs])
+
+  function handleScroll() {
+    const lastMsg = chatRef.current?.lastElementChild;
+    if (lastMsg) {
+      const {top, height} = lastMsg.getBoundingClientRect()
+      const parent = chatRef.current.parentNode.getBoundingClientRect()
+      const parentHeight = parent.top + parent.height
+      if (top + (height / 2) <= parentHeight) {
+        setScrolling(false)
+      } else {
+        setScrolling(true)
+      }
+    }
+  }
+
+  function scrollToEnd() {
+    setScrolling(false)
+    chatRef.current?.lastElementChild?.scrollIntoView()
+  }
 
   return (
     <>
-      <div id='ptt-chat-container' className={'ptt-overflow-y-scroll ptt-overflow-x-hidden ptt-h-full'}>
+      <div id='ptt-chat-container'
+           className={`ptt-overflow-y-scroll ptt-overflow-x-hidden ptt-h-full ${darkTheme ? '' : 'ptt-scroll-light'}`}
+           onScroll={handleScroll}
+      >
         <div id={"ptt-chat"} ref={chatRef} className={'ptt-mr-1 ptt-text-sm ptt-h-full'}>
           {msgs}
         </div>
+        {scrolling && <button id='ptt-page-end' onClick={scrollToEnd}
+                              className={`ptt-w-7 ptt-h-6 ptt-rounded ptt-text-white ${darkTheme ? 'ptt-bg-sky-600' : 'ptt-bg-sky-400'}`}>↓</button>}
       </div>
       <div id='ptt-chat-footer' className={'ptt-flex ptt-pt-2 ptt-pb-1'}>
         <input name='message' type='text' onChange={handleInput} onKeyDown={handleEnter} value={input}
