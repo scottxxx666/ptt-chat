@@ -5,12 +5,14 @@ import './wasm_exec'
 import Chat from "./Chat.jsx"
 import LightDarkIcon from "./LightDarkIcon.jsx";
 import {MAX_MESSAGE_COUNT} from "./configs.js";
+import Loading from "./Loading.jsx";
+import {STATE} from "./consts.js";
 
 export const DarkThemeContext = createContext(null);
 
 function App() {
   console.log('App')
-  const [isStart, setIsStart] = useState(false)
+  const [state, setState] = useState(STATE.LOGIN)
   const [messages, setMessages] = useState([])
   const [isMini, setIsMini] = useState(false)
 
@@ -21,6 +23,7 @@ function App() {
     console.log(request)
     const {type, data} = request
     if (type === 'MSG') {
+      setState('STREAMING')
       const messages = JSON.parse(data)
       if (messages.length === 0) return
       setMessages(prev => [...prev, ...messages].slice(-MAX_MESSAGE_COUNT))
@@ -33,8 +36,8 @@ function App() {
   }
 
   function reset() {
-    setIsStart(false)
-    // setMessages([])
+    setState(STATE.LOGIN)
+    setMessages([])
   }
 
   useEffect(() => {
@@ -47,12 +50,12 @@ function App() {
   async function start(data) {
     const res = await chrome.runtime.sendMessage({type: "START", data});
     console.log({res})
-    setIsStart(true)
+    setState(STATE.LOADING)
   }
 
   function close() {
     chrome.runtime.sendMessage({type: 'STOP'});
-    setIsStart(false)
+    setState(STATE.LOGIN)
   }
 
   function toggleChat() {
@@ -90,7 +93,8 @@ function App() {
         </div>
         <button onClick={close}>x</button>
       </div>
-      {isStart ? <Chat messages={messages}/> : <Login start={start}/>}
+      {state === STATE.LOGIN ? <Login start={start}/> :
+        state === STATE.LOADING ? <Loading/> : <Chat messages={messages}/>}
     </div>
   </DarkThemeContext.Provider>)
 }
