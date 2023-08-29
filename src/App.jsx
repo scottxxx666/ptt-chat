@@ -9,6 +9,10 @@ import Loading from "./Loading.jsx";
 import {STATE} from "./consts.js";
 import Settings from "./Settings.jsx";
 import {bgTextColorClass} from "./theme.js";
+import SettingsIcon from "./icons/SettingsIcon.jsx";
+import CloseIcon from "./icons/CloseIcon.jsx";
+import IconButton from "./IconButton.jsx";
+import MinimizeIcon from "./icons/MinimizeIcon.jsx";
 
 export const DarkThemeContext = createContext(null);
 
@@ -70,13 +74,15 @@ function App() {
   }
 
   if (isMini) {
-    return (<div
-      id="ptt-chat-window"
-      className={`ptt-h-fit ptt-rounded-md ptt-w-fit ptt-py-1 ptt-px-2 ${dark ? 'ptt-bg-slate-950 ptt-text-neutral-100 ' : 'ptt-bg-stone-50 ptt-text-slate-900'}`}
-      style={{top: settings.top + '%', right: settings.right + '%'}}
-    >
-      <button className={'ptt-text-lg'} onClick={toggleChat}>⇤</button>
-    </div>)
+    return (<DarkThemeContext.Provider value={dark}>
+      <div
+        id="ptt-chat-window"
+        className={`ptt-flex ptt-h-fit ptt-rounded-md ptt-w-fit ptt-py-1 ptt-px-2 ${dark ? 'ptt-bg-slate-950 ptt-text-neutral-100 ' : 'ptt-bg-stone-50 ptt-text-slate-900'}`}
+        style={{top: settings.top + '%', right: settings.right + '%'}}
+      >
+        <IconButton click={toggleChat} style={{transform: 'scaleX(-1)'}}><MinimizeIcon/></IconButton>
+      </div>
+    </DarkThemeContext.Provider>)
   }
 
   return (<DarkThemeContext.Provider value={dark}>
@@ -91,7 +97,7 @@ function App() {
     >
       <div id="ptt-chat-header" className={'ptt-flex ptt-mb-2 ptt-px-1 ptt-justify-between'}>
         <div className={'ptt-flex'}>
-          <button onClick={toggleChat}>⇥</button>
+          <IconButton click={toggleChat}><MinimizeIcon/></IconButton>
           <button className={'ptt-ml-2'} onClick={() => setTransparent(prev => !prev)}>
             {transparent ? '取消透明' : '背景透明'}
           </button>
@@ -100,8 +106,8 @@ function App() {
           </button>
         </div>
         <div className={'ptt-flex'}>
-          <button onClick={() => setShowSettings(true)}>Settings</button>
-          <button onClick={close}>x</button>
+          <IconButton click={() => setShowSettings(true)}><SettingsIcon/></IconButton>
+          <IconButton click={close} className={'ptt-ml-2'}><CloseIcon/></IconButton>
         </div>
       </div>
       {state === STATE.LOGIN ? <Login start={start}/> :
