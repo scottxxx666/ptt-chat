@@ -21,7 +21,6 @@ function App() {
   const [state, setState] = useState(STATE.LOGIN)
   const [messages, setMessages] = useState([])
   const [isMini, setIsMini] = useState(false)
-  const [transparent, setTransparent] = useState(false)
   const [dark, setDark] = useState(true)
   const [showSettings, setShowSettings] = useState(false)
   const [settings, setSettings] = useState(defaultSettings())
@@ -86,34 +85,33 @@ function App() {
   }
 
   return (<DarkThemeContext.Provider value={dark}>
-    <div id="ptt-chat-window"
-         className={`ptt-rounded-md ptt-flex ptt-flex-col ptt-py-2 ptt-px-2 ptt-overflow-auto ${bgTextColorClass(dark)} ptt-text-base ${transparent ? '[&:not(:hover)]:ptt-bg-transparent' : ''}`}
-         style={{
-           top: `${settings.top}%`,
-           right: `${settings.right}%`,
-           width: `${settings.width}%`,
-           height: `${settings.height}%`
-         }}
-    >
-      <div id="ptt-chat-header" className={'ptt-flex ptt-mb-2 ptt-px-1 ptt-justify-between'}>
-        <div className={'ptt-flex'}>
-          <IconButton click={toggleChat}><MinimizeIcon/></IconButton>
-          <button className={'ptt-ml-2'} onClick={() => setTransparent(prev => !prev)}>
-            {transparent ? '取消透明' : '背景透明'}
-          </button>
-          <button className={`ptt-ml-2`} onClick={() => setDark(prev => !prev)}>
-            <LightDarkIcon/>
-          </button>
+    <section className={'ptt-text-base'}>
+      <div id="ptt-chat-window"
+           className={`ptt-rounded-md ptt-flex ptt-flex-col ptt-py-2 ptt-px-2 ptt-overflow-auto ${bgTextColorClass(dark)} ${settings.transparent ? '[&:not(:hover)]:ptt-bg-transparent' : ''}`}
+           style={{
+             top: `${settings.top}%`,
+             right: `${settings.right}%`,
+             width: `${settings.width}%`,
+             height: `${settings.height}%`,
+           }}
+      >
+        <div id="ptt-chat-header" className={'ptt-flex ptt-mb-2 ptt-px-1 ptt-justify-between'}>
+          <div className={'ptt-flex'}>
+            <IconButton click={toggleChat}><MinimizeIcon/></IconButton>
+            <button className={`ptt-ml-2`} onClick={() => setDark(prev => !prev)}>
+              <LightDarkIcon/>
+            </button>
+          </div>
+          <div className={'ptt-flex'}>
+            <IconButton click={() => setShowSettings(true)}><SettingsIcon/></IconButton>
+            <IconButton click={close} className={'ptt-ml-2'}><CloseIcon/></IconButton>
+          </div>
         </div>
-        <div className={'ptt-flex'}>
-          <IconButton click={() => setShowSettings(true)}><SettingsIcon/></IconButton>
-          <IconButton click={close} className={'ptt-ml-2'}><CloseIcon/></IconButton>
-        </div>
+        {state === STATE.LOGIN ? <Login start={start}/> :
+          state === STATE.LOADING ? <Loading/> : <Chat messages={messages}/>}
       </div>
-      {state === STATE.LOGIN ? <Login start={start}/> :
-        state === STATE.LOADING ? <Loading/> : <Chat messages={messages}/>}
       {showSettings && <Settings settings={settings} setSettings={setSettings} close={() => setShowSettings(false)}/>}
-    </div>
+    </section>
   </DarkThemeContext.Provider>)
 }
 
