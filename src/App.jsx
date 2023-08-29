@@ -4,9 +4,10 @@ import Login from "./Login.jsx"
 import './wasm_exec'
 import Chat from "./Chat.jsx"
 import LightDarkIcon from "./LightDarkIcon.jsx";
-import {MAX_MESSAGE_COUNT} from "./configs.js";
+import {defaultSettings, MAX_MESSAGE_COUNT} from "./configs.js";
 import Loading from "./Loading.jsx";
 import {STATE} from "./consts.js";
+import Settings from "./Settings.jsx";
 import {bgTextColorClass} from "./theme.js";
 
 export const DarkThemeContext = createContext(null);
@@ -16,9 +17,10 @@ function App() {
   const [state, setState] = useState(STATE.LOGIN)
   const [messages, setMessages] = useState([])
   const [isMini, setIsMini] = useState(false)
-
   const [transparent, setTransparent] = useState(false)
   const [dark, setDark] = useState(true)
+  const [showSettings, setShowSettings] = useState(false)
+  const [settings, setSettings] = useState(defaultSettings())
 
   function messageListener(request, sender, sendResponse) {
     console.log(request)
@@ -70,15 +72,22 @@ function App() {
   if (isMini) {
     return (<div
       id="ptt-chat-window"
-      className={`ptt-h-fit ptt-rounded-md ptt-w-fit ptt-py-1 ptt-px-2 ${dark ? 'ptt-bg-slate-950 ptt-text-neutral-100 ' : 'ptt-bg-stone-50 ptt-text-slate-900'}`}>
+      className={`ptt-h-fit ptt-rounded-md ptt-w-fit ptt-py-1 ptt-px-2 ${dark ? 'ptt-bg-slate-950 ptt-text-neutral-100 ' : 'ptt-bg-stone-50 ptt-text-slate-900'}`}
+      style={{top: settings.top + '%', right: settings.right + '%'}}
+    >
       <button className={'ptt-text-lg'} onClick={toggleChat}>⇤</button>
     </div>)
   }
 
   return (<DarkThemeContext.Provider value={dark}>
     <div id="ptt-chat-window"
-         className={`ptt-rounded-md ptt-flex ptt-flex-col ptt-py-2 ptt-px-2 ${bgTextColorClass(dark)} ptt-text-base ${transparent ? '[&:not(:hover)]:ptt-bg-transparent' : ''}`}
-         style={{width: '300px', height: '80%'}}
+         className={`ptt-rounded-md ptt-flex ptt-flex-col ptt-py-2 ptt-px-2 ptt-overflow-auto ${bgTextColorClass(dark)} ptt-text-base ${transparent ? '[&:not(:hover)]:ptt-bg-transparent' : ''}`}
+         style={{
+           top: `${settings.top}%`,
+           right: `${settings.right}%`,
+           width: `${settings.width}%`,
+           height: `${settings.height}%`
+         }}
     >
       <div id="ptt-chat-header" className={'ptt-flex ptt-mb-2 ptt-px-1 ptt-justify-between'}>
         <div className={'ptt-flex'}>
@@ -90,10 +99,14 @@ function App() {
             <LightDarkIcon/>
           </button>
         </div>
-        <button onClick={close}>x</button>
+        <div className={'ptt-flex'}>
+          <button onClick={() => setShowSettings(true)}>Settings</button>
+          <button onClick={close}>x</button>
+        </div>
       </div>
       {state === STATE.LOGIN ? <Login start={start}/> :
         state === STATE.LOADING ? <Loading/> : <Chat messages={messages}/>}
+      {showSettings && <Settings settings={settings} setSettings={setSettings} close={() => setShowSettings(false)}/>}
     </div>
   </DarkThemeContext.Provider>)
 }

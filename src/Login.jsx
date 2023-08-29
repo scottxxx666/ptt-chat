@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import {useContext, useState} from "react";
 import {DarkThemeContext} from "./App.jsx";
-
+import {inputClass} from "./theme.js";
 
 Login.propTypes = {
   start: PropTypes.func,
@@ -9,7 +9,6 @@ Login.propTypes = {
 
 export default function Login({start}) {
   const darkTheme = useContext(DarkThemeContext)
-  const inputClass = `ptt-pl-1 ptt-bg-transparent ptt-outline ptt-rounded ${darkTheme ? 'ptt-text-white ptt-outline-slate-400 placeholder:ptt-text-neutral-400' : 'ptt-text-black ptt-outline-slate-400 placeholder:ptt-text-slate-500'}`;
 
   const [loginArgs, setLoginArgs] = useState({
     username: '',
@@ -35,15 +34,15 @@ export default function Login({start}) {
   }
 
   return (
-    <div>
+    <div className={'ptt-px-1'}>
       <div className={'ptt-pb-4'}>
         <label>帳號：</label>
-        <input className={inputClass} name="username" onChange={handleChange} value={loginArgs.username}
+        <input className={inputClass(darkTheme)} name="username" onChange={handleChange} value={loginArgs.username}
                maxLength={13} minLength={1}/>
       </div>
       <div className={'ptt-pb-4'}>
         <label>密碼：</label>
-        <input type="password" name="password" className={inputClass} onChange={handleChange}
+        <input type="password" name="password" className={inputClass(darkTheme)} onChange={handleChange}
                value={loginArgs.password} maxLength={13}/>
       </div>
       <div className={'ptt-pb-4'}>
@@ -53,12 +52,12 @@ export default function Login({start}) {
       </div>
       <div className={'ptt-pb-4'}>
         <label>看板：</label>
-        <input name="board" className={inputClass} onChange={handleChange} value={loginArgs.board}
+        <input name="board" className={inputClass(darkTheme)} onChange={handleChange} value={loginArgs.board}
                placeholder="範例：c_chat" maxLength={32}/>
       </div>
       <div className={'ptt-pb-4'}>
         <label>文章代碼：</label>
-        <input name="article" className={inputClass} onChange={handleChange} onKeyDown={handleEnter}
+        <input name="article" className={inputClass(darkTheme)} onChange={handleChange} onKeyDown={handleEnter}
                value={loginArgs.article} placeholder="格式：#1ab2CDEF" maxLength={9}/>
       </div>
       <div className={'ptt-flex ptt-flex-col ptt-items-center ptt-mt-2'}>

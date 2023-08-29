@@ -14,7 +14,7 @@
         const {username, password, deleteDuplicate, board, article} = request.data
         pollingMessages(username, password, deleteDuplicate, board, article, sendPushes, notifyError)
       } else if (type === 'SEND') {
-        const res = pushMessage(request.data)
+        const res = pushMessage(request.data, notifyError)
         console.log({res})
       }
     }

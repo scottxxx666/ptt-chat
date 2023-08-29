@@ -31,8 +31,7 @@ export default function Chat({messages}) {
   }
 
   async function sendMessage() {
-    const res = await chrome.runtime.sendMessage({type: "SEND", data: input});
-    console.log(res);
+    chrome.runtime.sendMessage({type: "SEND", data: input});
     setInput('')
   }
 
