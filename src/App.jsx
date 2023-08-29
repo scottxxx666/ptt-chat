@@ -7,6 +7,7 @@ import LightDarkIcon from "./LightDarkIcon.jsx";
 import {MAX_MESSAGE_COUNT} from "./configs.js";
 import Loading from "./Loading.jsx";
 import {STATE} from "./consts.js";
+import {bgTextColorClass} from "./theme.js";
 
 export const DarkThemeContext = createContext(null);
 
@@ -66,26 +67,20 @@ function App() {
     setIsMini(prevState => !prevState)
   }
 
-  useEffect(() => {
-    const root = document.querySelector('#crx-root');
-    if (isMini) {
-      root.classList.add('mini')
-    } else {
-      root.classList.remove('mini')
-    }
-  }, [isMini])
-
   if (isMini) {
     return (<div
-      className={`ptt-rounded-md ptt-h-full ptt-py-1 ptt-px-2 ${dark ? 'ptt-bg-slate-950 ptt-text-white ' : 'ptt-bg-white ptt-text-black'}`}>
+      id="ptt-chat-window"
+      className={`ptt-h-fit ptt-rounded-md ptt-w-fit ptt-py-1 ptt-px-2 ${dark ? 'ptt-bg-slate-950 ptt-text-neutral-100 ' : 'ptt-bg-stone-50 ptt-text-slate-900'}`}>
       <button className={'ptt-text-lg'} onClick={toggleChat}>⇤</button>
     </div>)
   }
 
   return (<DarkThemeContext.Provider value={dark}>
     <div id="ptt-chat-window"
-         className={`ptt-rounded-md ptt-h-full ptt-flex ptt-flex-col ptt-py-2 ptt-pr-2 ptt-pl-3 ${dark ? 'ptt-bg-slate-950 ptt-text-white' : 'ptt-bg-white ptt-text-black'} ptt-text-base ${transparent ? '[&:not(:hover)]:ptt-bg-transparent' : ''}`}>
-      <div id="ptt-chat-header" className={'ptt-flex ptt-mb-2 ptt-justify-between'}>
+         className={`ptt-rounded-md ptt-flex ptt-flex-col ptt-py-2 ptt-px-2 ${bgTextColorClass(dark)} ptt-text-base ${transparent ? '[&:not(:hover)]:ptt-bg-transparent' : ''}`}
+         style={{width: '300px', height: '80%'}}
+    >
+      <div id="ptt-chat-header" className={'ptt-flex ptt-mb-2 ptt-px-1 ptt-justify-between'}>
         <div className={'ptt-flex'}>
           <button onClick={toggleChat}>⇥</button>
           <button className={'ptt-ml-2'} onClick={() => setTransparent(prev => !prev)}>

@@ -1,20 +1,14 @@
 #crx-root {
-  height: 80%;
-  width: 300px;
-  position: fixed;
-  top: 10%;
-  right: 4px;
-  z-index: 2147483637;
-  border-radius: 16px;
-}
-
-#crx-root.mini {
-  width: 36px;
-  height: fit-content;
+  position: relative;
 }
 
 #crx-root.hide {
   display: none;
+}
+
+#ptt-chat-window {
+  position: fixed;
+  z-index: 2147483637;
 }
 
 #ptt-chat-container::-webkit-scrollbar {
@@ -39,7 +33,4 @@
   z-index: 2147483638;
   position: absolute;
   bottom: 60px;
-  left: 50%;
-  /* since container padding left 4 more pixel*/
-  transform: translate(-36%, 0);
 }

@@ -11,7 +11,7 @@ export default function Chat({messages}) {
   const msgs = messages.map((e) => {
     return (<div key={e.id} className={'ptt-py-1 ptt-break-all'}>
       <span className={darkTheme ? 'ptt-text-green-400' : 'ptt-text-green-600'}>{e.user}</span>
-      <span className={darkTheme ? 'ptt-text-white' : 'ptt-text-black'}>: {e.message}</span>
+      <span>: {e.message}</span>
     </div>)
   })
   const chatRef = useRef();
@@ -65,16 +65,16 @@ export default function Chat({messages}) {
   return (
     <>
       <div id='ptt-chat-container'
-           className={`ptt-overflow-y-scroll ptt-overflow-x-hidden ptt-h-full ${darkTheme ? '' : 'ptt-scroll-light'}`}
+           className={`ptt-overflow-y-scroll ptt-overflow-x-hidden ptt-h-full ptt-px-1 ptt-flex ptt-justify-center ${darkTheme ? '' : 'ptt-scroll-light'}`}
            onScroll={handleScroll}
       >
         <div id={"ptt-chat"} ref={chatRef} className={'ptt-mr-1 ptt-text-sm ptt-h-full'}>
           {msgs}
         </div>
         {scrolling && <button id='ptt-page-end' onClick={scrollToEnd}
-                              className={`ptt-w-7 ptt-h-6 ptt-rounded ptt-text-white ${darkTheme ? 'ptt-bg-sky-600' : 'ptt-bg-sky-400'}`}>↓</button>}
+                              className={`ptt-w-7 ptt-h-6 ptt-rounded ptt-text-stone-50 ptt-text-center ${darkTheme ? 'ptt-bg-sky-600' : 'ptt-bg-sky-400'}`}>↓</button>}
       </div>
-      <div id='ptt-chat-footer' className={'ptt-flex ptt-pt-2 ptt-pb-1'}>
+      <div id='ptt-chat-footer' className={'ptt-flex ptt-pt-2 ptt-pb-1 ptt-px-1'}>
         <input name='message' type='text' onChange={handleInput} onKeyDown={handleEnter} value={input}
                className={`ptt-outline ptt-bg-transparent ptt-px-1 ptt-flex-auto ptt-rounded
                 ${darkTheme ? 'ptt-outline-slate-600' : 'ptt-outline-slate-400'}`}
