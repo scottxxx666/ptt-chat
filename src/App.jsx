@@ -23,15 +23,19 @@ function App() {
     console.log(request)
     const {type, data} = request
     if (type === 'MSG') {
-      setState('STREAMING')
+      setState(STATE.STREAMING)
       const messages = JSON.parse(data)
       if (messages.length === 0) return
       setMessages(prev => [...prev, ...messages].slice(-MAX_MESSAGE_COUNT))
     } else if (type === 'STOP') {
       reset()
     } else if (type === 'ERR') {
+      if (request.data === 'MSG_ENCODE_ERR') {
+        alert('推文中含有未支援的字元')
+        return;
+      }
       alert(request.data)
-      reset()
+      close()
     }
   }
 
