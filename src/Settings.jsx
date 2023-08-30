@@ -101,16 +101,6 @@ export default function Settings({settings, setSettings, setTheme, close}) {
                  checked={theme.transparent}/>
         </label>
       </div>
-      <div className={'ptt-pb-4'}>
-        <label>主題：</label>
-        {Object.entries(MODE_OPTIONS_MAP).map(([k, v]) => (
-          <label className={'ptt-px-1'} key={k}>
-            <input type="radio" name="mode" value={k} onChange={handleTheme}
-                   checked={theme.mode === k}/>
-            {' ' + v}
-          </label>
-        ))}
-      </div>
       <div className={'ptt-flex ptt-flex ptt-justify-center ptt-items-center ptt-mt-2'}>
         <button className={`ptt-mr-2 ptt-py-1 ptt-px-3 ${themeColor(theme).button}`} onClick={cancel}>
           取消

@@ -12,6 +12,7 @@ import SettingsIcon from "./icons/SettingsIcon.jsx";
 import CloseIcon from "./icons/CloseIcon.jsx";
 import IconButton from "./IconButton.jsx";
 import MinimizeIcon from "./icons/MinimizeIcon.jsx";
+import LightDarkIcon from "./LightDarkIcon.jsx";
 
 export const ThemeContext = createContext(null);
 
@@ -71,6 +72,10 @@ function App() {
     setIsMini(prevState => !prevState)
   }
 
+  function toggleThemeMode() {
+    setTheme(prev => ({...prev, mode: prev.mode === THEME_MODE.DARK ? THEME_MODE.LIGHT : THEME_MODE.DARK}))
+  }
+
   if (isMini) {
     return (<ThemeContext.Provider value={theme}>
       <div
@@ -97,6 +102,9 @@ function App() {
         <div id="ptt-chat-header" className={'ptt-flex ptt-mb-2 ptt-px-1 ptt-justify-between'}>
           <div className={'ptt-flex'}>
             <IconButton click={toggleChat}><MinimizeIcon/></IconButton>
+            <button className={`ptt-ml-2`} onClick={toggleThemeMode}>
+              <LightDarkIcon/>
+            </button>
           </div>
           <div className={'ptt-flex'}>
             <IconButton click={() => setShowSettings(true)}><SettingsIcon/></IconButton>
