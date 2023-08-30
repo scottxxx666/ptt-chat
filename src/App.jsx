@@ -3,10 +3,9 @@ import './App.css'
 import Login from "./Login.jsx"
 import './wasm_exec'
 import Chat from "./Chat.jsx"
-import LightDarkIcon from "./LightDarkIcon.jsx";
-import {defaultSettings, MAX_MESSAGE_COUNT} from "./configs.js";
+import {defaultSettings, defaultTheme, MAX_MESSAGE_COUNT} from "./configs.js";
 import Loading from "./Loading.jsx";
-import {STATE} from "./consts.js";
+import {STATE, THEME_MODE} from "./consts.js";
 import Settings from "./Settings.jsx";
 import {bgTextColorClass} from "./theme.js";
 import SettingsIcon from "./icons/SettingsIcon.jsx";
@@ -14,14 +13,14 @@ import CloseIcon from "./icons/CloseIcon.jsx";
 import IconButton from "./IconButton.jsx";
 import MinimizeIcon from "./icons/MinimizeIcon.jsx";
 
-export const DarkThemeContext = createContext(null);
+export const ThemeContext = createContext(null);
 
 function App() {
   console.log('App')
   const [state, setState] = useState(STATE.LOGIN)
   const [messages, setMessages] = useState([])
   const [isMini, setIsMini] = useState(false)
-  const [dark, setDark] = useState(true)
+  const [theme, setTheme] = useState(defaultTheme())
   const [showSettings, setShowSettings] = useState(false)
   const [settings, setSettings] = useState(defaultSettings())
 
@@ -73,21 +72,21 @@ function App() {
   }
 
   if (isMini) {
-    return (<DarkThemeContext.Provider value={dark}>
+    return (<ThemeContext.Provider value={theme}>
       <div
         id="ptt-chat-window"
-        className={`ptt-flex ptt-h-fit ptt-rounded-md ptt-w-fit ptt-py-1 ptt-px-2 ${dark ? 'ptt-bg-slate-950 ptt-text-neutral-100 ' : 'ptt-bg-stone-50 ptt-text-slate-900'}`}
+        className={`ptt-flex ptt-h-fit ptt-rounded-md ptt-w-fit ptt-py-1 ptt-px-2 ${theme.mode === THEME_MODE.DARK ? 'ptt-bg-slate-950 ptt-text-neutral-100 ' : 'ptt-bg-stone-50 ptt-text-slate-900'}`}
         style={{top: settings.top + '%', right: settings.right + '%'}}
       >
         <IconButton click={toggleChat} style={{transform: 'scaleX(-1)'}}><MinimizeIcon/></IconButton>
       </div>
-    </DarkThemeContext.Provider>)
+    </ThemeContext.Provider>)
   }
 
-  return (<DarkThemeContext.Provider value={dark}>
+  return (<ThemeContext.Provider value={theme}>
     <section className={'ptt-text-base'}>
       <div id="ptt-chat-window"
-           className={`ptt-rounded-md ptt-flex ptt-flex-col ptt-py-2 ptt-px-2 ptt-overflow-auto ${bgTextColorClass(dark)} ${settings.transparent ? '[&:not(:hover)]:ptt-bg-transparent' : ''}`}
+           className={`ptt-rounded-md ptt-flex ptt-flex-col ptt-py-2 ptt-px-2 ptt-overflow-auto ${bgTextColorClass(theme.mode === THEME_MODE.DARK)} ${theme.transparent ? '[&:not(:hover)]:ptt-bg-transparent' : ''}`}
            style={{
              top: `${settings.top}%`,
              right: `${settings.right}%`,
@@ -98,9 +97,6 @@ function App() {
         <div id="ptt-chat-header" className={'ptt-flex ptt-mb-2 ptt-px-1 ptt-justify-between'}>
           <div className={'ptt-flex'}>
             <IconButton click={toggleChat}><MinimizeIcon/></IconButton>
-            <button className={`ptt-ml-2`} onClick={() => setDark(prev => !prev)}>
-              <LightDarkIcon/>
-            </button>
           </div>
           <div className={'ptt-flex'}>
             <IconButton click={() => setShowSettings(true)}><SettingsIcon/></IconButton>
@@ -110,9 +106,10 @@ function App() {
         {state === STATE.LOGIN ? <Login start={start}/> :
           state === STATE.LOADING ? <Loading/> : <Chat messages={messages}/>}
       </div>
-      {showSettings && <Settings settings={settings} setSettings={setSettings} close={() => setShowSettings(false)}/>}
+      {showSettings && <Settings settings={settings} setSettings={setSettings} close={() => setShowSettings(false)}
+                                 setTheme={setTheme}/>}
     </section>
-  </DarkThemeContext.Provider>)
+  </ThemeContext.Provider>)
 }
 
 export default App

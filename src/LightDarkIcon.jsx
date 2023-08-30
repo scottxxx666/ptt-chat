@@ -1,10 +1,11 @@
 import {useContext} from "react";
-import {DarkThemeContext} from "./App.jsx";
+import {ThemeContext} from "./App.jsx";
+import {THEME_MODE} from "./consts.js";
 
 export default function LightDarkIcon() {
-  const darkTheme = useContext(DarkThemeContext)
+  const darkTheme = useContext(ThemeContext)
 
-  return darkTheme ? (
+  return darkTheme === THEME_MODE.DARK ? (
     <svg className={'ptt-fill-stone-50'} xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960"
          width="24">
       <path

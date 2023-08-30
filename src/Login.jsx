@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import {useContext, useState} from "react";
-import {DarkThemeContext} from "./App.jsx";
+import {ThemeContext} from "./App.jsx";
 import {inputClass} from "./theme.js";
 
 Login.propTypes = {
@@ -8,7 +8,7 @@ Login.propTypes = {
 }
 
 export default function Login({start}) {
-  const darkTheme = useContext(DarkThemeContext)
+  const darkTheme = useContext(ThemeContext)
 
   const [loginArgs, setLoginArgs] = useState({
     username: '',

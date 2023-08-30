@@ -1,6 +1,7 @@
 import {useContext} from "react";
-import {DarkThemeContext} from "./App.jsx";
+import {ThemeContext} from "./App.jsx";
 import PropTypes from "prop-types";
+import {THEME_MODE} from "./consts.js";
 
 IconButton.propTypes = {
   click: PropTypes.func,
@@ -10,10 +11,10 @@ IconButton.propTypes = {
 }
 
 export default function IconButton({click, children, style = {}, className = ''}) {
-  const darkTheme = useContext(DarkThemeContext)
+  const darkTheme = useContext(ThemeContext)
 
   return (
-    <button onClick={click} className={`${className} ${darkTheme ? 'ptt-fill-stone-50' : ''}`} style={style}>
+    <button onClick={click} className={`${className} ${darkTheme.mode === THEME_MODE.DARK ? 'ptt-fill-stone-50' : ''}`} style={style}>
       {children}
     </button>
   )
