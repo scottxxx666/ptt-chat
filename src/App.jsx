@@ -7,7 +7,7 @@ import {defaultSettings, defaultTheme, MAX_MESSAGE_COUNT} from "./configs.js";
 import Loading from "./Loading.jsx";
 import {STATE, THEME_MODE} from "./consts.js";
 import Settings from "./Settings.jsx";
-import {bgTextColorClass} from "./theme.js";
+import {bgColor, textColor} from "./theme.js";
 import SettingsIcon from "./icons/SettingsIcon.jsx";
 import CloseIcon from "./icons/CloseIcon.jsx";
 import IconButton from "./IconButton.jsx";
@@ -86,7 +86,7 @@ function App() {
   return (<ThemeContext.Provider value={theme}>
     <section className={'ptt-text-base'}>
       <div id="ptt-chat-window"
-           className={`ptt-rounded-md ptt-flex ptt-flex-col ptt-py-2 ptt-px-2 ptt-overflow-auto ${bgTextColorClass(theme.mode === THEME_MODE.DARK)} ${theme.transparent ? '[&:not(:hover)]:ptt-bg-transparent' : ''}`}
+           className={`ptt-rounded-md ptt-flex ptt-flex-col ptt-py-2 ptt-px-2 ptt-overflow-auto ${bgColor(theme)} ${textColor(theme)} ${theme.transparent ? '[&:not(:hover)]:ptt-bg-transparent' : ''}`}
            style={{
              top: `${settings.top}%`,
              right: `${settings.right}%`,

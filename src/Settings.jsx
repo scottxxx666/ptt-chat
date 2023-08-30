@@ -1,6 +1,6 @@
 import {useContext, useEffect, useRef} from "react";
 import {ThemeContext} from "./App.jsx";
-import {bgTextColorClass, inputClass} from "./theme.js";
+import {bgColor, inputClass, textColor, themeColor} from "./theme.js";
 import PropTypes from "prop-types";
 import {defaultSettings, defaultTheme} from "./configs.js";
 import {THEME_MODE} from "./consts.js";
@@ -65,9 +65,9 @@ export default function Settings({settings, setSettings, setTheme, close}) {
 
   return (
     <div id="ptt-chat-settings"
-         className={`ptt-overflow-auto ptt-fixed ptt-top-0 ptt-right-0 ptt-left-0 ptt-bottom-0 ptt-w-fit ptt-h-fit ptt-m-auto ptt-px-3 ptt-py-3 ptt-rounded ${bgTextColorClass(theme)}`}>
+         className={`ptt-overflow-auto ptt-fixed ptt-top-0 ptt-right-0 ptt-left-0 ptt-bottom-0 ptt-w-fit ptt-h-fit ptt-m-auto ptt-px-3 ptt-py-3 ptt-rounded ${bgColor(theme)} ${textColor(theme)}`}>
       <div className={'ptt-pb-4 ptt-flex ptt-justify-end'}>
-        <button className={`ptt-py-1 ptt-px-3 ${theme ? 'ptt-bg-stone-600' : 'ptt-bg-stone-200'}`}
+        <button className={`ptt-py-1 ptt-px-3 ${themeColor(theme).button}`}
                 onClick={importDefault}>帶入預設值
         </button>
       </div>
@@ -111,14 +111,12 @@ export default function Settings({settings, setSettings, setTheme, close}) {
           </label>
         ))}
       </div>
-      <div className={'ptt-pb-4'}>
-      </div>
       <div className={'ptt-flex ptt-flex ptt-justify-center ptt-items-center ptt-mt-2'}>
-        <button className={`ptt-mr-2 ptt-py-1 ptt-px-3 ${theme ? 'ptt-bg-stone-600' : 'ptt-bg-stone-200'}`}
-                onClick={cancel}>取消
+        <button className={`ptt-mr-2 ptt-py-1 ptt-px-3 ${themeColor(theme).button}`} onClick={cancel}>
+          取消
         </button>
-        <button className={`ptt-py-1 ptt-px-3 ${theme ? 'ptt-bg-stone-600' : 'ptt-bg-stone-200'}`}
-                onClick={save}>套用
+        <button className={`ptt-py-1 ptt-px-3 ${themeColor(theme).button}`} onClick={save}>
+          套用
         </button>
       </div>
     </div>
