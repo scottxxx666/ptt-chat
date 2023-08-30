@@ -1,9 +1,10 @@
 import {useContext, useEffect, useRef} from "react";
 import {ThemeContext} from "./App.jsx";
-import {bgColor, inputClass, textColor, themeColor} from "./theme.js";
+import {bgColor, inputClass, textColor, textColorOptions, themeColor} from "./theme.js";
 import PropTypes from "prop-types";
 import {defaultSettings, defaultTheme} from "./configs.js";
 import {THEME_MODE} from "./consts.js";
+import Select from "react-select";
 
 Settings.propTypes = {
   settings: PropTypes.shape({
@@ -17,12 +18,6 @@ Settings.propTypes = {
   close: PropTypes.func,
 }
 
-const MODE_OPTIONS_MAP = {
-  [THEME_MODE.DARK]: '深色',
-  [THEME_MODE.LIGHT]: '淺色',
-  [THEME_MODE.CUSTOM]: '自訂',
-}
-
 export default function Settings({settings, setSettings, setTheme, close}) {
   const theme = useContext(ThemeContext)
   const prevSettingsRef = useRef();
@@ -32,6 +27,11 @@ export default function Settings({settings, setSettings, setTheme, close}) {
     prevThemeRef.current = {...theme}
   }, [])
 
+  function optionsClass({data, isFocused}) {
+    if (isFocused) console.log(t)
+    return `${data.value} ${isFocused ? 'ptt-bg-red-400' : bgColor(theme)}`
+  }
+
   function handleChange(e) {
     setSettings(p => ({...p, [e.target.name]: +(+e.target.value).toFixed(2)}));
   }
@@ -40,12 +40,8 @@ export default function Settings({settings, setSettings, setTheme, close}) {
     setTheme(p => ({...p, transparent: !p.transparent}))
   }
 
-  function handleTheme(e) {
-    setTheme(p => ({...p, [e.target.name]: e.target.value}))
-  }
-
-  function handleColor(e) {
-    setTheme(p => ({...p, [e.target.name]: e.target.value}));
+  function handleAccountColor(e) {
+    setTheme(p => ({...p, accountColor: e.value}));
   }
 
   function cancel() {
@@ -62,6 +58,12 @@ export default function Settings({settings, setSettings, setTheme, close}) {
     setSettings(defaultSettings())
     setTheme(defaultTheme())
   }
+
+  function getColorOptions(theme) {
+    return theme.mode === THEME_MODE.DARK ? textColorOptions.DARK : textColorOptions.LIGHT
+  }
+
+  const colorOptions = getColorOptions(theme)
 
   return (
     <div id="ptt-chat-settings"
@@ -99,6 +101,20 @@ export default function Settings({settings, setSettings, setTheme, close}) {
         <label>透明背景：
           <input type="checkbox" name="transparent" onChange={handleTransparent}
                  checked={theme.transparent}/>
+        </label>
+      </div>
+      <div className={'ptt-pb-4'}>
+        <label className={'ptt-flex ptt-items-center'}>推文帳號顏色：
+          <Select
+            name="accountColor"
+            onChange={handleAccountColor}
+            defaultValue={colorOptions.find(e => e.value === theme.accountColor)}
+            options={colorOptions}
+            classNames={{
+              singleValue: ({data}) => data.value, option: optionsClass,
+              control: () => 'ptt-bg-transparent', menu: () => bgColor(theme)
+            }}
+          />
         </label>
       </div>
       <div className={'ptt-flex ptt-flex ptt-justify-center ptt-items-center ptt-mt-2'}>

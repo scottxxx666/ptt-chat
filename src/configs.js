@@ -14,6 +14,6 @@ export const defaultTheme = function () {
   return {
     transparent: false,
     mode: THEME_MODE.DARK,
-    backgroundColor: 'red'
+    accountColor: 'green'
   };
 }

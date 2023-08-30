@@ -1,6 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   prefix: "ptt-",
+  important: true,
   content: [
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
