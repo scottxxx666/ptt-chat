@@ -12,10 +12,10 @@ import {
 import PropTypes from "prop-types";
 import {defaultSettings, defaultTheme} from "./configs.js";
 import {deepCopy} from "./utils.js";
-import DarkIcon from "./DarkIcon.jsx";
+import DarkIcon from "./icons/DarkIcon.jsx";
 import ColorSelect from "./ColorSelect.jsx";
 import {THEME_MODE} from "./consts.js";
-import LightIcon from "./LightIcon.jsx";
+import LightIcon from "./icons/LightIcon.jsx";
 
 Settings.propTypes = {
   settings: PropTypes.shape({

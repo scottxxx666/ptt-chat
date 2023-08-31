@@ -12,7 +12,7 @@ import SettingsIcon from "./icons/SettingsIcon.jsx";
 import CloseIcon from "./icons/CloseIcon.jsx";
 import IconButton from "./IconButton.jsx";
 import MinimizeIcon from "./icons/MinimizeIcon.jsx";
-import LightDarkIcon from "./LightDarkIcon.jsx";
+import LightDarkIcon from "./icons/LightDarkIcon.jsx";
 import {deepCopy} from "./utils.js";
 import ResizeIcon from "./icons/ResizeIcon.jsx";
 import ResizeLayer from "./ResizeLayer.jsx";
@@ -58,11 +58,10 @@ function App() {
     return () => {
       chrome.runtime.onMessage.removeListener(messageListener)
     }
-  })
+  }, [])
 
   async function start(data) {
-    const res = await chrome.runtime.sendMessage({type: "START", data});
-    console.log({res})
+    chrome.runtime.sendMessage({type: "START", data});
     setState(STATE.LOADING)
   }
 
@@ -104,8 +103,8 @@ function App() {
     const h = mouseDownRef.current.y
     setSettings(prevState => ({
       ...prevState,
-      top: ((e.clientY - h) / window.innerHeight * 100).toFixed(2),
-      right: 100 - ((e.clientX + w) / window.innerWidth * 100).toFixed(2)
+      top: +((e.clientY - h) / window.innerHeight * 100).toFixed(2),
+      right: +(100 - (e.clientX + w) / window.innerWidth * 100).toFixed(2)
     }))
   }
 
