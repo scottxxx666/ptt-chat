@@ -1,12 +1,6 @@
-import {themeColor} from "./theme.js";
-import {useContext} from "react";
-import {ThemeContext} from "./App.jsx";
-
 export default function LightIcon() {
-  const theme = useContext(ThemeContext)
-
   return (
-    <svg className={themeColor(theme).iconButton} xmlns="http://www.w3.org/2000/svg" height="24"
+    <svg xmlns="http://www.w3.org/2000/svg" height="24"
          viewBox="0 -960 960 960"
          width="24">
       <path

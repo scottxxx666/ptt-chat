@@ -35,6 +35,10 @@
   bottom: 60px;
 }
 
+#ptt-size-layer {
+  z-index: 2147483638;
+}
+
 #ptt-chat-settings {
   z-index: 2147483638;
 }
