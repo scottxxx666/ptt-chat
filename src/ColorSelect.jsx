@@ -1,7 +1,6 @@
 import Select from "react-select";
-import {useContext} from "react";
-import {ThemeContext} from "./App.jsx";
 import PropTypes from "prop-types";
+import {themeModeColor} from "./theme.js";
 
 ColorSelect.propTypes = {
   label: PropTypes.node,
@@ -9,14 +8,14 @@ ColorSelect.propTypes = {
   onChange: PropTypes.func,
   defaultValue: PropTypes.object,
   options: PropTypes.array,
-  bgColor: PropTypes.string,
+  themeMode: PropTypes.string,
 }
 
-export default function ColorSelect({label, name, onChange, defaultValue, options, bgColor}) {
-  const theme = useContext(ThemeContext)
+export default function ColorSelect({label, name, onChange, defaultValue, options, themeMode}) {
+  const bgColor = themeModeColor(themeMode).background
 
   function optionsClass({data, isFocused}) {
-    return `${data.value} ${isFocused ? 'ptt-bg-red-400' : bgColor}`
+    return `${data.value} ${isFocused ? themeModeColor(themeMode).optionHover : bgColor}`
   }
 
   return (
@@ -28,7 +27,8 @@ export default function ColorSelect({label, name, onChange, defaultValue, option
         options={options}
         classNames={{
           singleValue: ({data}) => data.value, option: optionsClass,
-          control: () => bgColor, menu: () => bgColor
+          control: () => bgColor, menu: () => bgColor,
+          input: () => themeModeColor(themeMode).text,
         }}
       />
     </label>

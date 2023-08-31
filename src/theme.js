@@ -13,6 +13,8 @@ export const themeColor = (theme) => {
   }
 }
 
+export const themeModeColor = (mode) => themeColor({mode})
+
 export const DarkThemeColor = {
   background: 'ptt-bg-slate-950',
   text: 'ptt-text-neutral-100',
@@ -24,6 +26,7 @@ export const DarkThemeColor = {
   iconButton: 'ptt-fill-stone-50',
   button: 'ptt-bg-stone-600',
   resize: 'ptt-fill-neutral-200',
+  optionHover: 'ptt-bg-slate-700',
 }
 
 export const LightThemeColor = {
@@ -37,6 +40,7 @@ export const LightThemeColor = {
   iconButton: '',
   button: 'ptt-bg-stone-200',
   resize: 'ptt-fill-neutral-600',
+  optionHover: 'ptt-bg-slate-300',
 }
 
 export const textColorOptions = [

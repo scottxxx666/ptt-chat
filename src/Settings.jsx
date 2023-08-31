@@ -1,14 +1,6 @@
 import {useContext, useEffect, useRef} from "react";
 import {ThemeContext} from "./App.jsx";
-import {
-  bgColor,
-  DarkThemeColor,
-  inputClass,
-  LightThemeColor,
-  textColor,
-  textColorOptions,
-  themeColor
-} from "./theme.js";
+import {bgColor, inputClass, textColor, textColorOptions, themeColor} from "./theme.js";
 import PropTypes from "prop-types";
 import {defaultSettings, defaultTheme} from "./configs.js";
 import {deepCopy} from "./utils.js";
@@ -74,10 +66,6 @@ export default function Settings({settings, setSettings, setTheme, close}) {
     setTheme(deepCopy(defaultTheme))
   }
 
-  function optionsBgColor(mode) {
-    return mode === THEME_MODE.DARK ? DarkThemeColor.background : LightThemeColor.background
-  }
-
   return (
     <div id="ptt-chat-settings"
          className={`ptt-overflow-auto ptt-fixed ptt-top-0 ptt-right-0 ptt-left-0 ptt-bottom-0 ptt-w-fit ptt-h-fit ptt-m-auto ptt-px-3 ptt-py-3 ptt-rounded ${bgColor(theme)} ${textColor(theme)}`}>
@@ -124,7 +112,7 @@ export default function Settings({settings, setSettings, setTheme, close}) {
             onChange={handleCustomColor(THEME_MODE.DARK, 'text')}
             defaultValue={textColorOptions.find(e => e.value === theme[THEME_MODE.DARK].text)}
             options={textColorOptions}
-            bgColor={optionsBgColor(THEME_MODE.DARK)}
+            themeMode={THEME_MODE.DARK}
           />
         </div>
         <ColorSelect
@@ -133,7 +121,7 @@ export default function Settings({settings, setSettings, setTheme, close}) {
           onChange={handleCustomColor(THEME_MODE.DARK, 'account')}
           defaultValue={textColorOptions.find(e => e.value === theme[THEME_MODE.DARK].account)}
           options={textColorOptions}
-          bgColor={optionsBgColor(THEME_MODE.DARK)}
+          themeMode={THEME_MODE.DARK}
         />
       </div>
       <div className={'ptt-pb-4'}>
@@ -143,7 +131,7 @@ export default function Settings({settings, setSettings, setTheme, close}) {
           onChange={handleCustomColor(THEME_MODE.LIGHT, 'text')}
           defaultValue={textColorOptions.find(e => e.value === theme[THEME_MODE.LIGHT].text)}
           options={textColorOptions}
-          bgColor={optionsBgColor(THEME_MODE.LIGHT)}
+          themeMode={THEME_MODE.LIGHT}
         />
       </div>
       <div className={'ptt-pb-4'}>
@@ -153,7 +141,7 @@ export default function Settings({settings, setSettings, setTheme, close}) {
           onChange={handleCustomColor(THEME_MODE.LIGHT, 'text')}
           defaultValue={textColorOptions.find(e => e.value === theme[THEME_MODE.LIGHT].account)}
           options={textColorOptions}
-          bgColor={optionsBgColor(THEME_MODE.LIGHT)}
+          themeMode={THEME_MODE.LIGHT}
         />
       </div>
       <div className={'ptt-flex ptt-flex ptt-justify-center ptt-items-center ptt-mt-2'}>
