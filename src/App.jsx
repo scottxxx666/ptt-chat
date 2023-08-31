@@ -14,8 +14,8 @@ import IconButton from "./IconButton.jsx";
 import MinimizeIcon from "./icons/MinimizeIcon.jsx";
 import LightDarkIcon from "./LightDarkIcon.jsx";
 import {deepCopy} from "./utils.js";
-import DragIcon from "./icons/DragIcon.jsx";
 import ResizeIcon from "./icons/ResizeIcon.jsx";
+import ResizeLayer from "./ResizeLayer.jsx";
 
 export const ThemeContext = createContext(null);
 
@@ -82,15 +82,26 @@ function App() {
   const [editSize, setEditSize] = useState(false)
   const [isMoving, setIsMoving] = useState(false)
 
-  function toggleSize() {
-    setIsMoving(prevState => !prevState)
+  const mouseDownRef = useRef(null)
+
+  function startMoving(e) {
+    if (e.target !== e.currentTarget) return
+    mouseDownRef.current = {
+      x: e.nativeEvent.offsetX,
+      y: e.nativeEvent.offsetY,
+    }
+    setIsMoving(true)
+  }
+
+  function stopMoving() {
+    setIsMoving(false)
   }
 
   const windowRef = useRef();
 
   function handleMoving(e) {
-    const w = windowRef.current.offsetWidth / 2
-    const h = windowRef.current.offsetHeight / 2
+    const w = windowRef.current.offsetWidth - mouseDownRef.current.x
+    const h = mouseDownRef.current.y
     setSettings(prevState => ({
       ...prevState,
       top: ((e.clientY - h) / window.innerHeight * 100).toFixed(2),
@@ -101,8 +112,11 @@ function App() {
   useEffect(() => {
     if (isMoving) {
       document.addEventListener('mousemove', handleMoving)
-      document.addEventListener('mouseup', toggleSize, {once: true});
-      return () => document.removeEventListener('mousemove', handleMoving)
+      document.addEventListener('mouseup', stopMoving, {once: true});
+      return () => {
+        document.removeEventListener('mousemove', handleMoving)
+        document.removeEventListener('mouseup', stopMoving);
+      }
     }
     document.removeEventListener('mousemove', handleMoving)
   }, [isMoving])
@@ -120,45 +134,40 @@ function App() {
   }
 
   return (<ThemeContext.Provider value={theme}>
-    <section className={'ptt-text-base'}>
-      <div id="ptt-chat-window"
-           ref={windowRef}
-           className={`ptt-rounded-md ptt-flex ptt-flex-col ptt-py-2 ptt-px-2 ptt-overflow-auto ${bgColor(theme)} ${textColor(theme)} ${theme.transparent ? '[&:not(:hover)]:ptt-bg-transparent' : ''}`}
-           style={{
-             top: `${settings.top}%`,
-             right: `${settings.right}%`,
-             width: `${settings.width}%`,
-             height: `${settings.height}%`,
-           }}
-      >
-        {editSize && <section id="ptt-size-layer">
-          <button
-            id="ptt-move"
-            className="ptt-w-8 ptt-h-8 ptt-absolute ptt-top-0 ptt-right-0 ptt-left-0 ptt-bottom-0 ptt-m-auto ptt-fill-red-600"
-            onMouseDown={toggleSize}>
-            <DragIcon size={60}/>
-          </button>
-        </section>}
-        <div id="ptt-chat-header" className={'ptt-flex ptt-mb-2 ptt-px-1 ptt-justify-between'}>
-          <div className={'ptt-flex'}>
-            <IconButton onClick={toggleChat}><MinimizeIcon/></IconButton>
-            <IconButton className={`ptt-ml-2`} onClick={toggleThemeMode}>
-              <LightDarkIcon/>
-            </IconButton>
-            <IconButton className={`ptt-ml-2`} onClick={() => setEditSize(prev => !prev)}><ResizeIcon/></IconButton>
+      <section className={'ptt-text-base'}>
+        <div id="ptt-chat-window"
+             ref={windowRef}
+             className={`ptt-rounded-md ptt-flex ptt-flex-col ptt-py-2 ptt-px-2 ptt-overflow-auto ${bgColor(theme)} ${textColor(theme)} ${theme.transparent ? '[&:not(:hover)]:ptt-bg-transparent' : ''}`}
+             style={{
+               top: `${settings.top}%`,
+               right: `${settings.right}%`,
+               width: `${settings.width}%`,
+               height: `${settings.height}%`,
+             }}
+        >
+          {editSize && <ResizeLayer/>}
+          <div id="ptt-chat-header" className={'ptt-flex ptt-mb-2 ptt-px-1 ptt-justify-between'}
+               onMouseDown={startMoving}>
+            <div className={'ptt-flex'}>
+              <IconButton onClick={toggleChat}><MinimizeIcon/></IconButton>
+              <IconButton className={`ptt-ml-2`} onClick={toggleThemeMode}>
+                <LightDarkIcon/>
+              </IconButton>
+              <IconButton className={`ptt-ml-2`} onClick={() => setEditSize(prev => !prev)}><ResizeIcon/></IconButton>
+            </div>
+            <div className={'ptt-flex'}>
+              <IconButton onClick={() => setShowSettings(true)}><SettingsIcon/></IconButton>
+              <IconButton onClick={close} className={'ptt-ml-2'}><CloseIcon/></IconButton>
+            </div>
           </div>
-          <div className={'ptt-flex'}>
-            <IconButton onClick={() => setShowSettings(true)}><SettingsIcon/></IconButton>
-            <IconButton onClick={close} className={'ptt-ml-2'}><CloseIcon/></IconButton>
-          </div>
+          {state === STATE.LOGIN ? <Login start={start}/> :
+            state === STATE.LOADING ? <Loading/> : <Chat messages={messages}/>}
         </div>
-        {state === STATE.LOGIN ? <Login start={start}/> :
-          state === STATE.LOADING ? <Loading/> : <Chat messages={messages}/>}
-      </div>
-      {showSettings && <Settings settings={settings} setSettings={setSettings} close={() => setShowSettings(false)}
-                                 setTheme={setTheme}/>}
-    </section>
-  </ThemeContext.Provider>)
+        {showSettings && <Settings settings={settings} setSettings={setSettings} close={() => setShowSettings(false)}
+                                   setTheme={setTheme}/>}
+      </section>
+    </ThemeContext.Provider>
+  )
 }
 
 export default App
