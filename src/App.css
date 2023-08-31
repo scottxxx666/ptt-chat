@@ -42,3 +42,11 @@
 #ptt-chat-settings {
   z-index: 2147483638;
 }
+
+#ptt-width {
+  transform: rotate(270deg);
+}
+
+#ptt-height {
+  transform: rotate(180deg);
+}

@@ -23,6 +23,7 @@ export const DarkThemeColor = {
   pageEnd: 'ptt-bg-sky-600',
   iconButton: 'ptt-fill-stone-50',
   button: 'ptt-bg-stone-600',
+  resize: 'ptt-fill-neutral-200',
 }
 
 export const LightThemeColor = {
@@ -35,6 +36,7 @@ export const LightThemeColor = {
   pageEnd: 'ptt-bg-sky-400',
   iconButton: '',
   button: 'ptt-bg-stone-200',
+  resize: 'ptt-fill-neutral-600',
 }
 
 export const textColorOptions = [

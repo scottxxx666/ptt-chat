@@ -78,13 +78,14 @@ function App() {
     setTheme(prev => ({...deepCopy(prev), mode: prev.mode === THEME_MODE.DARK ? THEME_MODE.LIGHT : THEME_MODE.DARK}))
   }
 
-  const [editSize, setEditSize] = useState(false)
+  const [isResizing, setIsResizing] = useState(false)
   const [isMoving, setIsMoving] = useState(false)
 
   const mouseDownRef = useRef(null)
 
   function startMoving(e) {
     if (e.target !== e.currentTarget) return
+    e.preventDefault()
     mouseDownRef.current = {
       x: e.nativeEvent.offsetX,
       y: e.nativeEvent.offsetY,
@@ -144,7 +145,7 @@ function App() {
                height: `${settings.height}%`,
              }}
         >
-          {editSize && <ResizeLayer/>}
+          {isResizing && <ResizeLayer windowRef={windowRef} setSettings={setSettings}/>}
           <div id="ptt-chat-header" className={'ptt-flex ptt-mb-2 ptt-px-1 ptt-justify-between'}
                onMouseDown={startMoving}>
             <div className={'ptt-flex'}>
@@ -152,7 +153,7 @@ function App() {
               <IconButton className={`ptt-ml-2`} onClick={toggleThemeMode}>
                 <LightDarkIcon/>
               </IconButton>
-              <IconButton className={`ptt-ml-2`} onClick={() => setEditSize(prev => !prev)}><ResizeIcon/></IconButton>
+              <IconButton className={`ptt-ml-2`} onClick={() => setIsResizing(prev => !prev)}><ResizeIcon/></IconButton>
             </div>
             <div className={'ptt-flex'}>
               <IconButton onClick={() => setShowSettings(true)}><SettingsIcon/></IconButton>
