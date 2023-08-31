@@ -13,6 +13,7 @@ import CloseIcon from "./icons/CloseIcon.jsx";
 import IconButton from "./IconButton.jsx";
 import MinimizeIcon from "./icons/MinimizeIcon.jsx";
 import LightDarkIcon from "./LightDarkIcon.jsx";
+import {deepCopy} from "./utils.js";
 
 export const ThemeContext = createContext(null);
 
@@ -21,7 +22,7 @@ function App() {
   const [state, setState] = useState(STATE.LOGIN)
   const [messages, setMessages] = useState([])
   const [isMini, setIsMini] = useState(false)
-  const [theme, setTheme] = useState(defaultTheme())
+  const [theme, setTheme] = useState(deepCopy(defaultTheme))
   const [showSettings, setShowSettings] = useState(false)
   const [settings, setSettings] = useState(defaultSettings())
 

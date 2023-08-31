@@ -1,4 +1,5 @@
 import {THEME_MODE} from "./consts.js";
+import {DarkThemeColor, LightThemeColor} from "./theme.js";
 
 export const MAX_MESSAGE_COUNT = 300
 
@@ -10,10 +11,16 @@ export const defaultSettings = function () {
     height: 80,
   };
 }
-export const defaultTheme = function () {
-  return {
-    transparent: false,
-    mode: THEME_MODE.DARK,
-    accountColor: 'green'
-  };
+
+export const defaultTheme = {
+  transparent: false,
+  mode: THEME_MODE.DARK,
+  DARK: {
+    account: DarkThemeColor.account,
+    text: DarkThemeColor.text,
+  },
+  LIGHT: {
+    account: LightThemeColor.account,
+    text: LightThemeColor.text,
+  }
 }

@@ -11,7 +11,7 @@ export default function Chat({messages}) {
   const theme = useContext(ThemeContext)
   const msgs = messages.map((e) => {
     return (<div key={e.id} className={'ptt-py-1 ptt-break-all'}>
-      <span className={themeColor(theme).username}>{e.user}</span>
+      <span className={themeColor(theme).account}>{e.user}</span>
       <span>: {e.message}</span>
     </div>)
   })

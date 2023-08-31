@@ -3,8 +3,11 @@ import {ThemeContext} from "./App.jsx";
 import {bgColor, inputClass, textColor, textColorOptions, themeColor} from "./theme.js";
 import PropTypes from "prop-types";
 import {defaultSettings, defaultTheme} from "./configs.js";
+import {deepCopy} from "./utils.js";
+import NightIcon from "./NightIcon.jsx";
+import ColorSelect from "./ColorSelect.jsx";
 import {THEME_MODE} from "./consts.js";
-import Select from "react-select";
+import LightIcon from "./LightIcon.jsx";
 
 Settings.propTypes = {
   settings: PropTypes.shape({
@@ -24,25 +27,29 @@ export default function Settings({settings, setSettings, setTheme, close}) {
   const prevThemeRef = useRef();
   useEffect(() => {
     prevSettingsRef.current = {...settings}
-    prevThemeRef.current = {...theme}
+    prevThemeRef.current = deepCopy(theme)
   }, [])
-
-  function optionsClass({data, isFocused}) {
-    if (isFocused) console.log(t)
-    return `${data.value} ${isFocused ? 'ptt-bg-red-400' : bgColor(theme)}`
-  }
 
   function handleChange(e) {
     setSettings(p => ({...p, [e.target.name]: +(+e.target.value).toFixed(2)}));
   }
 
   function handleTransparent() {
-    setTheme(p => ({...p, transparent: !p.transparent}))
+    setTheme(p => ({...deepCopy(p), transparent: !p.transparent}))
   }
 
-  function handleAccountColor(e) {
-    setTheme(p => ({...p, accountColor: e.value}));
-  }
+  const handleCustomColor = (mode, key) => e => {
+    setTheme(p => {
+      const copy = deepCopy(p);
+      return {
+        ...copy,
+        [mode]: {
+          ...copy[mode],
+          [key]: e.value,
+        }
+      }
+    })
+  };
 
   function cancel() {
     setSettings(prevSettingsRef.current)
@@ -56,14 +63,8 @@ export default function Settings({settings, setSettings, setTheme, close}) {
 
   function importDefault() {
     setSettings(defaultSettings())
-    setTheme(defaultTheme())
+    setTheme(deepCopy(defaultTheme))
   }
-
-  function getColorOptions(theme) {
-    return theme.mode === THEME_MODE.DARK ? textColorOptions.DARK : textColorOptions.LIGHT
-  }
-
-  const colorOptions = getColorOptions(theme)
 
   return (
     <div id="ptt-chat-settings"
@@ -104,18 +105,36 @@ export default function Settings({settings, setSettings, setTheme, close}) {
         </label>
       </div>
       <div className={'ptt-pb-4'}>
-        <label className={'ptt-flex ptt-items-center'}>推文帳號顏色：
-          <Select
-            name="accountColor"
-            onChange={handleAccountColor}
-            defaultValue={colorOptions.find(e => e.value === theme.accountColor)}
-            options={colorOptions}
-            classNames={{
-              singleValue: ({data}) => data.value, option: optionsClass,
-              control: () => 'ptt-bg-transparent', menu: () => bgColor(theme)
-            }}
+        <div className={'ptt-pb-4'}>
+          <ColorSelect
+            label={(<><NightIcon/>文字顏色：</>)}
+            onChange={handleCustomColor(THEME_MODE.DARK, 'text')}
+            defaultValue={textColorOptions.find(e => e.value === theme[THEME_MODE.DARK].text)}
+            options={textColorOptions}
           />
-        </label>
+        </div>
+        <ColorSelect
+          label={(<><NightIcon/>帳號顏色：</>)}
+          onChange={handleCustomColor(THEME_MODE.DARK, 'account')}
+          defaultValue={textColorOptions.find(e => e.value === theme[THEME_MODE.DARK].account)}
+          options={textColorOptions}
+        />
+      </div>
+      <div className={'ptt-pb-4'}>
+        <ColorSelect
+          label={(<><LightIcon/>文字顏色：</>)}
+          onChange={handleCustomColor(THEME_MODE.LIGHT, 'text')}
+          defaultValue={textColorOptions.find(e => e.value === theme[THEME_MODE.LIGHT].text)}
+          options={textColorOptions}
+        />
+      </div>
+      <div className={'ptt-pb-4'}>
+        <ColorSelect
+          label={(<><LightIcon/>帳號顏色：</>)}
+          onChange={handleCustomColor(THEME_MODE.LIGHT, 'text')}
+          defaultValue={textColorOptions.find(e => e.value === theme[THEME_MODE.LIGHT].account)}
+          options={textColorOptions}
+        />
       </div>
       <div className={'ptt-flex ptt-flex ptt-justify-center ptt-items-center ptt-mt-2'}>
         <button className={`ptt-mr-2 ptt-py-1 ptt-px-3 ${themeColor(theme).button}`} onClick={cancel}>
@@ -128,3 +147,4 @@ export default function Settings({settings, setSettings, setTheme, close}) {
     </div>
   )
 }
+
