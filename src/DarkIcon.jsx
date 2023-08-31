@@ -2,7 +2,7 @@ import {useContext} from "react";
 import {ThemeContext} from "./App.jsx";
 import {themeColor} from "./theme.js";
 
-export default function NightIcon() {
+export default function DarkIcon() {
   const theme = useContext(ThemeContext)
 
   return (
