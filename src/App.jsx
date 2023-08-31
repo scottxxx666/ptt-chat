@@ -24,9 +24,35 @@ function App() {
   const [state, setState] = useState(STATE.LOGIN)
   const [messages, setMessages] = useState([])
   const [isMini, setIsMini] = useState(false)
+  const [settings, setSettings] = useState(defaultSettings())
+
   const [theme, setTheme] = useState(deepCopy(defaultTheme))
   const [showThemeSettings, setShowThemeSettings] = useState(false)
-  const [settings, setSettings] = useState(defaultSettings())
+  const prevThemeRef = useRef();
+
+  function toggleTheme() {
+    if (showThemeSettings) cancelTheme()
+    else openTheme()
+  }
+
+  function openTheme() {
+    prevThemeRef.current = deepCopy(theme);
+    setShowThemeSettings(true)
+  }
+
+  function cancelTheme() {
+    setTheme(prevThemeRef.current)
+    setShowThemeSettings(false)
+  }
+
+  function saveTheme() {
+    setShowThemeSettings(false)
+  }
+
+  useEffect(() => {
+    prevThemeRef.current = deepCopy(theme)
+  }, [])
+
 
   function messageListener(request, sender, sendResponse) {
     console.log(request)
@@ -156,14 +182,14 @@ function App() {
               <IconButton className={`ptt-ml-2`} onClick={() => setIsResizing(prev => !prev)}><ResizeIcon/></IconButton>
             </div>
             <div className={'ptt-flex'}>
-              <IconButton onClick={() => setShowThemeSettings(true)}><SettingsIcon/></IconButton>
+              <IconButton onClick={toggleTheme}><SettingsIcon/></IconButton>
               <IconButton onClick={close} className={'ptt-ml-2'}><CloseIcon/></IconButton>
             </div>
           </div>
           {state === STATE.LOGIN ? <Login start={start}/> :
             state === STATE.LOADING ? <Loading/> : <Chat messages={messages}/>}
         </div>
-        {showThemeSettings && <ThemeSettings close={() => setShowThemeSettings(false)} setTheme={setTheme}/>}
+        {showThemeSettings && <ThemeSettings cancel={cancelTheme} save={saveTheme} setTheme={setTheme}/>}
       </section>
     </ThemeContext.Provider>
   )

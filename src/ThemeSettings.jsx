@@ -14,12 +14,8 @@ ThemeSettings.propTypes = {
   close: PropTypes.func,
 }
 
-export default function ThemeSettings({setTheme, close}) {
+export default function ThemeSettings({setTheme, cancel, save}) {
   const theme = useContext(ThemeContext)
-  const prevThemeRef = useRef();
-  useEffect(() => {
-    prevThemeRef.current = deepCopy(theme)
-  }, [])
 
   function handleTransparent() {
     setTheme(p => ({...deepCopy(p), transparent: !p.transparent}))
@@ -37,15 +33,6 @@ export default function ThemeSettings({setTheme, close}) {
       }
     })
   };
-
-  function cancel() {
-    setTheme(prevThemeRef.current)
-    close()
-  }
-
-  function save() {
-    close()
-  }
 
   function importDefault() {
     setTheme(deepCopy(defaultTheme))
