@@ -6,7 +6,7 @@ import Chat from "./Chat.jsx"
 import {defaultSettings, defaultTheme, MAX_MESSAGE_COUNT} from "./configs.js";
 import Loading from "./Loading.jsx";
 import {STATE, THEME_MODE} from "./consts.js";
-import Settings from "./Settings.jsx";
+import ThemeSettings from "./ThemeSettings.jsx";
 import {bgColor, textColor} from "./theme.js";
 import SettingsIcon from "./icons/SettingsIcon.jsx";
 import CloseIcon from "./icons/CloseIcon.jsx";
@@ -25,7 +25,7 @@ function App() {
   const [messages, setMessages] = useState([])
   const [isMini, setIsMini] = useState(false)
   const [theme, setTheme] = useState(deepCopy(defaultTheme))
-  const [showSettings, setShowSettings] = useState(false)
+  const [showThemeSettings, setShowThemeSettings] = useState(false)
   const [settings, setSettings] = useState(defaultSettings())
 
   function messageListener(request, sender, sendResponse) {
@@ -156,15 +156,14 @@ function App() {
               <IconButton className={`ptt-ml-2`} onClick={() => setIsResizing(prev => !prev)}><ResizeIcon/></IconButton>
             </div>
             <div className={'ptt-flex'}>
-              <IconButton onClick={() => setShowSettings(true)}><SettingsIcon/></IconButton>
+              <IconButton onClick={() => setShowThemeSettings(true)}><SettingsIcon/></IconButton>
               <IconButton onClick={close} className={'ptt-ml-2'}><CloseIcon/></IconButton>
             </div>
           </div>
           {state === STATE.LOGIN ? <Login start={start}/> :
             state === STATE.LOADING ? <Loading/> : <Chat messages={messages}/>}
         </div>
-        {showSettings && <Settings settings={settings} setSettings={setSettings} close={() => setShowSettings(false)}
-                                   setTheme={setTheme}/>}
+        {showThemeSettings && <ThemeSettings close={() => setShowThemeSettings(false)} setTheme={setTheme}/>}
       </section>
     </ThemeContext.Provider>
   )
