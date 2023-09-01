@@ -73,10 +73,6 @@ function App() {
   }, [])
 
   useEffect(() => {
-    prevThemeRef.current = deepCopy(theme)
-  }, [])
-
-  useEffect(() => {
     function handleKeyDown(e) {
       if (e.key === 'Escape') {
         cancelTheme()
@@ -173,9 +169,12 @@ function App() {
 
   function stopMoving() {
     setIsMoving(false)
+    chromeHelper.saveBounding(deepCopy(boundingRef.current))
   }
 
   const windowRef = useRef();
+  const boundingRef = useRef()
+  boundingRef.current = bounding
 
   function handleMoving(e) {
     const w = windowRef.current.offsetWidth - mouseDownRef.current.x
@@ -187,8 +186,6 @@ function App() {
     }))
   }
 
-
-  const mountRef = useRef(false);
   useEffect(() => {
     if (isMoving) {
       document.addEventListener('mousemove', handleMoving)
@@ -198,10 +195,6 @@ function App() {
         document.removeEventListener('mouseup', stopMoving);
       }
     }
-    if (mountRef.current) {
-      chromeHelper.saveBounding(deepCopy(bounding))
-    }
-    if (!mountRef.current) mountRef.current = true
   }, [isMoving])
 
   if (isMini) {
