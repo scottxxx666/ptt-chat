@@ -187,6 +187,8 @@ function App() {
     }))
   }
 
+
+  const mountRef = useRef(false);
   useEffect(() => {
     if (isMoving) {
       document.addEventListener('mousemove', handleMoving)
@@ -196,7 +198,10 @@ function App() {
         document.removeEventListener('mouseup', stopMoving);
       }
     }
-    chromeHelper.saveBounding(deepCopy(bounding))
+    if (mountRef.current) {
+      chromeHelper.saveBounding(deepCopy(bounding))
+    }
+    if (!mountRef.current) mountRef.current = true
   }, [isMoving])
 
   if (isMini) {
