@@ -1,8 +1,6 @@
 import content from './content?script'
 import toggleChat from './toggleChat?script&module'
-import {defaultBounding, defaultTheme} from "./configs.js";
-import chromeHelper from "./chromeHelper.js";
-import {deepCopy} from "./utils.js";
+import storage from "./storage.js";
 
 chrome.runtime.onInstalled.addListener(details => {
   console.log('details', details)
@@ -18,7 +16,7 @@ chrome.runtime.onInstalled.addListener(details => {
 });
 
 chrome.contextMenus.onClicked.addListener(async () => {
-  await chromeHelper.saveTheme(deepCopy(defaultTheme))
+  await storage.clear()
   chrome.tabs.sendMessage(chatTab, {type: 'DEFAULT'});
 });
 

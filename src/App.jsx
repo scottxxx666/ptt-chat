@@ -16,7 +16,7 @@ import LightDarkIcon from "./icons/LightDarkIcon.jsx";
 import {deepCopy} from "./utils.js";
 import ResizeIcon from "./icons/ResizeIcon.jsx";
 import ResizeLayer from "./ResizeLayer.jsx";
-import chromeHelper from "./chromeHelper.js";
+import storage from "./storage.js";
 
 export const ThemeContext = createContext(null);
 
@@ -48,11 +48,11 @@ function App() {
 
   function saveTheme() {
     setShowThemeSettings(false)
-    chromeHelper.saveTheme(theme)
+    storage.saveTheme(theme)
   }
 
   async function initTheme() {
-    const themeData = await chromeHelper.loadTheme()
+    const themeData = await storage.loadTheme()
     if (themeData) {
       return setTheme(deepCopy(themeData))
     }
@@ -60,7 +60,7 @@ function App() {
   }
 
   async function initBounding() {
-    const boundingData = await chromeHelper.loadBounding()
+    const boundingData = await storage.loadBounding()
     if (boundingData) {
       return setBounding(deepCopy(boundingData))
     }
@@ -95,7 +95,7 @@ function App() {
       setMessages(prev => [...prev, ...messages].slice(-MAX_MESSAGE_COUNT))
     } else if (type === 'DEFAULT') {
       initTheme()
-      initBounding().then(() => chromeHelper.saveBounding(bounding))
+      initBounding()
       setShowThemeSettings(false)
     } else if (type === 'STOP') {
       reset()
@@ -169,7 +169,7 @@ function App() {
 
   function stopMoving() {
     setIsMoving(false)
-    chromeHelper.saveBounding(deepCopy(boundingRef.current))
+    storage.saveBounding(deepCopy(boundingRef.current))
   }
 
   const windowRef = useRef();
