@@ -37,7 +37,6 @@ export default function Chat({messages}) {
   }
 
   useEffect(() => {
-    console.log('useEffect')
     if (!scrolling) {
       chatRef.current?.lastElementChild?.scrollIntoView()
     }

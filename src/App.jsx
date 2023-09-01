@@ -76,8 +76,8 @@ function App() {
 
     if (showThemeSettings) {
       document.addEventListener('keydown', handleKeyDown);
+      return () => document.removeEventListener('keydown', handleKeyDown)
     }
-    return () => document.removeEventListener('keydown', handleKeyDown)
   }, [showThemeSettings])
 
   function messageListener(request, sender, sendResponse) {
@@ -143,8 +143,8 @@ function App() {
 
     if (isResizing) {
       document.addEventListener('keydown', handleKeyDown);
+      return () => document.removeEventListener('keydown', handleKeyDown)
     }
-    return () => document.removeEventListener('keydown', handleKeyDown)
   }, [isResizing])
 
   const [isMoving, setIsMoving] = useState(false)
@@ -180,13 +180,12 @@ function App() {
   useEffect(() => {
     if (isMoving) {
       document.addEventListener('mousemove', handleMoving)
-      document.addEventListener('mouseup', stopMoving, {once: true});
+      document.addEventListener('mouseup', stopMoving);
       return () => {
         document.removeEventListener('mousemove', handleMoving)
         document.removeEventListener('mouseup', stopMoving);
       }
     }
-    document.removeEventListener('mousemove', handleMoving)
   }, [isMoving])
 
   if (isMini) {

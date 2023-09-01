@@ -45,25 +45,23 @@ export default function ResizeLayer({windowRef, setSettings}) {
   useEffect(() => {
     if (isWidth) {
       document.addEventListener('mousemove', handleWidth)
-      document.addEventListener('mouseup', stop, {once: true});
+      document.addEventListener('mouseup', stop);
       return () => {
         document.removeEventListener('mousemove', handleWidth)
         document.removeEventListener('mouseup', stop);
       }
     }
-    document.removeEventListener('mousemove', handleWidth)
   }, [isWidth])
 
   useEffect(() => {
     if (isHeight) {
       document.addEventListener('mousemove', handleHeight)
-      document.addEventListener('mouseup', stop, {once: true});
+      document.addEventListener('mouseup', stop);
       return () => {
         document.removeEventListener('mousemove', handleHeight)
         document.removeEventListener('mouseup', stop);
       }
     }
-    document.removeEventListener('mousemove', handleHeight)
   }, [isHeight])
 
   function stop() {
