@@ -224,7 +224,7 @@ function App() {
           {isResizing && <ResizeLayer windowRef={windowRef} bounding={bounding} setBounding={setBounding}/>}
           <div id="ptt-chat-header" className={'ptt-flex ptt-mb-2 ptt-px-1 ptt-justify-between'}
                onMouseDown={startMoving}>
-            <div className={'ptt-flex'}>
+            <div className={'ptt-flex ptt-mr-6'}>
               <IconButton onClick={toggleChat}><MinimizeIcon/></IconButton>
               <IconButton className={`ptt-ml-2`} onClick={toggleThemeMode}>
                 <LightDarkIcon/>
