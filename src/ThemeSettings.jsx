@@ -1,4 +1,4 @@
-import {useContext, useEffect, useRef} from "react";
+import {useContext} from "react";
 import {ThemeContext} from "./App.jsx";
 import {bgColor, textColor, textColorOptions, themeColor} from "./theme.js";
 import PropTypes from "prop-types";

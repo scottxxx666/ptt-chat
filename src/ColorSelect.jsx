@@ -21,6 +21,7 @@ export default function ColorSelect({label, name, onChange, defaultValue, option
   return (
     <label className={'ptt-flex ptt-items-center'}>{label}：
       <Select
+        key={defaultValue.value}
         name={name}
         onChange={onChange}
         defaultValue={defaultValue}
