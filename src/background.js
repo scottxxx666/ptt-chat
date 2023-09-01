@@ -1,6 +1,6 @@
 import content from './content?script'
 import toggleChat from './toggleChat?script&module'
-import {defaultTheme} from "./configs.js";
+import {defaultBounding, defaultTheme} from "./configs.js";
 import chromeHelper from "./chromeHelper.js";
 import {deepCopy} from "./utils.js";
 

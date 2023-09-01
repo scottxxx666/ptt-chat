@@ -3,13 +3,16 @@ import {useContext, useEffect, useRef, useState} from "react";
 import PropTypes from "prop-types";
 import {ThemeContext} from "./App.jsx";
 import {themeColor} from "./theme.js";
+import chromeHelper from "./chromeHelper.js";
+import {deepCopy} from "./utils.js";
 
 ResizeLayer.propTypes = {
   windowRef: PropTypes.object,
-  setSettings: PropTypes.func,
+  bounding: PropTypes.object,
+  setBounding: PropTypes.func,
 }
 
-export default function ResizeLayer({windowRef, setSettings}) {
+export default function ResizeLayer({windowRef, bounding, setBounding}) {
   const theme = useContext(ThemeContext);
 
   const [isWidth, setIsWidth] = useState(false)
@@ -29,14 +32,14 @@ export default function ResizeLayer({windowRef, setSettings}) {
   }
 
   function handleWidth(e) {
-    setSettings(prevState => ({
+    setBounding(prevState => ({
       ...prevState,
       width: +((rightRef.current - e.clientX) / window.innerWidth * 100).toFixed(2)
     }))
   }
 
   function handleHeight(e) {
-    setSettings(prevState => ({
+    setBounding(prevState => ({
       ...prevState,
       height: +((e.clientY - topRef.current) / window.innerHeight * 100).toFixed(2)
     }))
@@ -51,6 +54,7 @@ export default function ResizeLayer({windowRef, setSettings}) {
         document.removeEventListener('mouseup', stop);
       }
     }
+    chromeHelper.saveBounding(deepCopy(bounding))
   }, [isWidth])
 
   useEffect(() => {
@@ -62,6 +66,7 @@ export default function ResizeLayer({windowRef, setSettings}) {
         document.removeEventListener('mouseup', stop);
       }
     }
+    chromeHelper.saveBounding(deepCopy(bounding))
   }, [isHeight])
 
   function stop() {

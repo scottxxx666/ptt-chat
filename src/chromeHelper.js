@@ -1,6 +1,15 @@
-export const saveTheme = async (theme) => {
+const saveTheme = (theme) => {
+  return saveData('theme', theme)
+}
+
+const saveBounding = (bounding) => {
+  console.log('saveBounding', bounding)
+  return saveData('bounding', bounding)
+}
+
+const saveData = async (key, theme) => {
   try {
-    await save('theme', theme)
+    await save(key, theme)
   } catch (e) {
     alert('儲存設定失敗，請確認允許檔案權限')
   }
@@ -14,7 +23,7 @@ const load = (key) => {
   return chrome.storage.local.get([key])
 }
 
-export const loadTheme = async () => {
+const loadTheme = async () => {
   try {
     const {theme} = await load('theme');
     return theme
@@ -23,7 +32,19 @@ export const loadTheme = async () => {
   }
 }
 
+const loadBounding = async () => {
+  try {
+    const {bounding} = await load('bounding');
+    console.log('loadBounding', bounding)
+    return bounding
+  } catch (e) {
+    alert('讀取設定失敗，請確認允許檔案權限')
+  }
+}
+
 export default {
   saveTheme,
   loadTheme,
+  saveBounding,
+  loadBounding,
 }

@@ -3,11 +3,11 @@ import './App.css'
 import Login from "./Login.jsx"
 import './wasm_exec'
 import Chat from "./Chat.jsx"
-import {defaultSettings, defaultTheme, MAX_MESSAGE_COUNT} from "./configs.js";
+import {defaultBounding, defaultTheme, MAX_MESSAGE_COUNT} from "./configs.js";
 import Loading from "./Loading.jsx";
 import {STATE, THEME_MODE} from "./consts.js";
 import ThemeSettings from "./ThemeSettings.jsx";
-import {bgColor, textColor} from "./theme.js";
+import {bgColor, textColor, themeColor} from "./theme.js";
 import SettingsIcon from "./icons/SettingsIcon.jsx";
 import CloseIcon from "./icons/CloseIcon.jsx";
 import IconButton from "./IconButton.jsx";
@@ -25,7 +25,7 @@ function App() {
   const [state, setState] = useState(STATE.LOGIN)
   const [messages, setMessages] = useState([])
   const [isMini, setIsMini] = useState(false)
-  const [settings, setSettings] = useState(defaultSettings())
+  const [bounding, setBounding] = useState(defaultBounding())
 
   const [theme, setTheme] = useState(deepCopy(defaultTheme))
   const [showThemeSettings, setShowThemeSettings] = useState(false)
@@ -59,8 +59,17 @@ function App() {
     return setTheme(deepCopy(defaultTheme))
   }
 
+  async function initBounding() {
+    const boundingData = await chromeHelper.loadBounding()
+    if (boundingData) {
+      return setBounding(deepCopy(boundingData))
+    }
+    return setBounding(deepCopy(defaultBounding()))
+  }
+
   useEffect(() => {
     initTheme()
+    initBounding()
   }, [])
 
   useEffect(() => {
@@ -90,6 +99,7 @@ function App() {
       setMessages(prev => [...prev, ...messages].slice(-MAX_MESSAGE_COUNT))
     } else if (type === 'DEFAULT') {
       initTheme()
+      initBounding().then(() => chromeHelper.saveBounding(bounding))
       setShowThemeSettings(false)
     } else if (type === 'STOP') {
       reset()
@@ -170,7 +180,7 @@ function App() {
   function handleMoving(e) {
     const w = windowRef.current.offsetWidth - mouseDownRef.current.x
     const h = mouseDownRef.current.y
-    setSettings(prevState => ({
+    setBounding(prevState => ({
       ...prevState,
       top: +((e.clientY - h) / window.innerHeight * 100).toFixed(2),
       right: +(100 - (e.clientX + w) / window.innerWidth * 100).toFixed(2)
@@ -186,14 +196,15 @@ function App() {
         document.removeEventListener('mouseup', stopMoving);
       }
     }
+    chromeHelper.saveBounding(deepCopy(bounding))
   }, [isMoving])
 
   if (isMini) {
     return (<ThemeContext.Provider value={theme}>
       <div
         id="ptt-chat-window"
-        className={`ptt-flex ptt-h-fit ptt-rounded-md ptt-w-fit ptt-py-1 ptt-px-2 ${theme.mode === THEME_MODE.DARK ? 'ptt-bg-slate-950 ptt-text-neutral-100 ' : 'ptt-bg-stone-50 ptt-text-slate-900'}`}
-        style={{top: settings.top + '%', right: settings.right + '%'}}
+        className={`ptt-flex ptt-h-fit ptt-rounded-md ptt-w-fit ptt-py-1 ptt-px-2 ${themeColor(theme).background} ${themeColor(theme).text}`}
+        style={{top: bounding.top + '%', right: bounding.right + '%'}}
       >
         <IconButton onClick={toggleChat} style={{transform: 'scaleX(-1)'}}><MinimizeIcon/></IconButton>
       </div>
@@ -206,13 +217,13 @@ function App() {
              ref={windowRef}
              className={`ptt-rounded-md ptt-flex ptt-flex-col ptt-py-2 ptt-px-2 ptt-overflow-auto ${bgColor(theme)} ${textColor(theme)} ${theme.transparent ? '[&:not(:hover)]:ptt-bg-transparent' : ''}`}
              style={{
-               top: `${settings.top}%`,
-               right: `${settings.right}%`,
-               width: `${settings.width}%`,
-               height: `${settings.height}%`,
+               top: `${bounding.top}%`,
+               right: `${bounding.right}%`,
+               width: `${bounding.width}%`,
+               height: `${bounding.height}%`,
              }}
         >
-          {isResizing && <ResizeLayer windowRef={windowRef} setSettings={setSettings}/>}
+          {isResizing && <ResizeLayer windowRef={windowRef} bounding={bounding} setBounding={setBounding}/>}
           <div id="ptt-chat-header" className={'ptt-flex ptt-mb-2 ptt-px-1 ptt-justify-between'}
                onMouseDown={startMoving}>
             <div className={'ptt-flex'}>
