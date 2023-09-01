@@ -7,11 +7,11 @@ import DarkIcon from "./icons/DarkIcon.jsx";
 import ColorSelect from "./ColorSelect.jsx";
 import {THEME_MODE} from "./consts.js";
 import LightIcon from "./icons/LightIcon.jsx";
-import {defaultTheme} from "./configs.js";
 
 ThemeSettings.propTypes = {
   setTheme: PropTypes.func,
-  close: PropTypes.func,
+  cancel: PropTypes.func,
+  save: PropTypes.func,
 }
 
 export default function ThemeSettings({setTheme, cancel, save}) {
@@ -34,18 +34,9 @@ export default function ThemeSettings({setTheme, cancel, save}) {
     })
   };
 
-  function importDefault() {
-    setTheme(deepCopy(defaultTheme))
-  }
-
   return (
     <div id="ptt-chat-theme"
          className={`ptt-overflow-auto ptt-fixed ptt-top-0 ptt-right-0 ptt-left-0 ptt-bottom-0 ptt-w-fit ptt-h-fit ptt-m-auto ptt-px-3 ptt-py-3 ptt-rounded ${bgColor(theme)} ${textColor(theme)} ${themeColor(theme).iconButton}`}>
-      <div className={'ptt-pb-4 ptt-flex ptt-justify-end'}>
-        <button className={`ptt-py-1 ptt-px-3 ${themeColor(theme).button}`}
-                onClick={importDefault}>帶入預設值
-        </button>
-      </div>
       <div className={'ptt-pb-4'}>
         <label>透明背景：
           <input type="checkbox" name="transparent" onChange={handleTransparent}
@@ -103,4 +94,3 @@ export default function ThemeSettings({setTheme, cancel, save}) {
     </div>
   )
 }
-

@@ -16,6 +16,7 @@ import LightDarkIcon from "./icons/LightDarkIcon.jsx";
 import {deepCopy} from "./utils.js";
 import ResizeIcon from "./icons/ResizeIcon.jsx";
 import ResizeLayer from "./ResizeLayer.jsx";
+import chromeHelper from "./chromeHelper.js";
 
 export const ThemeContext = createContext(null);
 
@@ -47,12 +48,37 @@ function App() {
 
   function saveTheme() {
     setShowThemeSettings(false)
+    chromeHelper.saveTheme(theme)
   }
+
+  async function initTheme() {
+    const themeData = await chromeHelper.loadTheme()
+    if (themeData) {
+      return setTheme(deepCopy(themeData))
+    }
+    return setTheme(deepCopy(defaultTheme))
+  }
+
+  useEffect(() => {
+    initTheme()
+  }, [])
 
   useEffect(() => {
     prevThemeRef.current = deepCopy(theme)
   }, [])
 
+  useEffect(() => {
+    function handleKeyDown(e) {
+      if (e.key === 'Escape') {
+        cancelTheme()
+      }
+    }
+
+    if (showThemeSettings) {
+      document.addEventListener('keydown', handleKeyDown);
+    }
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [showThemeSettings])
 
   function messageListener(request, sender, sendResponse) {
     console.log(request)
@@ -62,6 +88,9 @@ function App() {
       const messages = JSON.parse(data)
       if (messages.length === 0) return
       setMessages(prev => [...prev, ...messages].slice(-MAX_MESSAGE_COUNT))
+    } else if (type === 'DEFAULT') {
+      initTheme()
+      setShowThemeSettings(false)
     } else if (type === 'STOP') {
       reset()
     } else if (type === 'ERR') {
@@ -105,6 +134,19 @@ function App() {
   }
 
   const [isResizing, setIsResizing] = useState(false)
+  useEffect(() => {
+    function handleKeyDown(e) {
+      if (e.key === 'Escape') {
+        setIsResizing(false)
+      }
+    }
+
+    if (isResizing) {
+      document.addEventListener('keydown', handleKeyDown);
+    }
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [isResizing])
+
   const [isMoving, setIsMoving] = useState(false)
 
   const mouseDownRef = useRef(null)

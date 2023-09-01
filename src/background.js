@@ -1,11 +1,25 @@
 import content from './content?script'
 import toggleChat from './toggleChat?script&module'
+import {defaultTheme} from "./configs.js";
+import chromeHelper from "./chromeHelper.js";
+import {deepCopy} from "./utils.js";
 
 chrome.runtime.onInstalled.addListener(details => {
   console.log('details', details)
   chrome.action.setBadgeText({
     text: "OFF",
   });
+
+  chrome.contextMenus.create({
+    id: 'default',
+    title: '還原為預設值',
+    contexts: ['selection', 'action']
+  })
+});
+
+chrome.contextMenus.onClicked.addListener(async () => {
+  await chromeHelper.saveTheme(deepCopy(defaultTheme))
+  chrome.tabs.sendMessage(chatTab, {type: 'DEFAULT'});
 });
 
 async function setStatus(nextState) {
