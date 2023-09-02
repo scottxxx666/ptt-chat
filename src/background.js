@@ -1,9 +1,9 @@
 import content from './content?script'
 import toggleChat from './toggleChat?script&module'
 import storage from "./storage.js";
+import {logError} from "./log.js";
 
 chrome.runtime.onInstalled.addListener(details => {
-  console.log('details', details)
   chrome.action.setBadgeText({
     text: "OFF",
   });
@@ -17,7 +17,7 @@ chrome.runtime.onInstalled.addListener(details => {
 
 chrome.contextMenus.onClicked.addListener(async () => {
   await storage.clear()
-  chrome.tabs.sendMessage(chatTab, {type: 'DEFAULT'});
+  sendMessage(chatTab, {type: 'DEFAULT'});
 });
 
 async function setStatus(nextState) {
@@ -37,33 +37,34 @@ chrome.action.onClicked.addListener(async (tab) => {
   }
 })
 
+async function sendMessage(tab, data, ignoreError) {
+  try {
+    await chrome.tabs.sendMessage(tab, data);
+  } catch (e) {
+    logError('send message', e)
+    if (!ignoreError) {
+      stopExtension()
+    }
+  }
+}
+
 let pttTab
 let chatTab
 
 chrome.runtime.onMessage.addListener(async function (request, sender, sendResponse) {
-  console.log(request)
   const {type} = request
   if (type === 'START') {
-    await chrome.tabs.sendMessage(pttTab, {type: 'START', data: request.data});
+    sendMessage(pttTab, {type: 'START', data: request.data});
   } else if (type === 'PTT' && sender.tab.id === pttTab) {
-    await chrome.tabs.sendMessage(chatTab, {type: 'READY'});
+    sendMessage(chatTab, {type: 'READY'}, true);
   } else if (type === 'SEND') {
-    await chrome.tabs.sendMessage(pttTab, request);
+    sendMessage(pttTab, request);
   } else if (type === 'STOP') {
     stopExtension();
   } else if (type === 'MSG' && chatTab) {
-    try {
-      await chrome.tabs.sendMessage(chatTab, request);
-    } catch (e) {
-      console.log(e);
-      stopExtension();
-    }
+    sendMessage(chatTab, request);
   } else if (type === 'ERR' && chatTab) {
-    try {
-      await chrome.tabs.sendMessage(chatTab, request);
-    } catch (e) {
-      console.log(e);
-    }
+    sendMessage(chatTab, request, true);
   }
 });
 
@@ -96,8 +97,13 @@ async function startExtension() {
 }
 
 async function stopExtension() {
+  const state = await chrome.action.getBadgeText({});
+  if (state === 'OFF') return
+  setStatus('OFF');
+
   if (pttTab) {
     chrome.tabs.remove(pttTab);
+    pttTab = null
   }
 
   try {
@@ -106,11 +112,10 @@ async function stopExtension() {
       files: [toggleChat],
     });
 
-    await chrome.tabs.sendMessage(chatTab, {type: 'STOP'})
+    sendMessage(chatTab, {type: 'STOP'}, true)
   } catch (e) {
-    console.log(e)
+    logError('stop extension', e)
   }
 
-  setStatus('OFF');
   chatTab = null
 }
