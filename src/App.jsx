@@ -21,7 +21,6 @@ import storage from "./storage.js";
 export const ThemeContext = createContext(null);
 
 function App() {
-  console.log('App')
   const [state, setState] = useState(STATE.LOGIN)
   const [messages, setMessages] = useState([])
   const [isMini, setIsMini] = useState(false)
@@ -85,7 +84,6 @@ function App() {
   }, [showThemeSettings])
 
   function messageListener(request, sender, sendResponse) {
-    console.log(request)
     const {type, data} = request
     if (type === 'MSG') {
       setState(STATE.STREAMING)

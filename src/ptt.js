@@ -8,14 +8,12 @@
 
   chrome.runtime.onMessage.addListener(
     function (request, sender, sendResponse) {
-      console.log(request)
       const {type} = request
       if (type === 'START') {
         const {username, password, deleteDuplicate, board, article} = request.data
         pollingMessages(username, password, deleteDuplicate, board, article, sendPushes, notifyError)
       } else if (type === 'SEND') {
         const res = pushMessage(request.data, notifyError)
-        console.log({res})
       }
     }
   );

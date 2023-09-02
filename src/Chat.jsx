@@ -20,7 +20,6 @@ export default function Chat({messages}) {
   const [scrolling, setScrolling] = useState(false);
 
   function handleInput(e) {
-    console.log('change')
     e.preventDefault()
     setInput(e.target.value)
   }

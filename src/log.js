@@ -1,0 +1,1 @@
+export const logError = (str, e) => console.log(str, e)
