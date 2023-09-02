@@ -3,7 +3,7 @@ import './App.css'
 import Login from "./Login.jsx"
 import './wasm_exec'
 import Chat from "./Chat.jsx"
-import {defaultBounding, defaultTheme, MAX_MESSAGE_COUNT} from "./configs.js";
+import {calculateDefaultBounding, defaultTheme, MAX_MESSAGE_COUNT} from "./configs.js";
 import Loading from "./Loading.jsx";
 import {STATE, THEME_MODE} from "./consts.js";
 import ThemeSettings from "./ThemeSettings.jsx";
@@ -25,10 +25,9 @@ function App() {
   const [state, setState] = useState(STATE.LOGIN)
   const [messages, setMessages] = useState([])
   const [isMini, setIsMini] = useState(false)
-  const [bounding, setBounding] = useState(defaultBounding())
-
-  const [theme, setTheme] = useState(deepCopy(defaultTheme))
   const [showThemeSettings, setShowThemeSettings] = useState(false)
+  const [bounding, setBounding] = useState({})
+  const [theme, setTheme] = useState({})
   const prevThemeRef = useRef();
 
   function toggleTheme() {
@@ -64,7 +63,7 @@ function App() {
     if (boundingData) {
       return setBounding(deepCopy(boundingData))
     }
-    return setBounding(deepCopy(defaultBounding()))
+    return setBounding(calculateDefaultBounding())
   }
 
   useEffect(() => {

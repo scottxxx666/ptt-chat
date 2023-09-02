@@ -3,7 +3,7 @@ import {useContext, useEffect, useRef, useState} from "react";
 import PropTypes from "prop-types";
 import {ThemeContext} from "./App.jsx";
 import {themeColor} from "./theme.js";
-import chromeHelper from "./chromeHelper.js";
+import storage from "./storage.js";
 import {deepCopy} from "./utils.js";
 
 ResizeLayer.propTypes = {
@@ -54,7 +54,7 @@ export default function ResizeLayer({windowRef, bounding, setBounding}) {
         document.removeEventListener('mouseup', stop);
       }
     }
-    chromeHelper.saveBounding(deepCopy(bounding))
+    storage.saveBounding(deepCopy(bounding))
   }, [isWidth])
 
   useEffect(() => {
@@ -66,7 +66,7 @@ export default function ResizeLayer({windowRef, bounding, setBounding}) {
         document.removeEventListener('mouseup', stop);
       }
     }
-    chromeHelper.saveBounding(deepCopy(bounding))
+    storage.saveBounding(deepCopy(bounding))
   }, [isHeight])
 
   function stop() {
