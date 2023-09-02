@@ -1,5 +1,4 @@
 import {createContext, useEffect, useRef, useState} from 'react'
-import './App.css'
 import Login from "./Login.jsx"
 import './wasm_exec'
 import Chat from "./Chat.jsx"

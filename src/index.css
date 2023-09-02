@@ -1,3 +1,111 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+#crx-root {
+  position: relative;
+}
+
+#crx-root.hide {
+  display: none;
+}
+
+#ptt-chat-window {
+  position: fixed;
+  z-index: 2147483637;
+}
+
+#ptt-chat-container::-webkit-scrollbar {
+  width: 4px;
+  background: transparent;
+}
+
+#ptt-chat-container::-webkit-scrollbar-thumb {
+  background: #555;
+  border: 0;
+}
+
+#ptt-chat-container.ptt-scroll-light::-webkit-scrollbar-thumb {
+  background: #ccc;
+}
+
+#ptt-chat-container::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+#ptt-page-end {
+  z-index: 2147483638;
+  position: absolute;
+  bottom: 60px;
+}
+
+#ptt-size-layer {
+  z-index: 2147483638;
+}
+
+#ptt-chat-theme {
+  z-index: 2147483638;
+}
+
+#ptt-width {
+  transform: rotate(270deg);
+}
+
+#ptt-height {
+  transform: rotate(180deg);
+}
+
+.ptt-switch {
+  position: relative;
+  display: inline-block;
+  width: 42px;
+  height: 24px;
+}
+
+.ptt-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.ptt-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+}
+
+.ptt-slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  transition: .25s;
+}
+
+input:checked + .ptt-slider {
+  background-color: #2196F3;
+}
+
+input:focus + .ptt-slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .ptt-slider:before {
+  transform: translateX(18px);
+}
+
+.ptt-slider.ptt-round {
+  border-radius: 44px;
+}
+
+.ptt-slider.ptt-round:before {
+  border-radius: 50%;
+}
