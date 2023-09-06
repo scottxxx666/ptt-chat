@@ -16,6 +16,7 @@ import {deepCopy} from "./utils.js";
 import ResizeIcon from "./icons/ResizeIcon.jsx";
 import ResizeLayer from "./ResizeLayer.jsx";
 import storage from "./storage.js";
+import iframe from "./iframe.js";
 
 export const ThemeContext = createContext(null);
 
@@ -184,11 +185,13 @@ function App() {
 
   useEffect(() => {
     if (isMoving) {
+      iframe.clearPointerEvent()
       document.addEventListener('mousemove', handleMoving)
       document.addEventListener('mouseup', stopMoving);
       return () => {
         document.removeEventListener('mousemove', handleMoving)
         document.removeEventListener('mouseup', stopMoving);
+        iframe.autoPointerEvent()
       }
     }
   }, [isMoving])

@@ -5,6 +5,7 @@ import {ThemeContext} from "./App.jsx";
 import {themeColor} from "./theme.js";
 import storage from "./storage.js";
 import {deepCopy} from "./utils.js";
+import iframe from "./iframe.js";
 
 ResizeLayer.propTypes = {
   windowRef: PropTypes.object,
@@ -47,11 +48,13 @@ export default function ResizeLayer({windowRef, bounding, setBounding}) {
 
   useEffect(() => {
     if (isWidth) {
+      iframe.clearPointerEvent();
       document.addEventListener('mousemove', handleWidth)
       document.addEventListener('mouseup', stop);
       return () => {
         document.removeEventListener('mousemove', handleWidth)
         document.removeEventListener('mouseup', stop);
+        iframe.autoPointerEvent()
       }
     }
     storage.saveBounding(deepCopy(bounding))
@@ -59,11 +62,13 @@ export default function ResizeLayer({windowRef, bounding, setBounding}) {
 
   useEffect(() => {
     if (isHeight) {
+      iframe.clearPointerEvent()
       document.addEventListener('mousemove', handleHeight)
       document.addEventListener('mouseup', stop);
       return () => {
         document.removeEventListener('mousemove', handleHeight)
         document.removeEventListener('mouseup', stop);
+        iframe.autoPointerEvent()
       }
     }
     storage.saveBounding(deepCopy(bounding))
