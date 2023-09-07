@@ -13,7 +13,7 @@ export default function Login({start}) {
   const [loginArgs, setLoginArgs] = useState({
     username: '',
     password: '',
-    deleteDuplicate: '',
+    deleteDuplicate: false,
     board: '',
     article: '',
   })
@@ -22,9 +22,13 @@ export default function Login({start}) {
     setLoginArgs(p => ({...p, [e.target.name]: e.target.value}));
   }
 
+  function handleCheckbox(e) {
+    setLoginArgs(p => ({...p, [e.target.name]: !p[e.target.name]}));
+  }
+
   function submit() {
     const {username, password, deleteDuplicate, board, article} = loginArgs
-    start({username, password, deleteDuplicate: deleteDuplicate === 'on', board, article});
+    start({username, password, deleteDuplicate, board, article});
   }
 
   function handleEnter(e) {
@@ -46,8 +50,8 @@ export default function Login({start}) {
                value={loginArgs.password} maxLength={13}/>
       </div>
       <div className={'ptt-pb-4'}>
-        <input type="checkbox" name="deleteDuplicate" onChange={handleChange}
-               value={loginArgs.deleteDuplicate}/>
+        <input type="checkbox" name="deleteDuplicate" onChange={handleCheckbox}
+               checked={loginArgs.deleteDuplicate} value="deleteDuplicate"/>
         <label> 是否刪除重覆連線</label>
       </div>
       <div className={'ptt-pb-4'}>
