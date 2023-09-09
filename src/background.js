@@ -41,7 +41,8 @@ async function sendMessage(tab, data, ignoreError) {
   try {
     await chrome.tabs.sendMessage(tab, data);
   } catch (e) {
-    logError('send message', e)
+    const tabName = tab === pttTab ? 'PTT' : 'CHAT'
+    logError(`send ${tabName} message`, e)
     if (!ignoreError) {
       stopExtension()
     }
@@ -55,8 +56,6 @@ chrome.runtime.onMessage.addListener(async function (request, sender, sendRespon
   const {type} = request
   if (type === 'START') {
     sendMessage(pttTab, {type: 'START', data: request.data});
-  } else if (type === 'PTT' && sender.tab.id === pttTab) {
-    sendMessage(chatTab, {type: 'READY'}, true);
   } else if (type === 'SEND') {
     sendMessage(pttTab, request);
   } else if (type === 'STOP') {

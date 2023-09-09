@@ -18,8 +18,6 @@
     }
   );
 
-  chrome.runtime.sendMessage({type: "PTT"});
-
   function sendPushes(pushes) {
     chrome.runtime.sendMessage({type: "MSG", data: pushes});
   }
