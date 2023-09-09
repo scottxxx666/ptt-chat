@@ -4,14 +4,24 @@ https://pse.is/ptt-chat
 
 在觀看任何實況時，可以同時發和看 ptt 推文
 
+v1.0.3 更新：
+- 修正剛安裝時載入較慢就會關閉而只顯示 loading 的錯誤
+- 修正登入時信箱已滿的判斷
+
+v1.0.2 更新：
+- 刪除重覆連線可以正常使用
+- 修正調整大小在 holodex 或是 Youtube 聊天室的問題
+
 ## 使用方式
 
 [//]: # (- 詳細圖文教學請至 https://github.com/scottxxx666/ptt-chat#使用方式)
 
 ### Youtube
+
 ![Youtube](/docs/youtube.gif)
 
 ### Twitch 劇院模式
+
 ![Twitch 劇院模式](/docs/twitch.gif)
 
 ### 功能
@@ -33,7 +43,8 @@ https://pse.is/ptt-chat
 
 ### 注意事項
 
-- 安裝時如果出現『安全瀏覽強化防護功能不信任這個擴充功能』，是因為這是第一次做 Chrome Extension，Google 文件寫新加入的開發人員通常需要幾個月才能獲得信任
+- 安裝時如果出現『安全瀏覽強化防護功能不信任這個擴充功能』，是因為這是第一次做 Chrome Extension，Google
+  文件寫新加入的開發人員通常需要幾個月才能獲得信任
 - 開啟時會開一個 PTT 的 tab，請不要關掉，需要那個 tab 才能夠連到 PTT。正常情況下 tab 會在關閉時跟著關閉
 - 目前僅支援 big5 字元集，日文、簡體字或是特殊符號可能會出現錯誤（讀或是發推文都是）
 - 部分錯誤仍在處理中，通常再開關一次或是重新整理網頁可以解決大部分的問題
@@ -45,11 +56,8 @@ https://pse.is/ptt-chat
 - 開啟／關閉：`CTRL(Cmd) + b`
 - 可以至 [chrome://extensions/shortcuts](chrome://extensions/shortcuts) 自行修改
 
-### 已知問題 (已修復，目前送審中)
-- 調整大小會有 bug，在 holodex 播放器或是 YT 聊天室上方會停不下來, 目前請先重設位置改好大小再移動至播放器上方（或是先暫時關閉 YT 聊天室）
-- 刪除重覆連線目前沒有作用
-
 ### 問題回報
+
 - 可以在 github 開 issue 或是寄 email 至 `ptt.chat.extension@gmail.com`
 - 由於未收集任何資料，問題回報時如果能提供越多資訊可以加速處理的時間，感謝
     - 時間
