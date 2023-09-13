@@ -55,16 +55,30 @@ let chatTab
 chrome.runtime.onMessage.addListener(async function (request, sender, sendResponse) {
   const {type} = request
   if (type === 'START') {
-    sendMessage(pttTab, {type: 'START', data: request.data});
+    pttPort.postMessage({type: 'START', data: request.data})
   } else if (type === 'SEND') {
-    sendMessage(pttTab, request);
+    pttPort.postMessage(request);
   } else if (type === 'STOP') {
     stopExtension();
-  } else if (type === 'MSG' && chatTab) {
-    sendMessage(chatTab, request);
-  } else if (type === 'ERR' && chatTab) {
-    sendMessage(chatTab, request, true);
   }
+})
+
+let pttPort;
+
+chrome.runtime.onConnect.addListener(function (port) {
+  if (port.name !== 'PTT') return
+  pttPort = port
+  pttPort.onDisconnect.addListener(e => {
+    stopExtension()
+  })
+  port.onMessage.addListener(function (request) {
+    const {type} = request
+    if (type === 'MSG' && chatTab) {
+      sendMessage(chatTab, request);
+    } else if (type === 'ERR' && chatTab) {
+      sendMessage(chatTab, request, true);
+    }
+  });
 });
 
 async function getCurrentTab() {
@@ -98,12 +112,10 @@ async function startExtension() {
 async function stopExtension() {
   const state = await chrome.action.getBadgeText({});
   if (state === 'OFF') return
-  setStatus('OFF');
+  await setStatus('OFF');
 
-  if (pttTab) {
-    chrome.tabs.remove(pttTab);
-    pttTab = null
-  }
+  chrome.tabs.remove(pttTab).catch(() => {
+  })
 
   try {
     await chrome.scripting.executeScript({
@@ -115,6 +127,4 @@ async function stopExtension() {
   } catch (e) {
     logError('stop extension', e)
   }
-
-  chatTab = null
 }
