@@ -64,13 +64,20 @@ chrome.runtime.onMessage.addListener(async function (request, sender, sendRespon
 })
 
 let pttPort;
+let pttInterval;
 
 chrome.runtime.onConnect.addListener(function (port) {
   if (port.name !== 'PTT') return
   pttPort = port
-  pttPort.onDisconnect.addListener(e => {
+  pttPort.onDisconnect.addListener(() => {
+    clearInterval(pttInterval)
     stopExtension()
   })
+
+  pttInterval = setInterval(() => {
+    port.postMessage({type: 'PING'})
+  }, 10000)
+
   port.onMessage.addListener(function (request) {
     const {type} = request
     if (type === 'MSG' && chatTab) {
@@ -113,6 +120,10 @@ async function stopExtension() {
   const state = await chrome.action.getBadgeText({});
   if (state === 'OFF') return
   await setStatus('OFF');
+
+  // since chat page reload will not close ptt tab
+  // at least stop heartbeat
+  clearInterval(pttInterval)
 
   chrome.tabs.remove(pttTab).catch(() => {
   })

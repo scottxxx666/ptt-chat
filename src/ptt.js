@@ -14,6 +14,8 @@
       pollingMessages(username, password, deleteDuplicate, board, article, sendPushes, notifyError)
     } else if (type === 'SEND') {
       pushMessage(request.data, notifyError)
+    } else if (type === 'PING') {
+      port.postMessage({type: 'PONG'});
     }
   });
 
