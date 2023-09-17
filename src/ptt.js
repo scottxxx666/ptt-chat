@@ -11,7 +11,7 @@
     const {type} = request
     if (type === 'START') {
       const {username, password, deleteDuplicate, board, article} = request.data
-      pollingMessages(username, password, deleteDuplicate, board, article, sendPushes, notifyError)
+      pollingMessages(username, password, deleteDuplicate, board, article, sendPushes, notifyError, false)
     } else if (type === 'SEND') {
       pushMessage(request.data, notifyError)
     } else if (type === 'PING') {
