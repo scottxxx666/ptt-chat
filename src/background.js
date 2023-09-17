@@ -75,7 +75,11 @@ chrome.runtime.onConnect.addListener(function (port) {
   })
 
   pttInterval = setInterval(() => {
-    port.postMessage({type: 'PING'})
+    try {
+      port.postMessage({type: 'PING'})
+    } catch (e) {
+      clearInterval(pttInterval)
+    }
   }, 10000)
 
   port.onMessage.addListener(function (request) {
