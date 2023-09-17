@@ -4,20 +4,6 @@ https://pse.is/ptt-chat
 
 在觀看任何實況時，可以同時發和看 ptt 推文
 
-v1.0.5 更新：
-- 支援 utf-8
-
-v1.0.4 更新：
-- 修正閒置超過 30 秒之後按開始會卡在 loading
-
-v1.0.3 更新：
-- 修正剛安裝時載入較慢就會關閉而只顯示 loading 的錯誤
-- 修正登入時信箱已滿的判斷
-
-v1.0.2 更新：
-- 刪除重覆連線可以正常使用
-- 修正調整大小在 holodex 或是 Youtube 聊天室的問題
-
 ## 使用方式
 
 [//]: # (- 詳細圖文教學請至 https://github.com/scottxxx666/ptt-chat#使用方式)
@@ -53,7 +39,7 @@ v1.0.2 更新：
   文件寫新加入的開發人員通常需要幾個月才能獲得信任
 - 開啟時會開一個 PTT 的 tab，請不要關掉，需要那個 tab 才能夠連到 PTT。正常情況下 tab 會在關閉時跟著關閉
 - 如果發生錯誤，通常再開關一次或是重新整理網頁可以解決大部分的問題
-- 如果仍有問題，可以登入 PTT 確認一下，有可能某些情況沒有處理到（比方說沒有權限），歡迎回報問題
+- 如果仍有問題，可以登入 PTT 確認一下，有可能某些情況沒有處理到，歡迎回報問題
 - 目前全螢幕只有 Youtube 下可以出現，holodex 和 twitch 僅支援劇院模式
 
 ### 熱鍵
@@ -74,7 +60,22 @@ v1.0.2 更新：
 
 - 部分程式參考 [PyPtt](https://github.com/PyPtt/PyPtt)，感謝開源
 - icon https://alexleybourne.github.io/chrome-extension-icon-generator/
-- 編碼參考 [pyUAO](https://github.com/eight04/pyUAO) 和 [Ptt-official-app](https://github.com/Ptt-official-app/go-openbbsmiddleware)
+- UTF-8 參考 [pyUAO](https://github.com/eight04/pyUAO) 和 [Ptt-official-app](https://github.com/Ptt-official-app/go-openbbsmiddleware)
+
+## 更新紀錄
+v1.0.5 更新：
+- 支援 UTF-8
+
+v1.0.4 更新：
+- 修正閒置超過 30 秒之後按開始會卡在 loading
+
+v1.0.3 更新：
+- 修正剛安裝時載入較慢就會關閉而只顯示 loading 的錯誤
+- 修正登入時信箱已滿的判斷
+
+v1.0.2 更新：
+- 刪除重覆連線可以正常使用
+- 修正調整大小在 holodex 或是 Youtube 聊天室的問題
 
 ## Development
 
