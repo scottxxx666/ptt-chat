@@ -1,3 +1,5 @@
+import {deepCopy} from "./utils.js";
+
 const saveData = async (key, theme) => {
   try {
     await save(key, theme)
@@ -27,7 +29,7 @@ export default {
     }
   },
   saveBounding: (bounding) => {
-    return saveData('bounding', bounding)
+    return saveData('bounding', deepCopy(bounding))
   },
   loadBounding: async () => {
     try {

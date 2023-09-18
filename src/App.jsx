@@ -181,7 +181,7 @@ function App() {
 
     function stopMoving() {
       setIsMoving(false)
-      storage.saveBounding(deepCopy(boundingRef.current))
+      storage.saveBounding(boundingRef.current)
     }
 
     if (isMoving) {

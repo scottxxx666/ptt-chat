@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 import {ThemeContext} from "./App.jsx";
 import {themeColor} from "./theme.js";
 import storage from "./storage.js";
-import {deepCopy} from "./utils.js";
 import iframe from "./iframe.js";
 
 ResizeLayer.propTypes = {
@@ -52,7 +51,7 @@ export default function ResizeLayer({windowRef, bounding, setBounding}) {
         iframe.autoPointerEvent()
       }
     }
-    storage.saveBounding(deepCopy(boundingRef.current))
+    storage.saveBounding(boundingRef.current)
   }, [isWidth, setBounding])
 
   useEffect(() => {
@@ -73,7 +72,7 @@ export default function ResizeLayer({windowRef, bounding, setBounding}) {
         iframe.autoPointerEvent()
       }
     }
-    storage.saveBounding(deepCopy(boundingRef.current))
+    storage.saveBounding(boundingRef.current)
   }, [isHeight, setBounding])
 
   function stop() {
