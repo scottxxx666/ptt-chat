@@ -3,7 +3,7 @@ import toggleChat from './toggleChat?script&module'
 import storage from "./storage.js";
 import {logError} from "./log.js";
 
-chrome.runtime.onInstalled.addListener(details => {
+chrome.runtime.onInstalled.addListener(() => {
   chrome.action.setBadgeText({
     text: "OFF",
   });
@@ -26,7 +26,7 @@ async function setStatus(nextState) {
   });
 }
 
-chrome.action.onClicked.addListener(async (tab) => {
+chrome.action.onClicked.addListener(async () => {
   const prevState = await chrome.action.getBadgeText({});
   const nextState = prevState === 'ON' ? 'OFF' : 'ON'
 
@@ -52,7 +52,7 @@ async function sendMessage(tab, data, ignoreError) {
 let pttTab
 let chatTab
 
-chrome.runtime.onMessage.addListener(async function (request, sender, sendResponse) {
+chrome.runtime.onMessage.addListener(async function (request) {
   const {type} = request
   if (type === 'START') {
     pttPort.postMessage({type: 'START', data: request.data})

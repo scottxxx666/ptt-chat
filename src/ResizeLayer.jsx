@@ -21,6 +21,8 @@ export default function ResizeLayer({windowRef, bounding, setBounding}) {
 
   const rightRef = useRef()
   const topRef = useRef()
+  const boundingRef = useRef()
+  boundingRef.current = bounding
 
   function startWidth() {
     rightRef.current = windowRef.current.offsetLeft + windowRef.current.offsetWidth
@@ -32,21 +34,14 @@ export default function ResizeLayer({windowRef, bounding, setBounding}) {
     setIsHeight(true)
   }
 
-  function handleWidth(e) {
-    setBounding(prevState => ({
-      ...prevState,
-      width: +((rightRef.current - e.clientX) / window.innerWidth * 100).toFixed(2)
-    }))
-  }
-
-  function handleHeight(e) {
-    setBounding(prevState => ({
-      ...prevState,
-      height: +((e.clientY - topRef.current) / window.innerHeight * 100).toFixed(2)
-    }))
-  }
-
   useEffect(() => {
+    function handleWidth(e) {
+      setBounding(prevState => ({
+        ...prevState,
+        width: +((rightRef.current - e.clientX) / window.innerWidth * 100).toFixed(2)
+      }))
+    }
+
     if (isWidth) {
       iframe.clearPointerEvent();
       document.addEventListener('mousemove', handleWidth)
@@ -57,10 +52,17 @@ export default function ResizeLayer({windowRef, bounding, setBounding}) {
         iframe.autoPointerEvent()
       }
     }
-    storage.saveBounding(deepCopy(bounding))
-  }, [isWidth])
+    storage.saveBounding(deepCopy(boundingRef.current))
+  }, [isWidth, setBounding])
 
   useEffect(() => {
+    function handleHeight(e) {
+      setBounding(prevState => ({
+        ...prevState,
+        height: +((e.clientY - topRef.current) / window.innerHeight * 100).toFixed(2)
+      }))
+    }
+
     if (isHeight) {
       iframe.clearPointerEvent()
       document.addEventListener('mousemove', handleHeight)
@@ -71,8 +73,8 @@ export default function ResizeLayer({windowRef, bounding, setBounding}) {
         iframe.autoPointerEvent()
       }
     }
-    storage.saveBounding(deepCopy(bounding))
-  }, [isHeight])
+    storage.saveBounding(deepCopy(boundingRef.current))
+  }, [isHeight, setBounding])
 
   function stop() {
     setIsWidth(false)

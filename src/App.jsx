@@ -83,35 +83,35 @@ function App() {
     }
   }, [showThemeSettings])
 
-  function messageListener(request, sender, sendResponse) {
-    const {type, data} = request
-    if (type === 'MSG') {
-      setState(STATE.STREAMING)
-      const messages = JSON.parse(data)
-      if (messages.length === 0) return
-      setMessages(prev => [...prev, ...messages].slice(-MAX_MESSAGE_COUNT))
-    } else if (type === 'DEFAULT') {
-      initTheme()
-      initBounding()
-      setShowThemeSettings(false)
-    } else if (type === 'STOP') {
-      reset()
-    } else if (type === 'ERR') {
-      if (request.data === 'MSG_ENCODE_ERR') {
-        alert('推文中含有未支援的字元')
-        return;
-      }
-      alert(request.data)
-      close()
-    }
-  }
-
   function reset() {
     setState(STATE.LOGIN)
     setMessages([])
   }
 
   useEffect(() => {
+    function messageListener(request) {
+      const {type, data} = request
+      if (type === 'MSG') {
+        setState(STATE.STREAMING)
+        const messages = JSON.parse(data)
+        if (messages.length === 0) return
+        setMessages(prev => [...prev, ...messages].slice(-MAX_MESSAGE_COUNT))
+      } else if (type === 'DEFAULT') {
+        initTheme()
+        initBounding()
+        setShowThemeSettings(false)
+      } else if (type === 'STOP') {
+        reset()
+      } else if (type === 'ERR') {
+        if (request.data === 'MSG_ENCODE_ERR') {
+          alert('推文中含有未支援的字元')
+          return;
+        }
+        alert(request.data)
+        close()
+      }
+    }
+
     chrome.runtime.onMessage.addListener(messageListener)
     return () => {
       chrome.runtime.onMessage.removeListener(messageListener)
@@ -164,26 +164,26 @@ function App() {
     setIsMoving(true)
   }
 
-  function stopMoving() {
-    setIsMoving(false)
-    storage.saveBounding(deepCopy(boundingRef.current))
-  }
-
   const windowRef = useRef();
   const boundingRef = useRef()
   boundingRef.current = bounding
 
-  function handleMoving(e) {
-    const w = windowRef.current.offsetWidth - mouseDownRef.current.x
-    const h = mouseDownRef.current.y
-    setBounding(prevState => ({
-      ...prevState,
-      top: +((e.clientY - h) / window.innerHeight * 100).toFixed(2),
-      right: +(100 - (e.clientX + w) / window.innerWidth * 100).toFixed(2)
-    }))
-  }
-
   useEffect(() => {
+    function handleMoving(e) {
+      const w = windowRef.current.offsetWidth - mouseDownRef.current.x
+      const h = mouseDownRef.current.y
+      setBounding(prevState => ({
+        ...prevState,
+        top: +((e.clientY - h) / window.innerHeight * 100).toFixed(2),
+        right: +(100 - (e.clientX + w) / window.innerWidth * 100).toFixed(2)
+      }))
+    }
+
+    function stopMoving() {
+      setIsMoving(false)
+      storage.saveBounding(deepCopy(boundingRef.current))
+    }
+
     if (isMoving) {
       iframe.clearPointerEvent()
       document.addEventListener('mousemove', handleMoving)

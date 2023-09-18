@@ -39,7 +39,7 @@ export default function Chat({messages}) {
     if (!scrolling) {
       chatRef.current?.lastElementChild?.scrollIntoView()
     }
-  }, [msgs])
+  }, [msgs, scrolling])
 
   function handleScroll() {
     const lastMsg = chatRef.current?.lastElementChild;
@@ -55,11 +55,6 @@ export default function Chat({messages}) {
     }
   }
 
-  function scrollToEnd() {
-    setScrolling(false)
-    chatRef.current?.lastElementChild?.scrollIntoView()
-  }
-
   return (
     <>
       <div id='ptt-chat-container'
@@ -69,7 +64,7 @@ export default function Chat({messages}) {
         <div id={"ptt-chat"} ref={chatRef} className={'ptt-mr-1 ptt-text-sm ptt-h-full ptt-w-full'}>
           {msgs}
         </div>
-        {scrolling && <button id='ptt-page-end' onClick={scrollToEnd}
+        {scrolling && <button id='ptt-page-end' onClick={() => setScrolling(false)}
                               className={`ptt-w-7 ptt-h-6 ptt-rounded ptt-text-stone-50 ptt-text-center ${themeColor(theme).pageEnd}`}>↓</button>}
       </div>
       <div id='ptt-chat-footer' className={'ptt-flex ptt-pt-2 ptt-pb-1 ptt-px-1'}>
