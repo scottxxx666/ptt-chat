@@ -28,6 +28,7 @@ function App() {
   const [bounding, setBounding] = useState({})
   const [theme, setTheme] = useState({})
   const prevThemeRef = useRef();
+  const loginDataRef = useRef();
 
   function toggleTheme() {
     if (showThemeSettings) cancelTheme()
@@ -103,7 +104,11 @@ function App() {
       } else if (type === 'STOP') {
         reset()
       } else if (type === 'ERR') {
-        if (request.data === 'MSG_ENCODE_ERR') {
+        if (request.data === 'DEADLINE_EXCEEDED') {
+          reset()
+          start(loginDataRef.current)
+          return;
+        } else if (request.data === 'MSG_ENCODE_ERR') {
           alert('推文中含有未支援的字元')
           return;
         }
@@ -118,14 +123,16 @@ function App() {
     }
   }, [])
 
-  async function start(data) {
-    chrome.runtime.sendMessage({type: "START", data});
+  function start(data) {
+    chrome.runtime.sendMessage({type: "START", data})
+    loginDataRef.current = {...data}
     setState(STATE.LOADING)
   }
 
   function close() {
-    chrome.runtime.sendMessage({type: 'STOP'});
+    chrome.runtime.sendMessage({type: 'STOP'})
     setState(STATE.LOGIN)
+    setMessages([])
   }
 
   function toggleChat() {
