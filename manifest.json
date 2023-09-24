@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "PTT Chat",
   "description": "在一個視窗同時看實況跟推文",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "background": {
     "service_worker": "src/background.js",
     "type": "module"

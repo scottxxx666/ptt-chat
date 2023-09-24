@@ -63,6 +63,10 @@ https://pse.is/ptt-chat
 - UTF-8 參考 [pyUAO](https://github.com/eight04/pyUAO) 和 [Ptt-official-app](https://github.com/Ptt-official-app/go-openbbsmiddleware)
 
 ## 更新紀錄
+v1.0.6 更新
+- 當 PTT 過久沒回應（卡在未知的步驟）時重新連線
+- 修正解析推文錯誤會卡住或是重覆出現
+
 v1.0.5 更新：
 - 支援 UTF-8
 
