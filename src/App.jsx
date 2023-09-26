@@ -206,8 +206,7 @@ function App() {
   if (isMini) {
     return (<ThemeContext.Provider value={theme}>
       <div
-        id="ptt-chat-window"
-        className={`ptt-flex ptt-h-fit ptt-rounded-md ptt-w-fit ptt-py-1 ptt-px-2 ${themeColor(theme).background} ${themeColor(theme).text}`}
+        className={`ptt-chat-window ptt-flex ptt-h-fit ptt-rounded-md ptt-w-fit ptt-py-1 ptt-px-2 ${themeColor(theme).background} ${themeColor(theme).text}`}
         style={{top: bounding.top + '%', right: bounding.right + '%'}}
       >
         <IconButton onClick={toggleChat} style={{transform: 'scaleX(-1)'}}><MinimizeIcon/></IconButton>
@@ -217,15 +216,15 @@ function App() {
 
   return (<ThemeContext.Provider value={theme}>
       <section className={'ptt-text-base'}>
-        <div id="ptt-chat-window"
-             ref={windowRef}
-             className={`ptt-rounded-md ptt-flex ptt-flex-col ptt-py-2 ptt-px-2 ptt-overflow-auto ${bgColor(theme)} ${textColor(theme)} ${theme.transparent ? '[&:not(:hover)]:ptt-bg-transparent' : ''}`}
-             style={{
-               top: `${bounding.top}%`,
-               right: `${bounding.right}%`,
-               width: `${bounding.width}%`,
-               height: `${bounding.height}%`,
-             }}
+        <div
+          ref={windowRef}
+          className={`ptt-chat-window ptt-rounded-md ptt-flex ptt-flex-col ptt-py-2 ptt-px-2 ptt-overflow-auto ${bgColor(theme)} ${textColor(theme)} ${theme.transparent ? '[&:not(:hover)]:ptt-bg-transparent' : ''}`}
+          style={{
+            top: `${bounding.top}%`,
+            right: `${bounding.right}%`,
+            width: `${bounding.width}%`,
+            height: `${bounding.height}%`,
+          }}
         >
           {isResizing && <ResizeLayer windowRef={windowRef} bounding={bounding} setBounding={setBounding}/>}
           <div id="ptt-chat-header" className={'ptt-flex ptt-mb-2 ptt-px-1 ptt-justify-between'}

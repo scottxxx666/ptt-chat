@@ -57,15 +57,17 @@ export default function Chat({messages}) {
 
   return (
     <>
-      <div id='ptt-chat-container'
-           className={`ptt-overflow-y-scroll ptt-overflow-x-hidden ptt-h-full ptt-px-1 ptt-flex ptt-justify-center ${themeColor(theme).scrollBar}`}
-           onScroll={handleScroll}
+      <div
+        className={`ptt-chat-container ptt-overflow-y-scroll ptt-overflow-x-hidden ptt-h-full ptt-px-1 ptt-flex ptt-justify-center ${themeColor(theme).scrollBar}`}
+        onScroll={handleScroll}
       >
         <div id={"ptt-chat"} ref={chatRef} className={'ptt-mr-1 ptt-text-sm ptt-h-full ptt-w-full'}>
           {msgs}
         </div>
-        {scrolling && <button id='ptt-page-end' onClick={() => setScrolling(false)}
-                              className={`ptt-w-7 ptt-h-6 ptt-rounded ptt-text-stone-50 ptt-text-center ${themeColor(theme).pageEnd}`}>↓</button>}
+        {scrolling &&
+          <button
+            onClick={() => setScrolling(false)}
+            className={`ptt-page-end ptt-w-7 ptt-h-6 ptt-rounded ptt-text-stone-50 ptt-text-center ${themeColor(theme).pageEnd}`}>↓</button>}
       </div>
       <div id='ptt-chat-footer' className={'ptt-flex ptt-pt-2 ptt-pb-1 ptt-px-1'}>
         <input name='message' type='text' onChange={handleInput} onKeyDown={handleEnter} value={input}
