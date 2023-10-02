@@ -50,7 +50,9 @@ function App() {
 
     function messageListener(request) {
       const {type, data} = request
-      if (type === MESSAGE_TYPE.MSG) {
+      if (type === MESSAGE_TYPE.ON) {
+        setState(STATE.LOGIN)
+      } else if (type === MESSAGE_TYPE.MSG) {
         setState(STATE.STREAMING)
         const messages = JSON.parse(data)
         if (messages.length === 0) return
@@ -60,7 +62,8 @@ function App() {
         initBounding()
         setShowThemeSettings(false)
       } else if (type === MESSAGE_TYPE.OFF) {
-        reset()
+        setState(STATE.OFF)
+        setMessages([])
       } else if (type === MESSAGE_TYPE.ERROR) {
         if (request.data === 'DEADLINE_EXCEEDED') {
           reset()
@@ -95,9 +98,13 @@ function App() {
   }, [])
 
   function close() {
-    setState(STATE.LOGIN)
     chrome.runtime.sendMessage({type: MESSAGE_TYPE.OFF})
+    setState(STATE.OFF)
     setMessages([])
+  }
+
+  if (state === STATE.OFF) {
+    return;
   }
 
   const chatWindow = <ChatWindow

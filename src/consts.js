@@ -13,6 +13,7 @@ export const THEME_MODE = {
 
 export const MESSAGE_TYPE = {
   OFF: 'OFF',
+  ON: 'ON',
   DEFAULT: 'DEFAULT',
   START: 'START',
   SEND: 'SEND',

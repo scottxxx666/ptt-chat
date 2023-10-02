@@ -1,5 +1,4 @@
 import content from './content?script'
-import toggleChat from './toggleChat?script&module'
 import storage from "./storage.js";
 import {logError} from "./log.js";
 import {MESSAGE_TYPE} from "./consts.js";
@@ -110,13 +109,12 @@ async function startExtension() {
 
   await chrome.scripting.executeScript({
     target: {tabId: chatTab},
-    files: [toggleChat],
-  });
-
-  await chrome.scripting.executeScript({
-    target: {tabId: chatTab},
     files: [content],
   });
+
+  // since content script only run at first time
+  // use message to turn on instead
+  sendMessage(chatTab, {type: MESSAGE_TYPE.ON}, true)
 
   setStatus('ON');
 }
@@ -134,11 +132,6 @@ async function stopExtension() {
   })
 
   try {
-    await chrome.scripting.executeScript({
-      target: {tabId: chatTab},
-      files: [toggleChat],
-    });
-
     sendMessage(chatTab, {type: MESSAGE_TYPE.OFF}, true)
   } catch (e) {
     logError('stop extension', e)
