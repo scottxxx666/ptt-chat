@@ -9,6 +9,11 @@ import {createPortal} from "react-dom";
 
 export const ThemeContext = createContext(null);
 
+function supportFullscreen() {
+  // youtube already support fullscreen without handling
+  return window.location.hostname !== 'www.youtube.com'
+}
+
 function App() {
   const [bounding, setBounding] = useState({})
   const [theme, setTheme] = useState(deepCopy(defaultTheme))
@@ -117,7 +122,8 @@ function App() {
 
   return (
     <ThemeContext.Provider value={theme}>
-      {showFullscreen ? createPortal(chatWindow, videoContainerRef.current) : chatWindow}
+      {showFullscreen && supportFullscreen() ?
+        createPortal(chatWindow, videoContainerRef.current) : chatWindow}
     </ThemeContext.Provider>
   )
 }
