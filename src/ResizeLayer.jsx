@@ -80,7 +80,7 @@ export default function ResizeLayer({windowRef, bounding, setBounding}) {
     setIsHeight(false)
   }
 
-  return <section className="ptt-size-layer">
+  return <section className="ptt-size-layer ptt-m-0">
     <button
       className={`ptt-width ptt-w-fit ptt-h-fit ptt-absolute ptt-top-0 ptt-left-0 ptt-bottom-0 ptt-m-auto ${themeColor(theme).resize}`}
       onMouseDown={startWidth}>

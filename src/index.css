@@ -15,6 +15,10 @@
   z-index: 2147483637;
 }
 
+.ptt-chat-window input {
+  appearance: auto;
+}
+
 .ptt-chat-container::-webkit-scrollbar {
   width: 4px;
   background: transparent;
