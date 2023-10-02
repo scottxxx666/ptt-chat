@@ -4,7 +4,7 @@ import ChatWindow from "./ChatWindow.jsx";
 import storage from "./storage.js";
 import {deepCopy} from "./utils.js";
 import {calculateDefaultBounding, defaultTheme, MAX_MESSAGE_COUNT} from "./configs.js";
-import {STATE} from "./consts.js";
+import {MESSAGE_TYPE, STATE} from "./consts.js";
 import {createPortal} from "react-dom";
 
 export const ThemeContext = createContext(null);
@@ -26,7 +26,7 @@ function App() {
   }
 
   function start(data) {
-    chrome.runtime.sendMessage({type: "START", data})
+    chrome.runtime.sendMessage({type: MESSAGE_TYPE.START, data})
     loginDataRef.current = {...data}
     setState(STATE.LOADING)
   }
@@ -50,18 +50,18 @@ function App() {
 
     function messageListener(request) {
       const {type, data} = request
-      if (type === 'MSG') {
+      if (type === MESSAGE_TYPE.MSG) {
         setState(STATE.STREAMING)
         const messages = JSON.parse(data)
         if (messages.length === 0) return
         setMessages(prev => [...prev, ...messages].slice(-MAX_MESSAGE_COUNT))
-      } else if (type === 'DEFAULT') {
+      } else if (type === MESSAGE_TYPE.DEFAULT) {
         initTheme()
         initBounding()
         setShowThemeSettings(false)
-      } else if (type === 'STOP') {
+      } else if (type === MESSAGE_TYPE.OFF) {
         reset()
-      } else if (type === 'ERR') {
+      } else if (type === MESSAGE_TYPE.ERROR) {
         if (request.data === 'DEADLINE_EXCEEDED') {
           reset()
           start(loginDataRef.current)
@@ -95,8 +95,8 @@ function App() {
   }, [])
 
   function close() {
-    chrome.runtime.sendMessage({type: 'STOP'})
     setState(STATE.LOGIN)
+    chrome.runtime.sendMessage({type: MESSAGE_TYPE.OFF})
     setMessages([])
   }
 

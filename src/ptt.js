@@ -1,3 +1,5 @@
+import {MESSAGE_TYPE} from "./consts.js";
+
 (async () => {
   const src = chrome.runtime.getURL("src/wasm_exec.js");
   await import(/* @vite-ignore */src);
@@ -9,13 +11,13 @@
   const port = chrome.runtime.connect({name: 'PTT'});
   port.onMessage.addListener(function (request) {
     const {type} = request
-    if (type === 'START') {
+    if (type === MESSAGE_TYPE.START) {
       const {username, password, deleteDuplicate, board, article} = request.data
       pollingMessages(username, password, deleteDuplicate, board, article, sendPushes, notifyError, false)
-    } else if (type === 'SEND') {
+    } else if (type === MESSAGE_TYPE.SEND) {
       pushMessage(request.data, notifyError)
-    } else if (type === 'PING') {
-      port.postMessage({type: 'PONG'});
+    } else if (type === MESSAGE_TYPE.PING) {
+      port.postMessage({type: MESSAGE_TYPE.PONG});
     }
   });
 

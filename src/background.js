@@ -2,6 +2,7 @@ import content from './content?script'
 import toggleChat from './toggleChat?script&module'
 import storage from "./storage.js";
 import {logError} from "./log.js";
+import {MESSAGE_TYPE} from "./consts.js";
 
 chrome.runtime.onInstalled.addListener(() => {
   chrome.action.setBadgeText({
@@ -17,7 +18,7 @@ chrome.runtime.onInstalled.addListener(() => {
 
 chrome.contextMenus.onClicked.addListener(async () => {
   await storage.clear()
-  sendMessage(chatTab, {type: 'DEFAULT'});
+  sendMessage(chatTab, {type: MESSAGE_TYPE.DEFAULT});
 });
 
 async function setStatus(nextState) {
@@ -54,11 +55,11 @@ let chatTab
 
 chrome.runtime.onMessage.addListener(async function (request) {
   const {type} = request
-  if (type === 'START') {
-    pttPort.postMessage({type: 'START', data: request.data})
-  } else if (type === 'SEND') {
+  if (type === MESSAGE_TYPE.START) {
+    pttPort.postMessage({type: MESSAGE_TYPE.START, data: request.data})
+  } else if (type === MESSAGE_TYPE.SEND) {
     pttPort.postMessage(request);
-  } else if (type === 'STOP') {
+  } else if (type === MESSAGE_TYPE.OFF) {
     stopExtension();
   }
 })
@@ -76,7 +77,7 @@ chrome.runtime.onConnect.addListener(function (port) {
 
   pttInterval = setInterval(() => {
     try {
-      port.postMessage({type: 'PING'})
+      port.postMessage({type: MESSAGE_TYPE.PING})
     } catch (e) {
       clearInterval(pttInterval)
     }
@@ -84,9 +85,9 @@ chrome.runtime.onConnect.addListener(function (port) {
 
   port.onMessage.addListener(function (request) {
     const {type} = request
-    if (type === 'MSG' && chatTab) {
+    if (type === MESSAGE_TYPE.MSG && chatTab) {
       sendMessage(chatTab, request);
-    } else if (type === 'ERR' && chatTab) {
+    } else if (type === MESSAGE_TYPE.ERROR && chatTab) {
       sendMessage(chatTab, request, true);
     }
   });
@@ -138,7 +139,7 @@ async function stopExtension() {
       files: [toggleChat],
     });
 
-    sendMessage(chatTab, {type: 'STOP'}, true)
+    sendMessage(chatTab, {type: MESSAGE_TYPE.OFF}, true)
   } catch (e) {
     logError('stop extension', e)
   }
