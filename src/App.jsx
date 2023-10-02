@@ -5,6 +5,7 @@ import storage from "./storage.js";
 import {deepCopy} from "./utils.js";
 import {calculateDefaultBounding, defaultTheme, MAX_MESSAGE_COUNT} from "./configs.js";
 import {STATE} from "./consts.js";
+import {createPortal} from "react-dom";
 
 export const ThemeContext = createContext(null);
 
@@ -14,8 +15,10 @@ function App() {
   const [showThemeSettings, setShowThemeSettings] = useState(false)
   const [messages, setMessages] = useState([])
   const [state, setState] = useState(STATE.LOGIN)
+  const [showFullscreen, setShowFullsreen] = useState(false)
 
   const loginDataRef = useRef();
+  const videoContainerRef = useRef();
 
   function reset() {
     setState(STATE.LOGIN)
@@ -72,12 +75,22 @@ function App() {
       }
     }
 
+    function fullscreenListener() {
+      const isFullscreen = document.fullscreenElement !== null;
+      setShowFullsreen(isFullscreen)
+    }
+
     initTheme()
     initBounding()
+
+    // holodex only iframe not video
+    videoContainerRef.current = document.querySelector('video').parentElement || document;
+    document.addEventListener('fullscreenchange', fullscreenListener)
 
     chrome.runtime.onMessage.addListener(messageListener)
     return () => {
       chrome.runtime.onMessage.removeListener(messageListener)
+      document.removeEventListener('fullscreenchange', fullscreenListener)
     }
   }, [])
 
@@ -87,15 +100,17 @@ function App() {
     setMessages([])
   }
 
+  const chatWindow = <ChatWindow
+    theme={theme} setTheme={setTheme}
+    showThemeSettings={showThemeSettings} setShowThemeSettings={setShowThemeSettings}
+    bounding={bounding} setBounding={setBounding}
+    messages={messages} state={state}
+    start={start} close={close}
+  />
+
   return (
     <ThemeContext.Provider value={theme}>
-      <ChatWindow
-        theme={theme} setTheme={setTheme}
-        showThemeSettings={showThemeSettings} setShowThemeSettings={setShowThemeSettings}
-        bounding={bounding} setBounding={setBounding}
-        messages={messages} state={state}
-        start={start} close={close}
-      />
+      {showFullscreen ? createPortal(chatWindow, videoContainerRef.current) : chatWindow}
     </ThemeContext.Provider>
   )
 }
