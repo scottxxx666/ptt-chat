@@ -58,7 +58,8 @@ export default function ResizeLayer({windowRef, bounding, setBounding}) {
     function handleHeight(e) {
       setBounding(prevState => ({
         ...prevState,
-        height: +((e.clientY - topRef.current) / window.innerHeight * 100).toFixed(2)
+        // add more height prevent triggering mouseup event outside
+        height: +((e.clientY - topRef.current) / window.innerHeight * 100).toFixed(2) + 0.5
       }))
     }
 
