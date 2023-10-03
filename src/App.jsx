@@ -9,9 +9,17 @@ import {createPortal} from "react-dom";
 
 export const ThemeContext = createContext(null);
 
-function supportFullscreen() {
+function supportFullscreen(videoContainer) {
   // youtube already support fullscreen without handling
-  return window.location.hostname !== 'www.youtube.com'
+  // holodex only iframe not video
+  return window.location.host !== 'www.youtube.com' && videoContainer
+}
+
+function getVideoContainer() {
+  if (window.location.host === 'hamivideo.hinet.net') {
+    return document.querySelector('.plyr__video-wrapper')?.parentElement
+  }
+  return document.querySelector('video')?.parentElement
 }
 
 function App() {
@@ -91,8 +99,7 @@ function App() {
     initTheme()
     initBounding()
 
-    // holodex only iframe not video
-    videoContainerRef.current = document.querySelector('video').parentElement || document;
+    videoContainerRef.current = getVideoContainer();
     document.addEventListener('fullscreenchange', fullscreenListener)
 
     chrome.runtime.onMessage.addListener(messageListener)
@@ -122,7 +129,7 @@ function App() {
 
   return (
     <ThemeContext.Provider value={theme}>
-      {showFullscreen && supportFullscreen() ?
+      {showFullscreen && supportFullscreen(videoContainerRef.current) ?
         createPortal(chatWindow, videoContainerRef.current) : chatWindow}
     </ThemeContext.Provider>
   )
