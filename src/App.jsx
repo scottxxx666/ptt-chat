@@ -32,6 +32,11 @@ function App() {
 
   const loginDataRef = useRef();
   const videoContainerRef = useRef();
+  const prevThemeRef = useRef();
+
+  function setPrevTheme(data) {
+    prevThemeRef.current = deepCopy(data)
+  }
 
   function reset() {
     setState(STATE.LOGIN)
@@ -121,6 +126,7 @@ function App() {
 
   const chatWindow = <ChatWindow
     theme={theme} setTheme={setTheme}
+    prevTheme={prevThemeRef.current} setPrevTheme={setPrevTheme}
     showThemeSettings={showThemeSettings} setShowThemeSettings={setShowThemeSettings}
     bounding={bounding} setBounding={setBounding}
     messages={messages} state={state}

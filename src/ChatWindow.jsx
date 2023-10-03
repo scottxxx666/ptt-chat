@@ -34,6 +34,8 @@ ChatWindow.propTypes = {
   start: PropTypes.func,
   setShowThemeSettings: PropTypes.func,
   close: PropTypes.func,
+  prevTheme: PropTypes.object,
+  setPrevTheme: PropTypes.func,
 }
 
 function ChatWindow({
@@ -47,9 +49,10 @@ function ChatWindow({
                       start,
                       setShowThemeSettings,
                       close,
+                      prevTheme,
+                      setPrevTheme,
                     }) {
   const [isMini, setIsMini] = useState(false)
-  const prevThemeRef = useRef();
 
   function toggleTheme() {
     if (showThemeSettings) cancelTheme()
@@ -57,12 +60,12 @@ function ChatWindow({
   }
 
   function openTheme() {
-    prevThemeRef.current = deepCopy(theme);
+    setPrevTheme(theme);
     setShowThemeSettings(true)
   }
 
   function cancelTheme() {
-    setTheme(prevThemeRef.current)
+    setTheme(deepCopy(prevTheme))
     setShowThemeSettings(false)
   }
 
@@ -71,7 +74,7 @@ function ChatWindow({
     storage.saveTheme(theme)
   }
 
-  const cancelThemeCallBack = useCallback(cancelTheme, [setTheme, setShowThemeSettings])
+  const cancelThemeCallBack = useCallback(cancelTheme, [setTheme, setShowThemeSettings, prevTheme])
   useEffect(() => {
     function handleKeyDown(e) {
       if (e.key === 'Escape') {
