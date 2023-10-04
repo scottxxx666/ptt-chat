@@ -53,7 +53,7 @@ function App() {
     async function initTheme() {
       const themeData = await storage.loadTheme()
       if (themeData) {
-        return setTheme(deepCopy(themeData))
+        return setTheme(prev => ({...prev, ...deepCopy(themeData)}))
       }
       return setTheme(deepCopy(defaultTheme))
     }

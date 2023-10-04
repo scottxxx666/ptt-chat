@@ -22,5 +22,8 @@ export const defaultTheme = {
   LIGHT: {
     account: LightThemeColor.account,
     text: LightThemeColor.text,
+  },
+  font: {
+    size: 'ptt-text-base',
   }
 }

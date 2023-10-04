@@ -94,3 +94,8 @@ export const textColorOptions = [
   {value: 'ptt-text-pink-900', label: 'pink-900'},
 ]
 
+export const textSizeOptions = [
+  {value: 'ptt-text-sm', label: '小'},
+  {value: 'ptt-text-base', label: '中'},
+  {value: 'ptt-text-lg', label: '大'},
+]

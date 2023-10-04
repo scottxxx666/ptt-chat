@@ -1,6 +1,6 @@
 import {useContext} from "react";
 import {ThemeContext} from "./App.jsx";
-import {bgColor, textColor, textColorOptions, themeColor} from "./theme.js";
+import {bgColor, textColor, textColorOptions, textSizeOptions, themeColor} from "./theme.js";
 import PropTypes from "prop-types";
 import {deepCopy} from "./utils.js";
 import DarkIcon from "./icons/DarkIcon.jsx";
@@ -23,7 +23,7 @@ export default function ThemeSettings({setTheme, cancel, save}) {
 
   const handleCustomColor = (mode, key) => e => {
     setTheme(p => {
-      const copy = deepCopy(p);
+      const copy = deepCopy(p)
       return {
         ...copy,
         [mode]: {
@@ -34,9 +34,32 @@ export default function ThemeSettings({setTheme, cancel, save}) {
     })
   };
 
+  const handleTextChange = (key) => (e) => {
+    setTheme(p => {
+      const copy = deepCopy(p)
+      return {
+        ...copy,
+        font: {
+          ...copy.font,
+          [key]: e.target.value,
+        }
+      }
+    })
+  }
+
+  const textSizeRadio = textSizeOptions.map(({value, label}) => {
+    return (
+      <label className={'ptt-mr-1'} key={value}>
+        <input
+          type="radio" name="textSize" value={value}
+          checked={theme.font.size === value} onChange={handleTextChange('size')}/> {label}
+      </label>
+    )
+  })
+
   return (
     <div
-      className={`ptt-chat-theme ptt-overflow-auto ptt-fixed ptt-top-0 ptt-right-0 ptt-left-0 ptt-bottom-0 ptt-w-fit ptt-h-fit ptt-m-auto ptt-px-3 ptt-py-3 ptt-rounded ${bgColor(theme)} ${textColor(theme)} ${themeColor(theme).iconButton}`}>
+      className={`ptt-chat-theme ptt-overflow-auto ptt-fixed ptt-top-0 ptt-right-0 ptt-left-0 ptt-bottom-0 ptt-w-fit ptt-h-fit ptt-m-auto ptt-px-3 ptt-py-3 ptt-text-left ptt-rounded ${bgColor(theme)} ${textColor(theme)} ${themeColor(theme).iconButton}`}>
       <div className={'ptt-pb-4'}>
         <label>透明背景：
           <label className="ptt-switch">
@@ -84,6 +107,9 @@ export default function ThemeSettings({setTheme, cancel, save}) {
           options={textColorOptions}
           themeMode={THEME_MODE.LIGHT}
         />
+      </div>
+      <div className={'ptt-pb-4'}>
+        <label>字體大小：</label> {textSizeRadio}
       </div>
       <div className={'ptt-flex ptt-flex ptt-justify-center ptt-items-center ptt-mt-2'}>
         <button className={`ptt-mr-2 ptt-py-1 ptt-px-3 ${themeColor(theme).button}`} onClick={cancel}>
