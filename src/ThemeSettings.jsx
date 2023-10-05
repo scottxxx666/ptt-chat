@@ -67,6 +67,13 @@ export default function ThemeSettings({setTheme, cancel, save}) {
     )
   })
 
+  function handleStroke() {
+    setTheme(p => {
+      const copy = deepCopy(p)
+      return {...copy, font: {...copy.font, stroke: !p.font.stroke}}
+    })
+  }
+
   return (
     <div
       className={`ptt-chat-theme ptt-overflow-auto ptt-fixed ptt-top-0 ptt-right-0 ptt-left-0 ptt-bottom-0 ptt-w-fit ptt-h-fit ptt-m-auto ptt-px-3 ptt-py-3 ptt-text-left ptt-rounded ${bgColor(theme)} ${textColor(theme)} ${themeColor(theme).iconButton}`}>
@@ -123,6 +130,14 @@ export default function ThemeSettings({setTheme, cancel, save}) {
       </div>
       <div className={'ptt-pb-4'}>
         <label>字體粗細：</label> {textWeightRadio}
+      </div>
+      <div className={'ptt-pb-4'}>
+        <label>字體黑框：
+          <label className="ptt-switch">
+            <input type="checkbox" name="text-stroke" onChange={handleStroke} checked={theme.font.stroke}/>
+            <span className="ptt-slider ptt-round"></span>
+          </label>
+        </label>
       </div>
       <div className={'ptt-flex ptt-flex ptt-justify-center ptt-items-center ptt-mt-2'}>
         <button className={`ptt-mr-2 ptt-py-1 ptt-px-3 ${themeColor(theme).button}`} onClick={cancel}>

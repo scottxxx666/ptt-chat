@@ -58,7 +58,7 @@ export default function Chat({messages}) {
   return (
     <>
       <div
-        className={`ptt-chat-container ptt-overflow-y-scroll ptt-overflow-x-hidden ptt-h-full ptt-px-1 ptt-flex ptt-justify-center ${themeColor(theme).scrollBar}`}
+        className={`ptt-chat-container ptt-overflow-y-scroll ptt-overflow-x-hidden ptt-h-full ptt-px-1 ptt-flex ptt-justify-center ${themeColor(theme).scrollBar} ${theme.font.stroke ? 'font-stroke' : ''}`}
         onScroll={handleScroll}
       >
         <div

@@ -113,3 +113,7 @@ input:checked + .ptt-slider:before {
 .ptt-slider.ptt-round:before {
   border-radius: 50%;
 }
+
+.ptt-chat-container.font-stroke {
+  -webkit-text-stroke: 0.2px black !important;
+}

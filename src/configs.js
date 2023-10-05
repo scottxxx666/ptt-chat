@@ -25,6 +25,7 @@ export const defaultTheme = {
   },
   font: {
     size: 'ptt-text-sm',
-    weight: 'ptt-font-normal'
+    weight: 'ptt-font-normal',
+    stroke: false,
   }
 }
