@@ -1,6 +1,6 @@
 import {useContext} from "react";
 import {ThemeContext} from "./App.jsx";
-import {bgColor, textColor, textColorOptions, textSizeOptions, themeColor} from "./theme.js";
+import {bgColor, textColor, textColorOptions, textSizeOptions, textWeightOptions, themeColor} from "./theme.js";
 import PropTypes from "prop-types";
 import {deepCopy} from "./utils.js";
 import DarkIcon from "./icons/DarkIcon.jsx";
@@ -51,8 +51,18 @@ export default function ThemeSettings({setTheme, cancel, save}) {
     return (
       <label className={'ptt-mr-1'} key={value}>
         <input
-          type="radio" name="textSize" value={value}
+          type="radio" name="text-size" value={value}
           checked={theme.font.size === value} onChange={handleTextChange('size')}/> {label}
+      </label>
+    )
+  })
+
+  const textWeightRadio = textWeightOptions.map(({value, label}) => {
+    return (
+      <label className={'ptt-mr-1'} key={value}>
+        <input
+          type="radio" name="text-weight" value={value}
+          checked={theme.font.weight === value} onChange={handleTextChange('weight')}/> {label}
       </label>
     )
   })
@@ -110,6 +120,9 @@ export default function ThemeSettings({setTheme, cancel, save}) {
       </div>
       <div className={'ptt-pb-4'}>
         <label>字體大小：</label> {textSizeRadio}
+      </div>
+      <div className={'ptt-pb-4'}>
+        <label>字體粗細：</label> {textWeightRadio}
       </div>
       <div className={'ptt-flex ptt-flex ptt-justify-center ptt-items-center ptt-mt-2'}>
         <button className={`ptt-mr-2 ptt-py-1 ptt-px-3 ${themeColor(theme).button}`} onClick={cancel}>

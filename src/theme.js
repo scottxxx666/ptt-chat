@@ -99,3 +99,10 @@ export const textSizeOptions = [
   {value: 'ptt-text-base', label: '中'},
   {value: 'ptt-text-lg', label: '大'},
 ]
+
+export const textWeightOptions = [
+  {value: 'ptt-font-normal', label: '正常'},
+  {value: 'ptt-font-medium', label: '厚'},
+  {value: 'ptt-font-semibold', label: '粗'},
+  {value: 'ptt-font-black', label: '極粗'},
+]
