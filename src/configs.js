@@ -24,6 +24,6 @@ export const defaultTheme = {
     text: LightThemeColor.text,
   },
   font: {
-    size: 'ptt-text-base',
+    size: 'ptt-text-sm',
   }
 }

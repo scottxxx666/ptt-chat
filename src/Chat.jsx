@@ -61,7 +61,7 @@ export default function Chat({messages}) {
         className={`ptt-chat-container ptt-overflow-y-scroll ptt-overflow-x-hidden ptt-h-full ptt-px-1 ptt-flex ptt-justify-center ${themeColor(theme).scrollBar}`}
         onScroll={handleScroll}
       >
-        <div id={"ptt-chat"} ref={chatRef} className={'ptt-mr-1 ptt-text-sm ptt-h-full ptt-w-full'}>
+        <div id={"ptt-chat"} ref={chatRef} className={`ptt-mr-1 ptt-h-full ptt-w-full ${theme.font.size}`}>
           {msgs}
         </div>
         {scrolling &&
