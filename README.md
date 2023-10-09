@@ -25,7 +25,7 @@ https://pse.is/ptt-chat
 - 隱藏背景
 - 縮小到旁邊
 - 淺色深色模式
-- 更改文字和帳號顏色
+- 更改文字和帳號顏色、大小、粗細和黑框
 
 ### 隱私
 
@@ -63,6 +63,10 @@ https://pse.is/ptt-chat
 - UTF-8 參考 [pyUAO](https://github.com/eight04/pyUAO) 和 [Ptt-official-app](https://github.com/Ptt-official-app/go-openbbsmiddleware)
 
 ## 更新紀錄
+v1.0.8 更新
+- 支援更改文字的大小、粗細和黑框
+- 修正愛爾達上的錯誤
+
 v1.0.7 更新
 - 支援各網站的全螢幕（除了 holodex 外有問題的歡迎回報）
 
