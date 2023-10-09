@@ -168,7 +168,7 @@ function ChatWindow({
   }
 
   return (
-    <section className={'ptt-text-base'}>
+    <section className={'ptt-chat ptt-text-base'}>
       <div
         ref={windowRef}
         className={`ptt-chat-window ptt-rounded-md ptt-flex ptt-flex-col ptt-py-2 ptt-px-2 ptt-overflow-auto ptt-text-left ${bgColor(theme)} ${textColor(theme)} ${theme.transparent ? '[&:not(:hover)]:ptt-bg-transparent' : ''}`}

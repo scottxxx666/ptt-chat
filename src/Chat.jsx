@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import {useContext, useEffect, useRef, useState} from "react";
 import {ThemeContext} from "./App.jsx";
 import {themeColor} from "./theme.js";
+import IconButton from "./IconButton.jsx";
 
 Chat.propTypes = {
   messages: PropTypes.array,
@@ -78,7 +79,7 @@ export default function Chat({messages}) {
                 ${themeColor(theme).inputOutline}`}
                maxLength={24}
         />
-        <button id='submit' onClick={sendMessage} className={'ptt-ml-2 ptt-w-7'}>⏎</button>
+        <IconButton onClick={sendMessage} className={'ptt-ml-2 ptt-w-7'}>⏎</IconButton>
       </div>
     </>
   )

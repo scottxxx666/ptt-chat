@@ -15,8 +15,22 @@
   z-index: 2147483637;
 }
 
-.ptt-chat-window input {
+.ptt-chat input {
+  display: inline-block;
   appearance: auto;
+  width: auto;
+}
+
+.ptt-chat input::after {
+  content: none;
+}
+
+.ptt-chat input:checked::after {
+  content: none;
+}
+
+.ptt-chat label {
+  display: inline-block;
 }
 
 .ptt-chat-container::-webkit-scrollbar {

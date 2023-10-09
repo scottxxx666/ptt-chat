@@ -14,8 +14,11 @@ export default function IconButton({onClick, children, style = {}, className = '
   const darkTheme = useContext(ThemeContext)
 
   return (
-    <button onClick={onClick} className={`${className} ${themeColor(darkTheme).iconButton}`} style={style}
-            data-testid="icon-button">
+    <button
+      onClick={onClick}
+      className={`ptt-border-none ${className} ${themeColor(darkTheme).iconButton}`}
+      style={style}
+      data-testid="icon-button">
       {children}
     </button>
   )

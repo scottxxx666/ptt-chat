@@ -19,6 +19,9 @@ function getVideoContainer() {
   if (window.location.host === 'hamivideo.hinet.net') {
     return document.querySelector('.plyr__video-wrapper')?.parentElement
   }
+  if (window.location.host === 'eltaott.tv') {
+    return document.querySelector('#playerVideo')
+  }
   return document.querySelector('video')?.parentElement
 }
 
