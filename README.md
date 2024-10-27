@@ -63,6 +63,11 @@ https://pse.is/ptt-chat
 - UTF-8 參考 [pyUAO](https://github.com/eight04/pyUAO) 和 [Ptt-official-app](https://github.com/Ptt-official-app/go-openbbsmiddleware)
 
 ## 更新紀錄
+
+v1.0.9 更新
+- 修正 CSP header 導致 js 無法載入
+- 更新套件
+
 v1.0.8 更新
 - 支援更改文字的大小、粗細和黑框
 - 修正愛爾達上的錯誤
