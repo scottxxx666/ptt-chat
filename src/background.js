@@ -2,6 +2,14 @@ import content from './content?script'
 import storage from "./storage.js";
 import {logError} from "./log.js";
 import {MESSAGE_TYPE} from "./consts.js";
+import IndexedDbRepo from "./indexedDbRepo.js";
+
+const blacklistRepo = new IndexedDbRepo('ptt-chat')
+let pttTab
+let chatTab
+let username
+
+const handleError = async func => func().catch((e) => logError(e));
 
 chrome.runtime.onInstalled.addListener(() => {
   chrome.action.setBadgeText({
@@ -49,22 +57,46 @@ async function sendMessage(tab, data, ignoreError) {
   }
 }
 
-let pttTab
-let chatTab
-
+// only chatTab use runtime.onMessage, pttTab use port
 chrome.runtime.onMessage.addListener(async function (request) {
   const {type} = request
-  if (type === MESSAGE_TYPE.START) {
-    pttPort.postMessage({type: MESSAGE_TYPE.START, data: request.data})
-  } else if (type === MESSAGE_TYPE.SEND) {
-    pttPort.postMessage(request);
-  } else if (type === MESSAGE_TYPE.OFF) {
-    stopExtension();
+  switch (type) {
+    case MESSAGE_TYPE.START:
+      username = request.data.username
+      pttPort.postMessage({type: MESSAGE_TYPE.START, data: request.data});
+      break;
+    case MESSAGE_TYPE.SEND:
+      pttPort.postMessage(request);
+      break;
+    case MESSAGE_TYPE.OFF:
+      stopExtension();
+      break;
+    case MESSAGE_TYPE.BLACKLIST:
+      await handleError(() => {
+        const {user} = request.data
+        return blacklistRepo.getBlacklist(user);
+      })
+      break;
+    case MESSAGE_TYPE.BLACKLIST_ADD:
+      await handleError(() => {
+        const {user, blockedUser} = request.data
+        return blacklistRepo.add(user, blockedUser);
+      })
+      break;
+    case MESSAGE_TYPE.BLACKLIST_DELETE:
+      await handleError(() => {
+        const {id} = request.data
+        return blacklistRepo.delete(id);
+      })
+      break;
+    default:
+      logError('unknown message type', type)
   }
 })
 
 let pttPort;
 let pttInterval;
+let isFirstMessage;
 
 chrome.runtime.onConnect.addListener(function (port) {
   if (port.name !== 'PTT') return
@@ -82,9 +114,16 @@ chrome.runtime.onConnect.addListener(function (port) {
     }
   }, 10000)
 
-  port.onMessage.addListener(function (request) {
+  pttPort.onMessage.addListener(function (request) {
     const {type} = request
     if (type === MESSAGE_TYPE.MSG && chatTab) {
+      if (isFirstMessage) {
+        isFirstMessage = false
+        handleError(async () => {
+          const blacklist = await blacklistRepo.getBlacklist(username);
+          sendMessage(chatTab, {type: MESSAGE_TYPE.BLACKLIST, data: {blacklist}});
+        })
+      }
       sendMessage(chatTab, request);
     } else if (type === MESSAGE_TYPE.ERROR && chatTab) {
       sendMessage(chatTab, request, true);
