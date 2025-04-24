@@ -71,22 +71,22 @@ chrome.runtime.onMessage.addListener(async function (request) {
     case MESSAGE_TYPE.OFF:
       stopExtension();
       break;
-    case MESSAGE_TYPE.BLACKLIST:
-      await handleError(() => {
-        const {user} = request.data
-        return blacklistRepo.getBlacklist(user);
-      })
-      break;
     case MESSAGE_TYPE.BLACKLIST_ADD:
-      await handleError(() => {
-        const {user, blockedUser} = request.data
-        return blacklistRepo.add(user, blockedUser);
+      await handleError(async () => {
+        const {blockedUser} = request.data
+        await blacklistRepo.add(username, blockedUser);
+        notifyBlacklist()
       })
       break;
     case MESSAGE_TYPE.BLACKLIST_DELETE:
-      await handleError(() => {
+      await handleError(async () => {
         const {id} = request.data
-        return blacklistRepo.delete(id);
+        const data = await blacklistRepo.get(id);
+        if (data?.user !== username) {
+          throw new Error('invalid user');
+        }
+        await blacklistRepo.delete(id);
+        notifyBlacklist()
       })
       break;
     default:
@@ -119,10 +119,7 @@ chrome.runtime.onConnect.addListener(function (port) {
     if (type === MESSAGE_TYPE.MSG && chatTab) {
       if (isFirstMessage) {
         isFirstMessage = false
-        handleError(async () => {
-          const blacklist = await blacklistRepo.getBlacklist(username);
-          sendMessage(chatTab, {type: MESSAGE_TYPE.BLACKLIST, data: {blacklist}});
-        })
+        handleError(notifyBlacklist)
       }
       sendMessage(chatTab, request);
     } else if (type === MESSAGE_TYPE.ERROR && chatTab) {
@@ -130,6 +127,11 @@ chrome.runtime.onConnect.addListener(function (port) {
     }
   });
 });
+
+async function notifyBlacklist() {
+  const blacklist = await blacklistRepo.getBlacklist(username);
+  sendMessage(chatTab, {type: MESSAGE_TYPE.BLACKLIST, data: {blacklist}});
+}
 
 async function getCurrentTab() {
   let [tab] = await chrome.tabs.query({active: true, lastFocusedWindow: true});

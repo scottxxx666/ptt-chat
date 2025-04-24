@@ -1,11 +1,11 @@
 import {useContext} from "react";
-import {ThemeContext} from "./App.jsx";
+import {ThemeContext} from "./context.js";
 import PropTypes from "prop-types";
 import {themeColor} from "./theme.js";
 
 IconButton.propTypes = {
   onClick: PropTypes.func,
-  children: PropTypes.object,
+  children: PropTypes.object || PropTypes.string,
   style: PropTypes.object,
   className: PropTypes.string,
 }

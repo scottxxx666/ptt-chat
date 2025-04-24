@@ -1,7 +1,7 @@
 import Maximize from "./icons/Maximize.jsx";
 import {useContext, useEffect, useRef, useState} from "react";
 import PropTypes from "prop-types";
-import {ThemeContext} from "./App.jsx";
+import {ThemeContext} from "./context.js";
 import {themeColor} from "./theme.js";
 import storage from "./storage.js";
 import iframe from "./iframe.js";

@@ -90,7 +90,7 @@ class IndexedDbRepo {
     });
   };
 
-  delete = async id => {
+  delete = async (id) => {
     const db = await this.initDB();
     return new Promise((resolve, reject) => {
       const transaction = db.transaction(this.blacklistTable, dbMode.READ_WRITE);
@@ -101,6 +101,18 @@ class IndexedDbRepo {
       request.onerror = (event) => reject(event.target.error);
     });
   };
+
+  get = async id => {
+    const db = await this.initDB();
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction(this.blacklistTable, dbMode.READ_ONLY);
+      const store = transaction.objectStore(this.blacklistTable);
+      const request = store.get(id);
+
+      request.onsuccess = (event) => resolve(event.target.result);
+      request.onerror = (event) => reject(event.target.error);
+    });
+  }
 }
 
 export default IndexedDbRepo;

@@ -1,5 +1,5 @@
 import {useContext} from "react";
-import {ThemeContext} from "../App.jsx";
+import {ThemeContext} from "../context.js";
 import {THEME_MODE} from "../consts.js";
 import LightIcon from "./LightIcon.jsx";
 import DarkIcon from "./DarkIcon.jsx";

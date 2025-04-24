@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import {useContext, useEffect, useRef, useState} from "react";
-import {ThemeContext} from "./App.jsx";
+import {ThemeContext} from "./context.js";
 import {themeColor} from "./theme.js";
 import IconButton from "./IconButton.jsx";
 

@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import {useContext, useState} from "react";
-import {ThemeContext} from "./App.jsx";
+import {ThemeContext} from "./context.js";
 import {inputClass, themeColor} from "./theme.js";
 
 Login.propTypes = {

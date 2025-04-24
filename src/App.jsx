@@ -1,4 +1,4 @@
-import {createContext, useEffect, useRef, useState} from 'react'
+import {useContext, useEffect, useRef, useState} from 'react'
 import './wasm_exec'
 import ChatWindow from "./ChatWindow.jsx";
 import storage from "./storage.js";
@@ -6,8 +6,7 @@ import {deepCopy} from "./utils.js";
 import {calculateDefaultBounding, defaultTheme, MAX_MESSAGE_COUNT} from "./configs.js";
 import {MESSAGE_TYPE, STATE} from "./consts.js";
 import {createPortal} from "react-dom";
-
-export const ThemeContext = createContext(null);
+import {ThemeContext} from "./context.js";
 
 function supportFullscreen(videoContainer) {
   // youtube already support fullscreen without handling
@@ -31,7 +30,8 @@ function App() {
   const [showThemeSettings, setShowThemeSettings] = useState(false)
   const [messages, setMessages] = useState([])
   const [state, setState] = useState(STATE.LOGIN)
-  const [showFullscreen, setShowFullsreen] = useState(false)
+  const [showFullscreen, setShowFullscreen] = useState(false)
+  const [blacklist, setBlacklist] = useState([])
 
   const loginDataRef = useRef();
   const videoContainerRef = useRef();
@@ -44,6 +44,7 @@ function App() {
   function reset() {
     setState(STATE.LOGIN)
     setMessages([])
+    setBlacklist([])
   }
 
   function start(data) {
@@ -84,7 +85,7 @@ function App() {
         setShowThemeSettings(false)
       } else if (type === MESSAGE_TYPE.OFF) {
         setState(STATE.OFF)
-        setMessages([])
+        reset()
       } else if (type === MESSAGE_TYPE.ERROR) {
         if (request.data === 'DEADLINE_EXCEEDED') {
           reset()
@@ -96,12 +97,15 @@ function App() {
         }
         alert(request.data)
         close()
+      } else if (type === MESSAGE_TYPE.BLACKLIST) {
+        const {blacklist} = data
+        setBlacklist(blacklist)
       }
     }
 
     function fullscreenListener() {
       const isFullscreen = document.fullscreenElement !== null;
-      setShowFullsreen(isFullscreen)
+      setShowFullscreen(isFullscreen)
     }
 
     initTheme()
@@ -126,6 +130,12 @@ function App() {
   if (state === STATE.OFF) {
     return;
   }
+  const addBlacklist = (data) => {
+     return chrome.runtime.sendMessage({type: MESSAGE_TYPE.BLACKLIST_ADD, data})
+  }
+  const deleteBlacklist = (id) => {
+    return chrome.runtime.sendMessage({type: MESSAGE_TYPE.BLACKLIST_DELETE, data: {id}})
+  }
 
   const chatWindow = <ChatWindow
     theme={theme} setTheme={setTheme}
@@ -134,6 +144,9 @@ function App() {
     bounding={bounding} setBounding={setBounding}
     messages={messages} state={state}
     start={start} close={close}
+    blacklist={blacklist}
+    addBlacklist={addBlacklist}
+    deleteBlacklist={deleteBlacklist}
   />
 
   return (

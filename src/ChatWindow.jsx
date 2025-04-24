@@ -36,6 +36,9 @@ ChatWindow.propTypes = {
   close: PropTypes.func,
   prevTheme: PropTypes.object,
   setPrevTheme: PropTypes.func,
+  blacklist: PropTypes.array,
+  addBlacklist: PropTypes.func,
+  deleteBlacklist: PropTypes.func,
 }
 
 function ChatWindow({
@@ -51,6 +54,9 @@ function ChatWindow({
                       close,
                       prevTheme,
                       setPrevTheme,
+                      blacklist,
+                      addBlacklist,
+                      deleteBlacklist,
                     }) {
   const [isMini, setIsMini] = useState(false)
 
@@ -197,7 +203,18 @@ function ChatWindow({
         {state === STATE.LOGIN ? <Login start={start}/> :
           state === STATE.LOADING ? <Loading/> : <Chat messages={messages}/>}
       </div>
-      {showThemeSettings && <ThemeSettings cancel={cancelTheme} save={saveTheme} setTheme={setTheme}/>}
+      {
+        showThemeSettings &&
+        <ThemeSettings
+          username={username}
+          cancel={cancelTheme}
+          save={saveTheme}
+          setTheme={setTheme}
+          blacklist={blacklist}
+          addBlacklist={addBlacklist}
+          deleteBlacklist={deleteBlacklist}
+        />
+      }
     </section>
   )
 }
