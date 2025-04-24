@@ -2,7 +2,7 @@ import {useState, useRef, useContext} from "react";
 import PropTypes from "prop-types";
 import IconButton from "./IconButton.jsx";
 import CloseIcon from "./icons/CloseIcon.jsx";
-// import AddIcon from "./icons/AddIcon.jsx";
+import AddIcon from "./icons/AddIcon.jsx";
 import DeleteIcon from "./icons/DeleteIcon.jsx";
 import {bgColor, textColor, themeColor} from "./theme.js";
 import {ThemeContext} from "./context.js";
@@ -30,12 +30,18 @@ function BlacklistWindow({blacklist, addBlacklist, deleteBlacklist, close}) {
     deleteBlacklist(id);
   }
 
+  function handleEnter(e) {
+    if (e.key === 'Enter' && !e.nativeEvent.isComposing) {
+      handleAdd();
+    }
+  }
+
   return (
     <div
       className={`ptt-chat-blacklist ptt-overflow-auto ptt-fixed ptt-top-0 ptt-right-0 ptt-left-0 ptt-bottom-0 ptt-w-fit ptt-h-fit ptt-m-auto ptt-px-3 ptt-py-3 ptt-text-left ptt-rounded ${bgColor(theme)} ${textColor(theme)} ${themeColor(theme).iconButton}`}
     >
       <div className="ptt-flex ptt-justify-between ptt-mb-2">
-        <h2>Blacklist</h2>
+        <h2>黑名單</h2>
         <IconButton onClick={close}>
           <CloseIcon/>
         </IconButton>
@@ -46,25 +52,28 @@ function BlacklistWindow({blacklist, addBlacklist, deleteBlacklist, close}) {
           type="text"
           value={newBlocked}
           onChange={(e) => setNewBlocked(e.target.value)}
-          className="ptt-input ptt-mr-2"
+          className={`ptt-outline ptt-bg-transparent ptt-px-1 ptt-flex-auto ptt-rounded ${themeColor(theme).inputOutline}`}
           placeholder="新增黑名單"
+          onKeyDown={handleEnter}
         />
-        <button className={`ptt-button ${themeColor(theme).button}`} onClick={handleAdd}>
-          Add
-        </button>
+        <IconButton onClick={handleAdd} className="ptt-ml-2">
+          <AddIcon/>
+        </IconButton>
       </div>
-      <ul className="ptt-list ptt-overflow-auto">
-        {blacklist.map((entry) => (
-          <li key={entry.id} className="ptt-flex ptt-justify-between ptt-items-center ptt-mb-1">
-            <span>{entry.blockedUser}</span>
-            <div>
-              <IconButton onClick={() => handleDelete(entry.id)} className="ptt-ml-2">
-                <DeleteIcon/>
-              </IconButton>
-            </div>
-          </li>
-        ))}
-      </ul>
+      <div className="ptt-overflow-auto ptt-max-h-80 ptt-min-w-[320px] ptt-pr-2">
+        <ul className="ptt-list">
+          {blacklist.map((entry) => (
+            <li key={entry.id} className="ptt-flex ptt-justify-between ptt-items-center ptt-mb-1">
+              <span>{entry.blockedUser}</span>
+              <div>
+                <IconButton onClick={() => handleDelete(entry.id)} className="ptt-ml-2">
+                  <DeleteIcon/>
+                </IconButton>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }

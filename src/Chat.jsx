@@ -6,19 +6,25 @@ import IconButton from "./IconButton.jsx";
 
 Chat.propTypes = {
   messages: PropTypes.array,
+  blacklistSet: PropTypes.object,
 }
 
-export default function Chat({messages}) {
+export default function Chat({messages, blacklistSet}) {
   const theme = useContext(ThemeContext)
-  const msgs = messages.map((e) => {
-    return (<div key={e.id} className={'ptt-py-1 ptt-break-all'}>
-      <span className={themeColor(theme).account}>{e.user}</span>
-      <span>: {e.message}</span>
-    </div>)
-  })
-  const chatRef = useRef();
+
   const [input, setInput] = useState('');
   const [scrolling, setScrolling] = useState(false);
+
+  const chatRef = useRef();
+
+  const msgs = messages
+    .filter(e => !blacklistSet.has(e.user))
+    .map((e) => {
+      return (<div key={e.id} className={'ptt-py-1 ptt-break-all'}>
+        <span className={themeColor(theme).account}>{e.user}</span>
+        <span>: {e.message}</span>
+      </div>)
+    })
 
   function handleInput(e) {
     e.preventDefault()

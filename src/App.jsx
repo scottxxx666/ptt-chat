@@ -1,4 +1,4 @@
-import {useContext, useEffect, useRef, useState} from 'react'
+import {useEffect, useRef, useState} from 'react'
 import './wasm_exec'
 import ChatWindow from "./ChatWindow.jsx";
 import storage from "./storage.js";
@@ -32,6 +32,8 @@ function App() {
   const [state, setState] = useState(STATE.LOGIN)
   const [showFullscreen, setShowFullscreen] = useState(false)
   const [blacklist, setBlacklist] = useState([])
+  const [blacklistSet, setBlacklistSet] = useState(new Set())
+  const [username, setUsername] = useState('')
 
   const loginDataRef = useRef();
   const videoContainerRef = useRef();
@@ -41,15 +43,22 @@ function App() {
     prevThemeRef.current = deepCopy(data)
   }
 
+  function clearState() {
+    setMessages([])
+    setUsername('')
+    setBlacklist([])
+    setBlacklistSet(new Set())
+  }
+
   function reset() {
     setState(STATE.LOGIN)
-    setMessages([])
-    setBlacklist([])
+    clearState()
   }
 
   function start(data) {
     chrome.runtime.sendMessage({type: MESSAGE_TYPE.START, data})
     loginDataRef.current = {...data}
+    setUsername(data.username)
     setState(STATE.LOADING)
   }
 
@@ -85,7 +94,7 @@ function App() {
         setShowThemeSettings(false)
       } else if (type === MESSAGE_TYPE.OFF) {
         setState(STATE.OFF)
-        reset()
+        clearState()
       } else if (type === MESSAGE_TYPE.ERROR) {
         if (request.data === 'DEADLINE_EXCEEDED') {
           reset()
@@ -100,6 +109,7 @@ function App() {
       } else if (type === MESSAGE_TYPE.BLACKLIST) {
         const {blacklist} = data
         setBlacklist(blacklist)
+        setBlacklistSet(new Set(blacklist.map(e => e.blockedUser)))
       }
     }
 
@@ -124,7 +134,7 @@ function App() {
   function close() {
     chrome.runtime.sendMessage({type: MESSAGE_TYPE.OFF})
     setState(STATE.OFF)
-    setMessages([])
+    clearState()
   }
 
   if (state === STATE.OFF) {
@@ -138,6 +148,7 @@ function App() {
   }
 
   const chatWindow = <ChatWindow
+    username={username}
     theme={theme} setTheme={setTheme}
     prevTheme={prevThemeRef.current} setPrevTheme={setPrevTheme}
     showThemeSettings={showThemeSettings} setShowThemeSettings={setShowThemeSettings}
@@ -147,6 +158,7 @@ function App() {
     blacklist={blacklist}
     addBlacklist={addBlacklist}
     deleteBlacklist={deleteBlacklist}
+    blacklistSet={blacklistSet}
   />
 
   return (

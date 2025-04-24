@@ -19,6 +19,7 @@ import iframe from "./iframe.js";
 import PropTypes from "prop-types";
 
 ChatWindow.propTypes = {
+  username: PropTypes.string.isRequired,
   theme: PropTypes.object,
   bounding: PropTypes.shape({
     top: PropTypes.number,
@@ -39,9 +40,11 @@ ChatWindow.propTypes = {
   blacklist: PropTypes.array,
   addBlacklist: PropTypes.func,
   deleteBlacklist: PropTypes.func,
+  blacklistSet: PropTypes.object,
 }
 
 function ChatWindow({
+                      username,
                       theme,
                       bounding,
                       setTheme,
@@ -57,6 +60,7 @@ function ChatWindow({
                       blacklist,
                       addBlacklist,
                       deleteBlacklist,
+                      blacklistSet,
                     }) {
   const [isMini, setIsMini] = useState(false)
 
@@ -201,7 +205,7 @@ function ChatWindow({
           </div>
         </div>
         {state === STATE.LOGIN ? <Login start={start}/> :
-          state === STATE.LOADING ? <Loading/> : <Chat messages={messages}/>}
+          state === STATE.LOADING ? <Loading/> : <Chat blacklistSet={blacklistSet} messages={messages}/>}
       </div>
       {
         showThemeSettings &&

@@ -5,7 +5,7 @@ import {themeColor} from "./theme.js";
 
 IconButton.propTypes = {
   onClick: PropTypes.func,
-  children: PropTypes.object || PropTypes.string,
+  children: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
   style: PropTypes.object,
   className: PropTypes.string,
 }

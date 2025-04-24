@@ -1,4 +1,4 @@
-import {useContext} from "react";
+import {useContext, useState} from "react";
 import {ThemeContext} from "./context.js";
 import {bgColor, textColor, textColorOptions, textSizeOptions, textWeightOptions, themeColor} from "./theme.js";
 import PropTypes from "prop-types";
@@ -21,6 +21,8 @@ ThemeSettings.propTypes = {
 
 export default function ThemeSettings({username, setTheme, cancel, save, blacklist, addBlacklist, deleteBlacklist}) {
   const theme = useContext(ThemeContext)
+
+  const [showBlacklist, setShowBlacklist] = useState(false)
 
   function handleTransparent() {
     setTheme(p => ({...deepCopy(p), transparent: !p.transparent}))
@@ -79,13 +81,24 @@ export default function ThemeSettings({username, setTheme, cancel, save, blackli
     })
   }
 
+  const isLogin = username !== ''
+
+  function openBlacklist() {
+    if (!isLogin) {
+      alert("請先登入！")
+      return
+    }
+    setShowBlacklist(true)
+  }
+
   return (
     <>
       {
-        username !== '' && <Blacklist
+        isLogin && showBlacklist && <Blacklist
           blacklist={blacklist}
           addBlacklist={addBlacklist}
           deleteBlacklist={deleteBlacklist}
+          close={()=> setShowBlacklist(false)}
         />
       }
       <div
@@ -151,6 +164,14 @@ export default function ThemeSettings({username, setTheme, cancel, save, blackli
               <span className="ptt-slider ptt-round"></span>
             </label>
           </label>
+        </div>
+        <div className={'ptt-pb-4'}>
+          <button
+            className={`ptt-py-1 ptt-px-3 ${themeColor(theme).button}`}
+            onClick={openBlacklist}
+          >
+            編輯黑名單
+          </button>
         </div>
         <div className={'ptt-flex ptt-justify-center ptt-items-center ptt-mt-2'}>
           <button className={`ptt-mr-2 ptt-py-1 ptt-px-3 ${themeColor(theme).button}`} onClick={cancel}>
