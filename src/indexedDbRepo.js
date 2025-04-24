@@ -17,7 +17,7 @@ class IndexedDbRepo {
     console.log('this', this);
 
     return new Promise((resolve, reject) => {
-      const request = indexedDB.open(this.dbName);
+      const request = indexedDB.open(this.dbName, 1);
 
       request.onupgradeneeded = (event) => {
         const db = event.target.result;
