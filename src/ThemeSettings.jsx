@@ -8,6 +8,8 @@ import ColorSelect from "./ColorSelect.jsx";
 import {THEME_MODE} from "./consts.js";
 import LightIcon from "./icons/LightIcon.jsx";
 import Blacklist from "./Blacklist.jsx";
+import IconButton from "./IconButton.jsx";
+import SupportIcon from "./icons/SupportIcon.jsx";
 
 ThemeSettings.propTypes = {
   username: PropTypes.string,
@@ -17,6 +19,10 @@ ThemeSettings.propTypes = {
   blacklist: PropTypes.array,
   addBlacklist: PropTypes.func,
   deleteBlacklist: PropTypes.func,
+}
+
+function contactSupport() {
+  window.open('https://www.instagram.com/666oyster/', '_blank');
 }
 
 export default function ThemeSettings({username, setTheme, cancel, save, blacklist, addBlacklist, deleteBlacklist}) {
@@ -103,13 +109,16 @@ export default function ThemeSettings({username, setTheme, cancel, save, blackli
       }
       <div
         className={`ptt-chat-theme ptt-overflow-auto ptt-fixed ptt-top-0 ptt-right-0 ptt-left-0 ptt-bottom-0 ptt-w-fit ptt-h-fit ptt-m-auto ptt-px-3 ptt-py-3 ptt-text-left ptt-rounded ${bgColor(theme)} ${textColor(theme)} ${themeColor(theme).iconButton}`}>
-        <div className={'ptt-pb-4'}>
+        <div className={'ptt-pb-4 ptt-flex ptt-justify-between ptt-items-center'}>
           <label>透明背景：
             <label className="ptt-switch">
               <input type="checkbox" name="transparent" onChange={handleTransparent} checked={theme.transparent}/>
               <span className="ptt-slider ptt-round"></span>
             </label>
           </label>
+          <div className={'ptt-flex-col ptt-justify-center'}>
+            <IconButton onClick={contactSupport}><SupportIcon/></IconButton>
+          </div>
         </div>
         <div className={'ptt-pb-4'}>
           <ColorSelect
