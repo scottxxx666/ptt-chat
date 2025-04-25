@@ -46,13 +46,13 @@ function BlacklistWindow({blacklist, addBlacklist, deleteBlacklist, close}) {
           <CloseIcon/>
         </IconButton>
       </div>
-      <div className="ptt-flex ptt-mb-2">
+      <div className="ptt-flex ptt-mb-2 ptt-pr-2">
         <input
           ref={inputRef}
           type="text"
           value={newBlocked}
           onChange={(e) => setNewBlocked(e.target.value)}
-          className={`ptt-outline ptt-bg-transparent ptt-px-1 ptt-flex-auto ptt-rounded ${themeColor(theme).inputOutline}`}
+          className={`ptt-outline ptt-bg-transparent ptt-px-1 ptt-flex-auto ptt-rounded ${themeColor(theme).inputOutline} ptt-w-24`}
           placeholder="新增黑名單"
           onKeyDown={handleEnter}
         />
