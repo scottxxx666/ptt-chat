@@ -48,7 +48,7 @@ https://pse.is/ptt-chat
 
 ### 問題回報
 
-- 可以留言或私訊 [![IG](https://img.shields.io/badge/Instagram-666oyster-%23E4405F?style=flat&logo=instagram&logoColor=white)](https://www.instagram.com/666oyster/) 或在 github 開 issue
+- 可以留言或私訊 [![IG](https://img.shields.io/badge/Instagram-666oyster-%23E4405F?style=flat&logo=instagram&logoColor=white)](https://www.instagram.com/666oyster/) 或在 github 開 issue 或是 email 至 666oyster@gmail.com
 - 由於未收集任何資料，問題回報時如果能提供越多資訊可以加速處理的時間，感謝
     - 時間
     - 問題內容（越詳細越好）
@@ -62,6 +62,10 @@ https://pse.is/ptt-chat
 - UTF-8 參考 [pyUAO](https://github.com/eight04/pyUAO) 和 [Ptt-official-app](https://github.com/Ptt-official-app/go-openbbsmiddleware)
 
 ## 更新紀錄
+
+v1.0.11 更新
+- 修正一開始黑名單不會出現問題
+- 在"還原預設值選項"會清除黑名單 (重新安裝也可以)
 
 v1.0.10 更新
 - 黑名單功能
