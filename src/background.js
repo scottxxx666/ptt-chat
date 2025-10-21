@@ -4,7 +4,8 @@ import {logError} from "./log.js";
 import {MESSAGE_TYPE} from "./consts.js";
 import IndexedDbRepo from "./indexedDbRepo.js";
 
-const blacklistRepo = new IndexedDbRepo('ptt-chat')
+const dbName = 'ptt-chat';
+const blacklistRepo = new IndexedDbRepo(dbName)
 let pttTab
 let chatTab
 let username
@@ -27,6 +28,8 @@ chrome.runtime.onInstalled.addListener(() => {
     title: '新增至黑名單',
     contexts: ['selection'],
   });
+
+  deleteDatabase(dbName);
 });
 
 chrome.contextMenus.onClicked.addListener(async (info, tab) => {
@@ -34,7 +37,7 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
   if (menuId === 'default') {
     await storage.clear()
     sendMessage(chatTab, {type: MESSAGE_TYPE.DEFAULT});
-    deleteDatabase()
+    deleteDatabase(dbName)
   } else if (menuId === 'addBlacklist') {
     if (!username) {
       chrome.scripting.executeScript({
