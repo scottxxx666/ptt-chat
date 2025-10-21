@@ -125,7 +125,7 @@ chrome.runtime.onMessage.addListener(async function (request) {
 
 let pttPort;
 let pttInterval;
-let isFirstMessage;
+let isFirstMessage
 
 chrome.runtime.onConnect.addListener(function (port) {
   if (port.name !== 'PTT') return
@@ -182,6 +182,7 @@ async function startExtension() {
     files: [content],
   });
 
+  isFirstMessage = true
   // since content script only run at first time
   // use message to turn on instead
   sendMessage(chatTab, {type: MESSAGE_TYPE.ON}, true)
