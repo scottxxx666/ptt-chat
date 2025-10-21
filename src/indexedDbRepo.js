@@ -14,7 +14,6 @@ class IndexedDbRepo {
 
   initDB = async () => {
     if (this.db) return this.db;
-    console.log('this', this);
 
     return new Promise((resolve, reject) => {
       const request = indexedDB.open(this.dbName, 1);
@@ -113,6 +112,41 @@ class IndexedDbRepo {
       request.onerror = (event) => reject(event.target.error);
     });
   }
+
+  // Safely close the current DB connection
+  closeDB = () => {
+    if (this.db) {
+      try {
+        this.db.close();
+      } catch (e) {
+        // ignore close errors
+      }
+      this.db = null;
+    }
+  };
+
+  // Add destroyDB to close and delete the database
+  destroyDB = async () => {
+    // Close any open connection first to avoid 'onblocked'
+    this.closeDB();
+
+    return new Promise((resolve, reject) => {
+      const deleteRequest = indexedDB.deleteDatabase(this.dbName);
+
+      deleteRequest.onsuccess = () => {
+        resolve(true);
+      };
+
+      deleteRequest.onerror = (event) => {
+        reject(event.target.error);
+      };
+
+      deleteRequest.onblocked = () => {
+        // deletion is blocked by open connections in other contexts
+        console.warn('deleteDatabase blocked for', this.dbName);
+      };
+    });
+  };
 }
 
 export default IndexedDbRepo;

@@ -29,7 +29,7 @@ chrome.runtime.onInstalled.addListener(() => {
     contexts: ['selection'],
   });
 
-  deleteDatabase(dbName);
+  blacklistRepo.destroyDB();
 });
 
 chrome.contextMenus.onClicked.addListener(async (info, tab) => {
@@ -37,7 +37,8 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
   if (menuId === 'default') {
     await storage.clear()
     sendMessage(chatTab, {type: MESSAGE_TYPE.DEFAULT});
-    deleteDatabase(dbName)
+    blacklistRepo.destroyDB();
+    notifyBlacklist()
   } else if (menuId === 'addBlacklist') {
     if (!username) {
       chrome.scripting.executeScript({
@@ -164,22 +165,6 @@ async function notifyBlacklist() {
 async function getCurrentTab() {
   let [tab] = await chrome.tabs.query({active: true, lastFocusedWindow: true});
   return tab;
-}
-
-function deleteDatabase(dbName) {
-  const request = indexedDB.deleteDatabase(dbName);
-
-  request.onsuccess = () => {
-    console.log(`Database "${dbName}" deleted successfully.`);
-  };
-
-  request.onerror = (event) => {
-    console.error(`Error deleting database "${dbName}":`, event.target.error);
-  };
-
-  request.onblocked = () => {
-    console.warn(`Database "${dbName}" deletion is blocked. Close all connections to the database.`);
-  };
 }
 
 async function startExtension() {
