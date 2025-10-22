@@ -28,8 +28,6 @@ chrome.runtime.onInstalled.addListener(() => {
     title: '新增至黑名單',
     contexts: ['selection'],
   });
-
-  blacklistRepo.destroyDB();
 });
 
 chrome.contextMenus.onClicked.addListener(async (info, tab) => {
