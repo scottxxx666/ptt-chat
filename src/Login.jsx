@@ -47,7 +47,7 @@ export default function Login({start}) {
       <div className={'ptt-pb-4'}>
         <label>密碼：</label>
         <input type="password" name="password" className={inputClass(theme)} onChange={handleChange}
-               value={loginArgs.password} maxLength={13}/>
+               value={loginArgs.password} maxLength={72}/>
       </div>
       <div className={'ptt-pb-4'}>
         <input type="checkbox" name="deleteDuplicate" onChange={handleCheckbox}
