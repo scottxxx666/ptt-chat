@@ -9,6 +9,8 @@ const blacklistRepo = new IndexedDbRepo(dbName)
 let pttTab
 let chatTab
 let username
+let isFirstMessage
+let blacklistReady
 
 const handleError = async func => func().catch((e) => logError(e));
 
@@ -90,6 +92,7 @@ chrome.runtime.onMessage.addListener(async function (request) {
   switch (type) {
     case MESSAGE_TYPE.START:
       username = request.data.username
+      isFirstMessage = true
       pttPort.postMessage({type: MESSAGE_TYPE.START, data: request.data});
       break;
     case MESSAGE_TYPE.SEND:
@@ -123,7 +126,6 @@ chrome.runtime.onMessage.addListener(async function (request) {
 
 let pttPort;
 let pttInterval;
-let isFirstMessage
 
 chrome.runtime.onConnect.addListener(function (port) {
   if (port.name !== 'PTT') return
@@ -141,13 +143,14 @@ chrome.runtime.onConnect.addListener(function (port) {
     }
   }, 10000)
 
-  pttPort.onMessage.addListener(function (request) {
+  pttPort.onMessage.addListener(async function (request) {
     const {type} = request
     if (type === MESSAGE_TYPE.MSG && chatTab) {
       if (isFirstMessage) {
         isFirstMessage = false
-        handleError(notifyBlacklist)
+        blacklistReady = handleError(notifyBlacklist)
       }
+      await blacklistReady
       sendMessage(chatTab, request);
     } else if (type === MESSAGE_TYPE.ERROR && chatTab) {
       sendMessage(chatTab, request, true);
@@ -157,7 +160,7 @@ chrome.runtime.onConnect.addListener(function (port) {
 
 async function notifyBlacklist() {
   const blacklist = await blacklistRepo.getBlacklist(username);
-  sendMessage(chatTab, {type: MESSAGE_TYPE.BLACKLIST, data: {blacklist}});
+  return sendMessage(chatTab, {type: MESSAGE_TYPE.BLACKLIST, data: {blacklist}});
 }
 
 async function getCurrentTab() {
@@ -180,7 +183,6 @@ async function startExtension() {
     files: [content],
   });
 
-  isFirstMessage = true
   // since content script only run at first time
   // use message to turn on instead
   sendMessage(chatTab, {type: MESSAGE_TYPE.ON}, true)
