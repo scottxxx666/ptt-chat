@@ -28,7 +28,11 @@ export default function Login({start}) {
 
   function submit() {
     const {username, password, deleteDuplicate, board, article} = loginArgs
-    start({username, password, deleteDuplicate, board, article});
+    const trimmedArticle = article.trim()
+    start({
+      username, password, deleteDuplicate, board,
+      article: trimmedArticle && !trimmedArticle.startsWith('#') ? `#${trimmedArticle}` : trimmedArticle,
+    });
   }
 
   function handleEnter(e) {
@@ -62,7 +66,7 @@ export default function Login({start}) {
       <div className={'ptt-pb-4'}>
         <label>文章代碼：</label>
         <input name="article" className={inputClass(theme)} onChange={handleChange} onKeyDown={handleEnter}
-               value={loginArgs.article} placeholder="格式：#1ab2CDEF" maxLength={9}/>
+               value={loginArgs.article} placeholder="格式：#1ab2CDEF" maxLength={11}/>
       </div>
       <div className={'ptt-flex ptt-flex-col ptt-items-center ptt-mt-2'}>
         <button className={`ptt-py-1 ptt-px-3 ${themeColor(theme).button}`} onClick={submit}>開始
