@@ -48,7 +48,7 @@ https://pse.is/ptt-chat
 
 ### 問題回報
 
-- 可以到 [問題回報區](https://docs.google.com/forms/d/e/1FAIpQLSfbEA933dJpMwFuniqoqP813aTm-9bwT1ss19kPJQ_FgzxMCQ/viewform?usp=dialog) 回報
+- 可以到 [問題回報區](https://forms.gle/AL6w9pfV1Quj3z8f7) 回報
 - 由於未收集任何資料，問題回報時如果能提供越多資訊可以加速處理的時間，感謝
     - 時間
     - 問題內容（越詳細越好）
@@ -62,6 +62,11 @@ https://pse.is/ptt-chat
 - UTF-8 參考 [pyUAO](https://github.com/eight04/pyUAO) 和 [Ptt-official-app](https://github.com/Ptt-official-app/go-openbbsmiddleware)
 
 ## 更新紀錄
+
+v1.0.13 更新
+- 實作 ECMA-48 和 DEC2026
+- 去除文章代碼空格
+- 移除 ip 顯示
 
 v1.0.12 更新
 - 修正 PTT 登入問題跟密碼長度限制
