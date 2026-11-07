@@ -147,11 +147,18 @@ function ChatWindow({
   boundingRef.current = bounding
 
   useEffect(() => {
+    // only a real drag touches the host page's iframes, so a plain button click leaves them alone
+    let iframesCleared = false
+
     function handleMoving(e) {
       const start = dragStartRef.current
       if (!dragMovedRef.current) {
         if (Math.hypot(e.clientX - start.x, e.clientY - start.y) <= DRAG_THRESHOLD) return
         dragMovedRef.current = true
+      }
+      if (!iframesCleared) {
+        iframe.clearPointerEvent()
+        iframesCleared = true
       }
       const w = windowRef.current.offsetWidth - mouseDownRef.current.x
       const h = mouseDownRef.current.y
@@ -164,17 +171,22 @@ function ChatWindow({
 
     function stopMoving() {
       setIsMoving(false)
-      if (dragMovedRef.current) storage.saveBounding(boundingRef.current)
+      if (!dragMovedRef.current) return
+      storage.saveBounding(boundingRef.current)
+      // the click that follows mouseup runs before this; if the drag ended outside the
+      // window that click never reaches suppressClickAfterDrag, so reset the flag here
+      setTimeout(() => {
+        dragMovedRef.current = false
+      })
     }
 
     if (isMoving) {
-      iframe.clearPointerEvent()
       document.addEventListener('mousemove', handleMoving)
       document.addEventListener('mouseup', stopMoving);
       return () => {
         document.removeEventListener('mousemove', handleMoving)
         document.removeEventListener('mouseup', stopMoving);
-        iframe.autoPointerEvent()
+        if (iframesCleared) iframe.autoPointerEvent()
       }
     }
   }, [isMoving, setBounding])

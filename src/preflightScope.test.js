@@ -7,8 +7,12 @@ import {scopePreflightSelector} from './preflightScope.js'
 const SCOPE = ':where(.ptt-root)'
 
 describe('scopePreflightSelector', () => {
-  it.each(['html', 'body', ':root', ':host'])('maps document-level %s onto the root itself', (selector) => {
+  it.each(['html', ':root', ':host'])('maps document-level %s onto the root itself', (selector) => {
     expect(scopePreflightSelector(selector)).toBe(SCOPE)
+  })
+
+  it('does not map body onto the root, so its line-height: inherit cannot override html', () => {
+    expect(scopePreflightSelector('body')).toBe(`${SCOPE} body`)
   })
 
   it('does not treat selectors that merely start with html/body as document-level', () => {
@@ -61,7 +65,16 @@ describe('postcss pipeline', () => {
       if (rule.selector === SCOPE) rootRules.push(rule)
     })
     const props = rootRules.flatMap(rule => rule.nodes.map(decl => decl.prop))
-    expect(props).toEqual(expect.arrayContaining(['font-family', 'line-height', 'margin']))
+    expect(props).toEqual(expect.arrayContaining(['font-family', 'line-height']))
+  })
+
+  it('keeps the root line-height at 1.5 instead of inheriting the host page', async () => {
+    const {result} = await compile('preflight.css')
+    const lineHeights = []
+    result.root.walkDecls('line-height', decl => {
+      if (decl.parent.selector === SCOPE) lineHeights.push(decl.value)
+    })
+    expect(lineHeights).toEqual(['1.5'])
   })
 
   it('does not prefix the extension stylesheet', async () => {

@@ -54,9 +54,9 @@ export default function Login({start}) {
                value={loginArgs.password} maxLength={72}/>
       </div>
       <div className={'ptt-pb-4'}>
-        <input type="checkbox" name="deleteDuplicate" onChange={handleCheckbox}
+        <input type="checkbox" name="deleteDuplicate" className={'ptt-mr-1'} onChange={handleCheckbox}
                checked={loginArgs.deleteDuplicate} value="deleteDuplicate"/>
-        <label> 是否刪除重覆連線</label>
+        <label>是否刪除重覆連線</label>
       </div>
       <div className={'ptt-pb-4'}>
         <label>看板：</label>

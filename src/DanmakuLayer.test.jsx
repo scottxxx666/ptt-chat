@@ -168,3 +168,49 @@ test('ignores the chat font size class', () => {
   act(() => vi.advanceTimersByTime(0))
   expect(moving(container)[0]).not.toHaveClass('ptt-text-sm')
 })
+
+test('drops in-flight danmaku when the video goes away, so they do not replay later', () => {
+  const {container, update} = renderLayer()
+  update({messages: [msg(1)]})
+  act(() => vi.advanceTimersByTime(0))
+  expect(moving(container)).toHaveLength(1)
+
+  video.remove()
+  act(() => vi.advanceTimersByTime(1000))
+  document.body.append(video)
+  act(() => vi.advanceTimersByTime(1000))
+
+  expect(moving(container)).toHaveLength(0)
+})
+
+test('lanes are free again after the video comes back', () => {
+  const {container, update} = renderLayer()
+  update({messages: [msg(1)]})
+  act(() => vi.advanceTimersByTime(0))
+
+  video.remove()
+  act(() => vi.advanceTimersByTime(1000))
+  document.body.append(video)
+  act(() => vi.advanceTimersByTime(1000))
+
+  update({messages: [msg(1), msg(2)]})
+  act(() => vi.advanceTimersByTime(0))
+  expect(moving(container).map(e => e.style.top)).toEqual(['0px'])
+})
+
+test('follows the video when the page scrolls', () => {
+  const {getByTestId} = renderLayer()
+  video.getBoundingClientRect = () => ({top: -90, left: 20, width: 1000, height: 400})
+  act(() => window.dispatchEvent(new Event('scroll')))
+  expect(getByTestId('ptt-danmaku-layer')).toHaveStyle({top: '-90px'})
+})
+
+test('scrolling inside an element (e.g. chat auto-scroll) does not re-measure the video', () => {
+  const box = document.createElement('div')
+  document.body.append(box)
+  renderLayer()
+  const measure = vi.spyOn(video, 'getBoundingClientRect')
+  box.dispatchEvent(new Event('scroll'))
+  expect(measure).not.toHaveBeenCalled()
+  box.remove()
+})

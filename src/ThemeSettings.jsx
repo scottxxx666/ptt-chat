@@ -22,6 +22,16 @@ ThemeSettings.propTypes = {
   deleteBlacklist: PropTypes.func,
 }
 
+function radioGroup(name, options, current, onSelect) {
+  return options.map(({value, label}) => (
+    <label className={'ptt-mr-1'} key={value}>
+      <input
+        type="radio" name={name} value={value}
+        checked={current === value} onChange={() => onSelect(value)}/> {label}
+    </label>
+  ))
+}
+
 function contactSupport() {
   window.open('https://forms.gle/AL6w9pfV1Quj3z8f7', '_blank');
 }
@@ -48,38 +58,12 @@ export default function ThemeSettings({username, setTheme, cancel, save, blackli
     })
   };
 
-  const handleTextChange = (key) => (e) => {
+  const handleTextChange = (key, value) => {
     setTheme(p => {
       const copy = deepCopy(p)
-      return {
-        ...copy,
-        font: {
-          ...copy.font,
-          [key]: e.target.value,
-        }
-      }
+      return {...copy, font: {...copy.font, [key]: value}}
     })
   }
-
-  const textSizeRadio = textSizeOptions.map(({value, label}) => {
-    return (
-      <label className={'ptt-mr-1'} key={value}>
-        <input
-          type="radio" name="text-size" value={value}
-          checked={theme.font.size === value} onChange={handleTextChange('size')}/> {label}
-      </label>
-    )
-  })
-
-  const textWeightRadio = textWeightOptions.map(({value, label}) => {
-    return (
-      <label className={'ptt-mr-1'} key={value}>
-        <input
-          type="radio" name="text-weight" value={value}
-          checked={theme.font.weight === value} onChange={handleTextChange('weight')}/> {label}
-      </label>
-    )
-  })
 
   function handleStroke() {
     setTheme(p => {
@@ -95,13 +79,8 @@ export default function ThemeSettings({username, setTheme, cancel, save, blackli
     })
   }
 
-  const danmakuRadio = (key, options) => options.map(({value, label}) => (
-    <label className={'ptt-mr-1'} key={value}>
-      <input
-        type="radio" name={`danmaku-${key}`} value={value}
-        checked={theme.danmaku[key] === value} onChange={() => handleDanmakuChange(key, value)}/> {label}
-    </label>
-  ))
+  const danmakuRadio = (key, options) =>
+    radioGroup(`danmaku-${key}`, options, theme.danmaku[key], value => handleDanmakuChange(key, value))
 
   const isLogin = username !== ''
 
@@ -177,10 +156,10 @@ export default function ThemeSettings({username, setTheme, cancel, save, blackli
           />
         </div>
         <div className={'ptt-pb-4'}>
-          <label>字體大小：</label> {textSizeRadio}
+          <label>字體大小：</label> {radioGroup('text-size', textSizeOptions, theme.font.size, v => handleTextChange('size', v))}
         </div>
         <div className={'ptt-pb-4'}>
-          <label>字體粗細：</label> {textWeightRadio}
+          <label>字體粗細：</label> {radioGroup('text-weight', textWeightOptions, theme.font.weight, v => handleTextChange('weight', v))}
         </div>
         <div className={'ptt-pb-4'}>
           <label>字體黑框：

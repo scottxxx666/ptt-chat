@@ -6,9 +6,11 @@ import {STATE} from "./consts.js";
 import storage from "./storage.js";
 import {deepCopy} from "./utils.js";
 import {PREFLIGHT_ROOT_CLASS} from "./preflightScope.js";
+import iframe from "./iframe.js";
 
 vi.mock('./wasm_exec', () => ({}))
 vi.mock('./storage.js', () => ({default: {saveBounding: vi.fn(), saveTheme: vi.fn()}}))
+vi.mock('./iframe.js', () => ({default: {clearPointerEvent: vi.fn(), autoPointerEvent: vi.fn()}}))
 vi.mock('./Chat.jsx', () => ({default: () => <div data-testid="chat-content"/>}))
 
 const bounding = {top: 10, right: 5, width: 20, height: 60}
@@ -97,6 +99,41 @@ describe('full window header', () => {
     drag(headerButton(4), {x: 0, y: 0}, {x: 100, y: 100})
     drag(headerButton(4), {x: 100, y: 100})
 
+    expect(close).toHaveBeenCalledTimes(1)
+  })
+
+  test('clicking a header button leaves host page iframes alone', () => {
+    const {headerButton} = renderWindow()
+    drag(headerButton(4), {x: 50, y: 50}, {x: 52, y: 52})
+
+    expect(iframe.clearPointerEvent).not.toHaveBeenCalled()
+    expect(iframe.autoPointerEvent).not.toHaveBeenCalled()
+  })
+
+  test('dragging disables iframe pointer events once and restores them on release', () => {
+    const {headerButton} = renderWindow()
+    fireEvent.mouseDown(headerButton(4), {clientX: 0, clientY: 0})
+    fireEvent.mouseMove(document, {clientX: 100, clientY: 100})
+    fireEvent.mouseMove(document, {clientX: 200, clientY: 200})
+    expect(iframe.clearPointerEvent).toHaveBeenCalledTimes(1)
+    expect(iframe.autoPointerEvent).not.toHaveBeenCalled()
+
+    fireEvent.mouseUp(document)
+    expect(iframe.autoPointerEvent).toHaveBeenCalledTimes(1)
+  })
+
+  test('a drag ending outside the window does not swallow the next click', () => {
+    vi.useFakeTimers()
+    const {headerButton, close} = renderWindow()
+    // mouseup lands elsewhere, so no click reaches the header to reset the flag
+    fireEvent.mouseDown(headerButton(4), {clientX: 0, clientY: 0})
+    fireEvent.mouseMove(document, {clientX: 100, clientY: 100})
+    fireEvent.mouseUp(document)
+    vi.runAllTimers()
+    vi.useRealTimers()
+
+    // e.g. keyboard activation, which fires click without mousedown
+    fireEvent.click(headerButton(4))
     expect(close).toHaveBeenCalledTimes(1)
   })
 

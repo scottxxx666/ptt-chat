@@ -7,8 +7,11 @@ export const PREFLIGHT_ROOT_CLASS = 'ptt-root'
 const SCOPE = `:where(.${PREFLIGHT_ROOT_CLASS})`
 
 export function scopePreflightSelector(selector) {
-  // document-level rules (font-family, line-height, margin) belong on the root itself
-  if (/^(html|body|:root|:host)$/.test(selector)) return SCOPE
+  // document-level rules (font-family, line-height) belong on the root itself.
+  // `body` is left to the default branch (`.ptt-root body`, which never matches): mapped
+  // onto the root, its later `line-height: inherit` would override html's 1.5 and pull
+  // in the host page's line-height. Its `margin: 0` is moot, since roots are divs/sections.
+  if (/^(html|:root|:host)$/.test(selector)) return SCOPE
   // universal and bare pseudo-element rules must also match the root element
   if (selector.startsWith('*')) return `${SCOPE}${selector.slice(1)}, ${SCOPE} ${selector}`
   if (selector.startsWith('::')) return `${SCOPE}${selector}, ${SCOPE} ${selector}`

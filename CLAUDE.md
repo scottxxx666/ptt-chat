@@ -13,7 +13,7 @@ yarn test:watch   # Watch mode
 yarn test:ui      # Vitest UI
 ```
 
-> Per project policy: do not run build/test/lint commands — user runs these manually.
+> Per project policy: Claude may run `yarn test`; do not run build/lint commands — user runs these manually.
 
 ## What This Is
 
@@ -40,6 +40,7 @@ Three isolated execution contexts communicate via Chrome message passing:
 - Injected into streaming pages; mounts React UI into an injected `#crx-root` div (no shadow DOM, so its `<style>` is page-global)
 - App states: `LOGIN → LOADING → STREAMING → OFF`
 - Detects fullscreen and repositions the chat window accordingly
+- Chat messages turn `http(s)://` URLs into new-tab links via `src/linkify.js` (pure; other schemes and bare domains stay text)
 - Theme/bounding-box persisted via Chrome Storage API (`src/storage.js`)
 - Optional danmaku overlay (`src/DanmakuLayer.jsx`): enabled via `theme.danmaku` and shown alongside the chat window while streaming. It tracks the `<video>` rect with a fixed-position layer that ignores pointer events. Lane allocation and collision math live in `src/danmaku.js` as pure functions. The model is Niconico-style fixed duration, so longer text moves faster. Font size is fixed px (`danmaku.fontSize`, like Bilibili's default 25px, not scaled in fullscreen), and lanes fill from the top. Each batch is spread over 1s, and when every lane is busy `danmaku.density` decides: `NORMAL` drops the danmaku, `OVERLAP` stacks it onto a random lane (Niconico 弾幕モード).
 

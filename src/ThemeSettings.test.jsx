@@ -61,3 +61,18 @@ test('changes danmaku density', () => {
   fireEvent.click(container.querySelector('input[name="danmaku-density"][value="OVERLAP"]'))
   expect(applied().danmaku.density).toBe('OVERLAP')
 })
+
+test('changes chat font size and weight', () => {
+  const {container, applied} = renderSettings()
+  fireEvent.click(container.querySelector('input[name="text-size"][value="ptt-text-lg"]'))
+  expect(applied().font.size).toBe('ptt-text-lg')
+
+  fireEvent.click(container.querySelector('input[name="text-weight"][value="ptt-font-black"]'))
+  expect(applied().font.weight).toBe('ptt-font-black')
+})
+
+test('marks the current font options as checked', () => {
+  const {container} = renderSettings()
+  expect(container.querySelector(`input[name="text-size"][value="${defaultTheme.font.size}"]`)).toBeChecked()
+  expect(container.querySelector(`input[name="text-weight"][value="${defaultTheme.font.weight}"]`)).toBeChecked()
+})

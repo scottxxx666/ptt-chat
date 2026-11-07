@@ -3,6 +3,7 @@ import {useContext, useEffect, useRef, useState} from "react";
 import {ThemeContext} from "./context.js";
 import {themeColor} from "./theme.js";
 import IconButton from "./IconButton.jsx";
+import {linkify} from "./linkify.js";
 
 Chat.propTypes = {
   messages: PropTypes.array,
@@ -22,7 +23,10 @@ export default function Chat({messages, blacklistSet}) {
     .map((e) => {
       return (<div key={e.id} className={'ptt-py-1 ptt-break-all'}>
         <span className={themeColor(theme).account}>{e.user}</span>
-        <span>: {e.message}</span>
+        <span>: {linkify(e.message).map((part, i) => part.type === 'link'
+          ? <a key={i} href={part.value} target="_blank" rel="noopener noreferrer"
+               className={`ptt-underline ${themeColor(theme).link}`}>{part.value}</a>
+          : part.value)}</span>
       </div>)
     })
 

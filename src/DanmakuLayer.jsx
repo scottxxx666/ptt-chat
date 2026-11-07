@@ -30,7 +30,8 @@ function sameRect(a, b) {
   return a?.top === b?.top && a?.left === b?.left && a?.width === b?.width && a?.height === b?.height
 }
 
-// keeps the overlay on top of the <video>; polling also catches SPA video swaps
+// keeps the overlay on top of the <video>; polling also catches SPA video swaps and
+// scrolling inside containers (a capture-phase listener would also fire on every chat auto-scroll)
 function useVideoRect() {
   const [rect, setRect] = useState(getVideoRect)
 
@@ -42,12 +43,12 @@ function useVideoRect() {
 
     const timer = setInterval(update, RECT_POLL_MS)
     window.addEventListener('resize', update)
-    window.addEventListener('scroll', update, {capture: true, passive: true})
+    window.addEventListener('scroll', update, {passive: true})
     document.addEventListener('fullscreenchange', update)
     return () => {
       clearInterval(timer)
       window.removeEventListener('resize', update)
-      window.removeEventListener('scroll', update, {capture: true})
+      window.removeEventListener('scroll', update)
       document.removeEventListener('fullscreenchange', update)
     }
   }, [])
@@ -74,6 +75,15 @@ export default function DanmakuLayer({messages, blacklistSet}) {
     const timers = timersRef.current
     return () => timers.forEach(clearTimeout)
   }, [])
+
+  // unmounted spans never fire animationend, so drop them; otherwise they would all
+  // restart together when a video reappears
+  const hasRect = rect !== null
+  useEffect(() => {
+    if (hasRect) return
+    setItems([])
+    lanesRef.current = []
+  }, [hasRect])
 
   useEffect(() => {
     const fresh = takeNewMessages(messages, lastIdRef.current)

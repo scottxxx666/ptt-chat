@@ -1,5 +1,8 @@
 import {MESSAGE_TYPE} from "./consts.js";
 
+// passed to the WASM pollingMessages; true turns on its debug mode
+const DEBUG = false;
+
 (async () => {
   const src = chrome.runtime.getURL("src/wasm_exec.js");
   await import(/* @vite-ignore */src);
@@ -13,7 +16,7 @@ import {MESSAGE_TYPE} from "./consts.js";
     const {type} = request
     if (type === MESSAGE_TYPE.START) {
       const {username, password, deleteDuplicate, board, article} = request.data
-      pollingMessages(username, password, deleteDuplicate, board, article, sendPushes, notifyError, true)
+      pollingMessages(username, password, deleteDuplicate, board, article, sendPushes, notifyError, DEBUG)
     } else if (type === MESSAGE_TYPE.SEND) {
       pushMessage(request.data, notifyError)
     } else if (type === MESSAGE_TYPE.PING) {
