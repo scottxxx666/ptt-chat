@@ -1,4 +1,4 @@
-import {useEffect, useRef, useState} from 'react'
+import {useCallback, useEffect, useRef, useState} from 'react'
 import './wasm_exec'
 import ChatWindow from "./ChatWindow.jsx";
 import storage from "./storage.js";
@@ -43,24 +43,30 @@ function App() {
     prevThemeRef.current = deepCopy(data)
   }
 
-  function clearState() {
+  const clearState = useCallback(() => {
     setMessages([])
     setUsername('')
     setBlacklist([])
     setBlacklistSet(new Set())
-  }
+  }, [])
 
-  function reset() {
+  const reset = useCallback(() => {
     setState(STATE.LOGIN)
     clearState()
-  }
+  }, [clearState])
 
-  function start(data) {
+  const start = useCallback((data) => {
     chrome.runtime.sendMessage({type: MESSAGE_TYPE.START, data})
     loginDataRef.current = {...data}
     setUsername(data.username)
     setState(STATE.LOADING)
-  }
+  }, [])
+
+  const close = useCallback(() => {
+    chrome.runtime.sendMessage({type: MESSAGE_TYPE.OFF})
+    setState(STATE.OFF)
+    clearState()
+  }, [clearState])
 
   useEffect(() => {
     async function initTheme() {
@@ -129,13 +135,7 @@ function App() {
       chrome.runtime.onMessage.removeListener(messageListener)
       document.removeEventListener('fullscreenchange', fullscreenListener)
     }
-  }, [])
-
-  function close() {
-    chrome.runtime.sendMessage({type: MESSAGE_TYPE.OFF})
-    setState(STATE.OFF)
-    clearState()
-  }
+  }, [close, reset, start])
 
   if (state === STATE.OFF) {
     return;

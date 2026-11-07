@@ -13,7 +13,7 @@ import {MESSAGE_TYPE} from "./consts.js";
     const {type} = request
     if (type === MESSAGE_TYPE.START) {
       const {username, password, deleteDuplicate, board, article} = request.data
-      pollingMessages(username, password, deleteDuplicate, board, article, sendPushes, notifyError, false)
+      pollingMessages(username, password, deleteDuplicate, board, article, sendPushes, notifyError, true)
     } else if (type === MESSAGE_TYPE.SEND) {
       pushMessage(request.data, notifyError)
     } else if (type === MESSAGE_TYPE.PING) {
