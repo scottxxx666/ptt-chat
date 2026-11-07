@@ -11,6 +11,11 @@ export const THEME_MODE = {
   CUSTOM: 'CUSTOM',
 }
 
+export const DANMAKU_DENSITY = {
+  NORMAL: 'NORMAL',
+  OVERLAP: 'OVERLAP',
+}
+
 export const MESSAGE_TYPE = {
   OFF: 'OFF',
   ON: 'ON',

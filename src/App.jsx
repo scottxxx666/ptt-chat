@@ -1,6 +1,7 @@
 import {useCallback, useEffect, useRef, useState} from 'react'
 import './wasm_exec'
 import ChatWindow from "./ChatWindow.jsx";
+import DanmakuLayer from "./DanmakuLayer.jsx";
 import storage from "./storage.js";
 import {deepCopy} from "./utils.js";
 import {calculateDefaultBounding, defaultTheme, MAX_MESSAGE_COUNT} from "./configs.js";
@@ -72,7 +73,8 @@ function App() {
     async function initTheme() {
       const themeData = await storage.loadTheme()
       if (themeData) {
-        return setTheme(prev => ({...prev, ...deepCopy(themeData)}))
+        const saved = deepCopy(themeData)
+        return setTheme(prev => ({...prev, ...saved, danmaku: {...prev.danmaku, ...saved.danmaku}}))
       }
       return setTheme(deepCopy(defaultTheme))
     }
@@ -161,10 +163,14 @@ function App() {
     blacklistSet={blacklistSet}
   />
 
+  const portalTarget = showFullscreen && supportFullscreen(videoContainerRef.current) ? videoContainerRef.current : null
+  const withPortal = (node) => portalTarget ? createPortal(node, portalTarget) : node
+  const showDanmaku = theme.danmaku?.enabled && state === STATE.STREAMING
+
   return (
     <ThemeContext.Provider value={theme}>
-      {showFullscreen && supportFullscreen(videoContainerRef.current) ?
-        createPortal(chatWindow, videoContainerRef.current) : chatWindow}
+      {withPortal(chatWindow)}
+      {showDanmaku && withPortal(<DanmakuLayer messages={messages} blacklistSet={blacklistSet}/>)}
     </ThemeContext.Provider>
   )
 }

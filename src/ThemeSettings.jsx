@@ -10,6 +10,7 @@ import LightIcon from "./icons/LightIcon.jsx";
 import Blacklist from "./Blacklist.jsx";
 import IconButton from "./IconButton.jsx";
 import SupportIcon from "./icons/SupportIcon.jsx";
+import {danmakuAreaOptions, danmakuDensityOptions, danmakuDurationOptions, danmakuSizeOptions} from "./configs.js";
 
 ThemeSettings.propTypes = {
   username: PropTypes.string,
@@ -22,7 +23,7 @@ ThemeSettings.propTypes = {
 }
 
 function contactSupport() {
-  window.open('https://www.instagram.com/666oyster/', '_blank');
+  window.open('https://forms.gle/AL6w9pfV1Quj3z8f7', '_blank');
 }
 
 export default function ThemeSettings({username, setTheme, cancel, save, blacklist, addBlacklist, deleteBlacklist}) {
@@ -86,6 +87,21 @@ export default function ThemeSettings({username, setTheme, cancel, save, blackli
       return {...copy, font: {...copy.font, stroke: !p.font.stroke}}
     })
   }
+
+  const handleDanmakuChange = (key, value) => {
+    setTheme(p => {
+      const copy = deepCopy(p)
+      return {...copy, danmaku: {...copy.danmaku, [key]: value}}
+    })
+  }
+
+  const danmakuRadio = (key, options) => options.map(({value, label}) => (
+    <label className={'ptt-mr-1'} key={value}>
+      <input
+        type="radio" name={`danmaku-${key}`} value={value}
+        checked={theme.danmaku[key] === value} onChange={() => handleDanmakuChange(key, value)}/> {label}
+    </label>
+  ))
 
   const isLogin = username !== ''
 
@@ -174,6 +190,39 @@ export default function ThemeSettings({username, setTheme, cancel, save, blackli
             </label>
           </label>
         </div>
+        <div className={'ptt-pb-4'}>
+          <label>彈幕：
+            <label className="ptt-switch">
+              <input
+                type="checkbox" name="danmaku-enabled" checked={theme.danmaku.enabled}
+                onChange={() => handleDanmakuChange('enabled', !theme.danmaku.enabled)}/>
+              <span className="ptt-slider ptt-round"></span>
+            </label>
+          </label>
+        </div>
+        {theme.danmaku.enabled && <>
+          <div className={'ptt-pb-4'}>
+            <label>彈幕大小：</label> {danmakuRadio('fontSize', danmakuSizeOptions)}
+          </div>
+          <div className={'ptt-pb-4'}>
+            <label>彈幕速度：</label> {danmakuRadio('duration', danmakuDurationOptions)}
+          </div>
+          <div className={'ptt-pb-4'}>
+            <label>顯示區域：</label> {danmakuRadio('area', danmakuAreaOptions)}
+          </div>
+          <div className={'ptt-pb-4'}>
+            <label>彈幕密度：</label> {danmakuRadio('density', danmakuDensityOptions)}
+          </div>
+          <div className={'ptt-pb-4'}>
+            <label>不透明度：
+              <input
+                type="range" name="danmaku-opacity" min={0.2} max={1} step={0.1}
+                value={theme.danmaku.opacity}
+                onChange={e => handleDanmakuChange('opacity', Number(e.target.value))}/>
+              {' '}{Math.round(theme.danmaku.opacity * 100)}%
+            </label>
+          </div>
+        </>}
         <div className={'ptt-pb-4'}>
           <button
             className={`ptt-py-1 ptt-px-3 ${themeColor(theme).button}`}

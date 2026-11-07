@@ -41,6 +41,7 @@ Three isolated execution contexts communicate via Chrome message passing:
 - App states: `LOGIN → LOADING → STREAMING → OFF`
 - Detects fullscreen and repositions the chat window accordingly
 - Theme/bounding-box persisted via Chrome Storage API (`src/storage.js`)
+- Optional danmaku overlay (`src/DanmakuLayer.jsx`): enabled via `theme.danmaku` and shown alongside the chat window while streaming. It tracks the `<video>` rect with a fixed-position layer that ignores pointer events. Lane allocation and collision math live in `src/danmaku.js` as pure functions. The model is Niconico-style fixed duration, so longer text moves faster. Font size is fixed px (`danmaku.fontSize`, like Bilibili's default 25px, not scaled in fullscreen), and lanes fill from the top. Each batch is spread over 1s, and when every lane is busy `danmaku.density` decides: `NORMAL` drops the danmaku, `OVERLAP` stacks it onto a random lane (Niconico 弾幕モード).
 
 ### Message Flow
 ```
