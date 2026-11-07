@@ -37,7 +37,7 @@ Three isolated execution contexts communicate via Chrome message passing:
 - Bridges WASM PTT events back to the background via `chrome.runtime.sendMessage`
 
 ### 3. Content Script + React UI (`src/content.jsx`, `src/App.jsx`)
-- Injected into streaming pages; mounts React UI into a shadow DOM or injected div
+- Injected into streaming pages; mounts React UI into an injected `#crx-root` div (no shadow DOM, so its `<style>` is page-global)
 - App states: `LOGIN → LOADING → STREAMING → OFF`
 - Detects fullscreen and repositions the chat window accordingly
 - Theme/bounding-box persisted via Chrome Storage API (`src/storage.js`)
@@ -53,7 +53,7 @@ Message type constants are in `src/consts.js` (`START`, `SEND`, `MSG`, `PING`, `
 
 ## Key Conventions
 
-- **CSS isolation**: Tailwind uses the `ppt-` prefix (`tailwind.config.js`) to avoid conflicts with host page styles
+- **CSS isolation**: Tailwind uses the `ptt-` prefix (`tailwind.config.js`) to avoid conflicts with host page styles. Preflight (`@tailwind base`) lives alone in `src/preflight.css`, and `postcss-prefix-selector` scopes it to `:where(.ptt-root)` (`src/preflightScope.js`) so it can't restyle the host page. Every top-level UI element (anything that can be portaled out of `#crx-root`) must carry `PREFLIGHT_ROOT_CLASS`; never put `@tailwind base` or bare element selectors in `index.css`
 - **Storage split**: Chrome Storage API for UI/theme settings; IndexedDB for blacklist data
 - **WASM source**: The Go code for `ptt.wasm` lives in a separate repo (`scottxxx666/ppt-websocket`, `wasm` branch) — updating the binary requires rebuilding there
 - **Test environment**: Vitest with jsdom (`vitest.config.js`); ESLint ignores `wasm_exec.js` and test files

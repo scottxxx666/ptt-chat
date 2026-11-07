@@ -1,0 +1,2 @@
+/* Kept apart from index.css so postcss-prefix-selector can scope only this file (see preflightScope.js) */
+@tailwind base;

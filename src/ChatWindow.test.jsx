@@ -5,6 +5,7 @@ import {defaultTheme} from "./configs.js";
 import {STATE} from "./consts.js";
 import storage from "./storage.js";
 import {deepCopy} from "./utils.js";
+import {PREFLIGHT_ROOT_CLASS} from "./preflightScope.js";
 
 vi.mock('./wasm_exec', () => ({}))
 vi.mock('./storage.js', () => ({default: {saveBounding: vi.fn(), saveTheme: vi.fn()}}))
@@ -43,6 +44,16 @@ const center = () => ({x: window.innerWidth / 2, y: window.innerHeight / 2})
 
 beforeEach(() => {
   vi.clearAllMocks()
+})
+
+describe('preflight scope', () => {
+  test('full and minimized windows are Preflight roots, since either may be portaled out of #crx-root', () => {
+    const {header, miniWindow, minimize} = renderWindow()
+    expect(header().closest('section')).toHaveClass(PREFLIGHT_ROOT_CLASS)
+
+    minimize()
+    expect(miniWindow()).toHaveClass(PREFLIGHT_ROOT_CLASS)
+  })
 })
 
 describe('full window header', () => {

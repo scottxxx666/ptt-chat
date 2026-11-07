@@ -4,6 +4,7 @@ import {ThemeContext} from "./context.js";
 import {defaultTheme} from "./configs.js";
 import {deepCopy} from "./utils.js";
 import {DANMAKU_DENSITY} from "./consts.js";
+import {PREFLIGHT_ROOT_CLASS} from "./preflightScope.js";
 
 const msg = (id, user = 'u' + id) => ({id, user, message: 'msg' + id})
 
@@ -52,6 +53,11 @@ test('overlays the video rect with the configured opacity', () => {
   const {getByTestId} = renderLayer({theme: makeTheme({opacity: 0.5})})
   const layer = getByTestId('ptt-danmaku-layer')
   expect(layer).toHaveStyle({top: '10px', left: '20px', width: '1000px', height: '400px', opacity: '0.5'})
+})
+
+test('is a Preflight root, since it may be portaled out of #crx-root', () => {
+  const {getByTestId} = renderLayer()
+  expect(getByTestId('ptt-danmaku-layer')).toHaveClass(PREFLIGHT_ROOT_CLASS)
 })
 
 test('does not replay messages that existed before mount', () => {

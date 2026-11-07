@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import {useContext, useEffect, useRef, useState} from "react";
 import {ThemeContext} from "./context.js";
 import {THEME_MODE} from "./consts.js";
+import {PREFLIGHT_ROOT_CLASS} from "./preflightScope.js";
 import {
   assignLane,
   countLanes,
@@ -125,7 +126,7 @@ export default function DanmakuLayer({messages, blacklistSet}) {
   return (
     <div
       data-testid="ptt-danmaku-layer"
-      className={'ptt-danmaku-layer'}
+      className={`${PREFLIGHT_ROOT_CLASS} ptt-danmaku-layer`}
       style={{top: rect.top, left: rect.left, width: rect.width, height: rect.height, opacity}}
     >
       <span

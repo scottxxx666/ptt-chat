@@ -17,6 +17,7 @@ import ResizeLayer from "./ResizeLayer.jsx";
 import storage from "./storage.js";
 import iframe from "./iframe.js";
 import PropTypes from "prop-types";
+import {PREFLIGHT_ROOT_CLASS} from "./preflightScope.js";
 
 ChatWindow.propTypes = {
   username: PropTypes.string.isRequired,
@@ -192,7 +193,7 @@ function ChatWindow({
         ref={windowRef}
         onMouseDown={startMoving}
         onClickCapture={suppressClickAfterDrag}
-        className={`ptt-chat-window ptt-flex ptt-h-fit ptt-rounded-md ptt-w-fit ptt-py-1 ptt-px-2 ${themeColor(theme).background} ${themeColor(theme).text}`}
+        className={`${PREFLIGHT_ROOT_CLASS} ptt-chat-window ptt-flex ptt-h-fit ptt-rounded-md ptt-w-fit ptt-py-1 ptt-px-2 ${themeColor(theme).background} ${themeColor(theme).text}`}
         style={{top: bounding.top + '%', right: bounding.right + '%'}}
       >
         <IconButton onClick={toggleChat} style={{transform: 'scaleX(-1)'}}><MinimizeIcon/></IconButton>
@@ -201,7 +202,7 @@ function ChatWindow({
   }
 
   return (
-    <section className={'ptt-chat ptt-text-base'}>
+    <section className={`${PREFLIGHT_ROOT_CLASS} ptt-chat ptt-text-base`}>
       <div
         ref={windowRef}
         className={`ptt-chat-window ptt-rounded-md ptt-flex ptt-flex-col ptt-py-2 ptt-px-2 ptt-overflow-auto ptt-text-left ${bgColor(theme)} ${textColor(theme)} ${theme.transparent ? '[&:not(:hover)]:ptt-bg-transparent' : ''}`}
