@@ -123,14 +123,21 @@ function ChatWindow({
   const [isMoving, setIsMoving] = useState(false)
 
   const mouseDownRef = useRef(null)
+  // the drag area contains buttons: moving less than this many px is still a click on them
+  const DRAG_THRESHOLD = 3
+  const dragStartRef = useRef(null)
+  const dragMovedRef = useRef(false)
 
   function startMoving(e) {
-    if (e.target !== e.currentTarget) return
+    if (e.button !== 0) return
     e.preventDefault()
+    const rect = windowRef.current.getBoundingClientRect()
     mouseDownRef.current = {
-      x: e.nativeEvent.offsetX,
-      y: e.nativeEvent.offsetY,
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
     }
+    dragStartRef.current = {x: e.clientX, y: e.clientY}
+    dragMovedRef.current = false
     setIsMoving(true)
   }
 
@@ -140,6 +147,11 @@ function ChatWindow({
 
   useEffect(() => {
     function handleMoving(e) {
+      const start = dragStartRef.current
+      if (!dragMovedRef.current) {
+        if (Math.hypot(e.clientX - start.x, e.clientY - start.y) <= DRAG_THRESHOLD) return
+        dragMovedRef.current = true
+      }
       const w = windowRef.current.offsetWidth - mouseDownRef.current.x
       const h = mouseDownRef.current.y
       setBounding(prevState => ({
@@ -151,7 +163,7 @@ function ChatWindow({
 
     function stopMoving() {
       setIsMoving(false)
-      storage.saveBounding(boundingRef.current)
+      if (dragMovedRef.current) storage.saveBounding(boundingRef.current)
     }
 
     if (isMoving) {
@@ -166,9 +178,20 @@ function ChatWindow({
     }
   }, [isMoving, setBounding])
 
+  // the click that ends a drag must not reach the button under the pointer
+  function suppressClickAfterDrag(e) {
+    if (!dragMovedRef.current) return
+    dragMovedRef.current = false
+    e.stopPropagation()
+    e.preventDefault()
+  }
+
   if (isMini) {
     return (
       <div
+        ref={windowRef}
+        onMouseDown={startMoving}
+        onClickCapture={suppressClickAfterDrag}
         className={`ptt-chat-window ptt-flex ptt-h-fit ptt-rounded-md ptt-w-fit ptt-py-1 ptt-px-2 ${themeColor(theme).background} ${themeColor(theme).text}`}
         style={{top: bounding.top + '%', right: bounding.right + '%'}}
       >
@@ -191,7 +214,7 @@ function ChatWindow({
       >
         {isResizing && <ResizeLayer windowRef={windowRef} bounding={bounding} setBounding={setBounding}/>}
         <div id="ptt-chat-header" className={'ptt-flex ptt-mb-2 ptt-px-1 ptt-justify-between'}
-             onMouseDown={startMoving}>
+             onMouseDown={startMoving} onClickCapture={suppressClickAfterDrag}>
           <div className={'ptt-flex ptt-mr-6'}>
             <IconButton onClick={toggleChat}><MinimizeIcon/></IconButton>
             <IconButton className={`ptt-ml-2`} onClick={toggleThemeMode}>
