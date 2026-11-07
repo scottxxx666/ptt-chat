@@ -137,7 +137,7 @@ function App() {
       chrome.runtime.onMessage.removeListener(messageListener)
       document.removeEventListener('fullscreenchange', fullscreenListener)
     }
-  }, [close, reset, start])
+  }, [clearState, close, reset, start])
 
   if (state === STATE.OFF) {
     return;
